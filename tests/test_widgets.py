@@ -65,6 +65,8 @@ def test_borderless_panel_reserves_title_row() -> None:
 @pytest.mark.parametrize(
     ("width", "expected"),
     [
+        (3, "+>+"),
+        (4, "+> +"),
         (5, "+ > +"),
         (6, "+ >  +"),
         (7, "+ > . +"),
@@ -86,3 +88,38 @@ def test_focus_marker_survives_narrow_widths(width: int, expected: str) -> None:
 )
 def test_collapsed_marker_survives_narrow_widths(width: int, expected: str) -> None:
     assert render_lines(Panel("", title="Active", collapsed=True), width, 3)[0] == expected
+
+
+@pytest.mark.parametrize(
+    ("width", "expected"),
+    [
+        (0, ""),
+        (1, "|"),
+        (2, "++"),
+        (3, "+>+"),
+        (4, "+>++"),
+        (5, "+>+ +"),
+        (6, "+ >+ +"),
+        (7, "+ >+  +"),
+        (8, "+ >[+] +"),
+    ],
+)
+def test_focused_collapsed_panel_preserves_both_states_when_space_allows(
+    width: int,
+    expected: str,
+) -> None:
+    # Widths below three have no interior header cell, so no marker can fit.
+    panel = Panel("", title="Active", focused=True, collapsed=True)
+    assert render_lines(panel, width, 3)[0] == expected
+
+
+@pytest.mark.parametrize(
+    ("width", "expected"),
+    [(0, ""), (1, ">"), (2, ">+"), (3, ">+ "), (4, ">[+]"), (5, ">[+] ")],
+)
+def test_borderless_focused_collapsed_panel_preserves_state(
+    width: int,
+    expected: str,
+) -> None:
+    panel = Panel("", title="Active", focused=True, collapsed=True, border=False)
+    assert render_lines(panel, width, 1)[0] == expected

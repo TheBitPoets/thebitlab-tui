@@ -128,11 +128,31 @@ class Panel:
     def _draw_title(self, canvas: Canvas, rect: Rect, *, bordered: bool) -> None:
         if rect.is_empty or not (self.title or self.focused or self.collapsed):
             return
-        available = max(0, rect.width - 4 if bordered else rect.width)
-        if self.collapsed:
-            marker = "+" if available < 3 else "[+]"
+        inner_width = max(0, rect.width - 2) if bordered else rect.width
+        padding = 1 if bordered else 0
+        available = max(0, inner_width - (padding * 2))
+
+        # Decorative title padding is expendable when a narrow panel needs the
+        # cells to communicate state. Focus wins if only one cell is available.
+        needs_state_cell = available < 1 <= inner_width
+        needs_combined_state_cells = (
+            self.focused and self.collapsed and available < 2 <= inner_width
+        )
+        if needs_state_cell or needs_combined_state_cells:
+            padding = 0
+            available = inner_width
+
+        if self.focused and self.collapsed:
+            if available >= 4:
+                marker = ">[+]"
+            elif available >= 2:
+                marker = ">+"
+            else:
+                marker = ">"
         elif self.focused:
             marker = ">"
+        elif self.collapsed:
+            marker = "+" if available < 3 else "[+]"
         else:
             marker = ""
         if marker:
@@ -147,6 +167,7 @@ class Panel:
             return
         styled = self.focus_style if self.focused else self.title_style
         if bordered:
-            canvas.write(rect.x + 1, rect.y, f" {title} ", max_width=rect.width - 2, style=styled)
+            rendered_title = f" {title} " if padding else title
+            canvas.write(rect.x + 1, rect.y, rendered_title, max_width=inner_width, style=styled)
         else:
             canvas.write(rect.x, rect.y, title, max_width=rect.width, style=styled)
