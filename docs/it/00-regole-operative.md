@@ -198,6 +198,10 @@ Per risolvere un finding:
 4. spiegare rischio originale, soluzione e contratto che impedisce la regressione;
 5. aggiornare `Review round N` nel body.
 
+Se un finding riguarda solo metadati GitHub, per esempio label, milestone o body di una issue,
+collegare l'oggetto aggiornato e documentare la verifica live senza creare commit vuoti. Se il fix
+modifica anche una regola versionata, collegare normalmente il relativo commit.
+
 Non rispondere solo `fixed`. Formato raccomandato:
 
 ```markdown
