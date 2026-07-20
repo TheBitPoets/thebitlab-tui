@@ -1,0 +1,29 @@
+name: Bug report
+description: Report a reproducible rendering, API, or portability defect.
+title: "[Bug] "
+labels: ["kind:bug"]
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual output
+      description: Include visible dimensions and plain ASCII output where possible.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: "Python, OS, terminal, color/no-color"
+    validations:
+      required: true
+  - type: input
+    id: parent
+    attributes:
+      label: Parent issue or milestone

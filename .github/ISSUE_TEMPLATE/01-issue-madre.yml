@@ -1,0 +1,42 @@
+name: Issue madre
+description: Plan a non-trivial milestone or release objective.
+title: "[Plan] "
+labels: ["kind:roadmap"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: State the measurable outcome.
+    validations:
+      required: true
+  - type: textarea
+    id: roadmap
+    attributes:
+      label: Primary roadmap
+      description: Link the canonical roadmap and explain why it is the primary reference.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and non-scope
+    validations:
+      required: true
+  - type: textarea
+    id: completion
+    attributes:
+      label: Completion criteria
+      description: Include tests, snapshots, API and documentation outcomes.
+    validations:
+      required: true
+  - type: textarea
+    id: traceability
+    attributes:
+      label: Implementation traceability
+      value: |
+        | Checklist item | Status | Issue / PR / Commit | Notes |
+        | --- | --- | --- | --- |
+        | | Todo | | |
+    validations:
+      required: true

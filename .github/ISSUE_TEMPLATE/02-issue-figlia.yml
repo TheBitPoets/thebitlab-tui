@@ -1,0 +1,30 @@
+name: Issue figlia
+description: Define one bounded implementation, test, or documentation step.
+title: "[Task] "
+body:
+  - type: input
+    id: parent
+    attributes:
+      label: Issue madre and milestone
+      placeholder: "Parent #...; milestone ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: nonscope
+    attributes:
+      label: Non-scope
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: List tests, snapshots, docs and manual checks.
+    validations:
+      required: true
