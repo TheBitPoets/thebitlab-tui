@@ -7,6 +7,10 @@ def test_fixed_and_proportional_allocation() -> None:
     assert allocate(16, specs) == [4, 4, 8]
 
 
+def test_zero_sized_child_does_not_consume_scarce_space() -> None:
+    assert allocate(1, [Size.fixed_size(0), Size.fixed_size(10)]) == [0, 1]
+
+
 def test_row_and_column_snapshot() -> None:
     row = Row([Label("left"), Label("right")], sizes=[Size.fixed_size(6), Size.flexible()])
     assert render_lines(row, 14, 1) == ["left   right  "]

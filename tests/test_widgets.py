@@ -7,6 +7,11 @@ def test_label_alignment_wrapping_and_truncation() -> None:
     assert render_lines(Label("one two", wrap=True), 4, 2) == ["one ", "two "]
 
 
+def test_label_ignores_input_ansi_for_geometry() -> None:
+    label = Label("\x1b[31mabcdef\x1b[0m", wrap=True)
+    assert render_lines(label, 5, 2) == ["abcde", "f    "]
+
+
 def test_panel_with_title_snapshot() -> None:
     panel = Panel("hello", title="Info")
     assert render_lines(panel, 12, 4) == [
@@ -38,3 +43,22 @@ def test_panel_color_keeps_borders_aligned() -> None:
     lines = render_lines(panel, 14, 3, color=True)
     assert all(visible_width(line) == 14 for line in lines)
     assert "\x1b[" in lines[0]
+
+
+def test_partially_clipped_panel_does_not_grow_a_new_border() -> None:
+    from thebitlab_tui import Canvas, Rect
+
+    canvas = Canvas(8, 3)
+    Panel("body", title="Title").draw(canvas, Rect(-2, 0, 10, 3))
+    assert canvas.lines() == ["Title -+", "ody    |", "-------+"]
+
+
+def test_borderless_panel_reserves_title_row() -> None:
+    assert render_lines(Panel("body", title="Title", border=False), 10, 2) == [
+        "Title     ",
+        "body      ",
+    ]
+
+
+def test_focus_marker_survives_minimum_width() -> None:
+    assert render_lines(Panel("", title="Active", focused=True), 5, 3)[0] == "+ > +"

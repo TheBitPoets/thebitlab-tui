@@ -51,10 +51,10 @@ class Canvas:
         if y < 0 or y >= self.height:
             return
         plain = strip_ansi(text).replace("\n", " ")
-        if max_width is not None:
-            if max_width <= 0:
-                return
-            plain = truncate(plain, max_width) if ellipsis else plain[:max_width]
+        available = self.width - x if max_width is None else max_width
+        if available <= 0:
+            return
+        plain = truncate(plain, available) if ellipsis else plain[:available]
         for offset, char in enumerate(plain):
             target_x = x + offset
             if target_x >= self.width:

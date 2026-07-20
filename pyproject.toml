@@ -20,6 +20,9 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 
+[project.urls]
+Repository = "https://github.com/TheBitPoets/thebitlab-tui"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
@@ -27,4 +30,3 @@ where = ["src"]
 addopts = "-ra"
 pythonpath = ["src"]
 testpaths = ["tests"]
-

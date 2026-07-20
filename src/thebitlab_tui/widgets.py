@@ -8,7 +8,7 @@ from typing import Protocol, runtime_checkable
 
 from .canvas import Canvas
 from .geometry import Rect
-from .styles import PLAIN, Style, truncate
+from .styles import PLAIN, Style, strip_ansi, truncate
 
 
 @runtime_checkable
@@ -47,7 +47,7 @@ class Label:
         if width <= 0:
             return []
         result: list[str] = []
-        for source in self.text.splitlines() or [""]:
+        for source in strip_ansi(self.text).splitlines() or [""]:
             if self.wrap:
                 result.extend(
                     textwrap.wrap(
@@ -102,27 +102,42 @@ class Panel:
     max_height: int | None = None
 
     def draw(self, canvas: Canvas, rect: Rect) -> None:
-        area = rect.intersect(canvas.rect)
-        if area.is_empty:
+        if rect.is_empty or rect.intersect(canvas.rect).is_empty:
             return
         panel_height = min(rect.height, 3) if self.collapsed else rect.height
-        panel_rect = Rect(rect.x, rect.y, rect.width, panel_height).intersect(canvas.rect)
+        panel_rect = Rect(rect.x, rect.y, rect.width, panel_height)
         if self.border:
             canvas.border(panel_rect, self.focus_style if self.focused else self.style)
-        self._draw_title(canvas, panel_rect)
+        has_header = bool(self.title or self.focused or self.collapsed)
+        self._draw_title(canvas, panel_rect, bordered=self.border)
         if self.collapsed:
             return
-        inset = 1 if self.border else 0
-        content_rect = panel_rect.inset(inset)
+        if self.border:
+            content_rect = panel_rect.inset(1)
+        elif has_header:
+            content_rect = Rect(
+                panel_rect.x,
+                panel_rect.y + 1,
+                panel_rect.width,
+                max(0, panel_rect.height - 1),
+            )
+        else:
+            content_rect = panel_rect
         draw_widget(self.content, canvas, content_rect)
 
-    def _draw_title(self, canvas: Canvas, rect: Rect) -> None:
-        if rect.width <= 2 or not (self.title or self.focused or self.collapsed):
+    def _draw_title(self, canvas: Canvas, rect: Rect, *, bordered: bool) -> None:
+        if rect.is_empty or not (self.title or self.focused or self.collapsed):
             return
         marker = "[+] " if self.collapsed else "> " if self.focused else ""
-        available = max(0, rect.width - 4)
-        title = truncate(marker + self.title, available)
+        available = max(0, rect.width - 4 if bordered else rect.width)
+        if self.focused and available == 1:
+            title = ">"
+        else:
+            title = truncate(marker + self.title, available)
         if not title:
             return
         styled = self.focus_style if self.focused else self.title_style
-        canvas.write(rect.x + 1, rect.y, f" {title} ", max_width=rect.width - 2, style=styled)
+        if bordered:
+            canvas.write(rect.x + 1, rect.y, f" {title} ", max_width=rect.width - 2, style=styled)
+        else:
+            canvas.write(rect.x, rect.y, title, max_width=rect.width, style=styled)

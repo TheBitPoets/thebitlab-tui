@@ -57,9 +57,9 @@ def allocate(total: int, specs: list[Size]) -> list[int]:
     if sum(wanted) > budget:
         remaining = budget
         for index, amount in enumerate(wanted):
-            children_left = len(specs) - index - 1
+            children_left = sum(1 for later in wanted[index + 1 :] if later > 0)
             grant = min(amount, max(0, remaining - children_left))
-            if grant == 0 and remaining > 0:
+            if grant == 0 and amount > 0 and remaining > 0:
                 grant = 1
             sizes[index] = grant
             remaining -= grant
