@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="180" viewBox="0 0 760 180" role="img" aria-labelledby="title desc">
+  <title id="title">Wide three-panel ASCII layout</title>
+  <desc id="desc">Assignment, Activity, and Tests panels are arranged horizontally.</desc>
+  <rect width="760" height="180" rx="8" fill="#171717"/>
+  <text x="20" y="34" fill="#f4f4f4" font-family="Consolas, monospace" font-size="16" xml:space="preserve">
+    <tspan x="20" dy="0">+ Assignment --------+ + Activity ----------+ + &gt; Tests -------+</tspan>
+    <tspan x="20" dy="24">|Exercise 01         | |No recent events    | |3 passed         |</tspan>
+    <tspan x="20" dy="24">|Implement function  | |                    | |0 failed         |</tspan>
+    <tspan x="20" dy="24">+--------------------+ +--------------------+ +-----------------+</tspan>
+  </text>
+</svg>

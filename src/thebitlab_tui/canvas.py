@@ -15,7 +15,16 @@ class _Cell:
 
 
 class Canvas:
-    """A rectangular grid whose output always has stable visible dimensions."""
+    """A clipped terminal-cell grid with stable visible dimensions.
+
+    Args:
+        width: Non-negative number of columns.
+        height: Non-negative number of rows.
+        fill: Single character used for untouched cells.
+
+    Styles are stored on cells and converted to ANSI only when output is requested. This keeps
+    escape sequences out of all geometry calculations.
+    """
 
     def __init__(self, width: int, height: int, fill: str = " ") -> None:
         if width < 0 or height < 0:
@@ -28,9 +37,13 @@ class Canvas:
 
     @property
     def rect(self) -> Rect:
+        """Return the full drawable rectangle of the canvas."""
+
         return Rect(0, 0, self.width, self.height)
 
     def set(self, x: int, y: int, char: str, style: Style = PLAIN) -> None:
+        """Set one cell, silently ignoring coordinates outside the canvas."""
+
         if not char:
             return
         if 0 <= x < self.width and 0 <= y < self.height:
@@ -46,7 +59,16 @@ class Canvas:
         style: Style = PLAIN,
         ellipsis: bool = True,
     ) -> None:
-        """Write one line, automatically clipping it to the canvas."""
+        """Write one line and clip it to the canvas.
+
+        Args:
+            x: Starting column, which may be negative.
+            y: Target row.
+            text: Text to draw. Newlines become spaces and existing ANSI is removed.
+            max_width: Optional logical width before canvas clipping.
+            style: Style stored on each written cell.
+            ellipsis: Use ``...`` when ``max_width`` truncates the text.
+        """
 
         if y < 0 or y >= self.height:
             return
@@ -63,6 +85,8 @@ class Canvas:
                 self.set(target_x, y, char, style)
 
     def fill(self, rect: Rect, char: str = " ", style: Style = PLAIN) -> None:
+        """Fill the visible portion of ``rect`` with one character."""
+
         if len(char) != 1:
             raise ValueError("fill character must have length one")
         clipped = rect.intersect(self.rect)
@@ -71,14 +95,20 @@ class Canvas:
                 self.set(x, y, char, style)
 
     def hline(self, x: int, y: int, width: int, char: str = "-", style: Style = PLAIN) -> None:
+        """Draw a clipped horizontal line."""
+
         for offset in range(max(0, width)):
             self.set(x + offset, y, char, style)
 
     def vline(self, x: int, y: int, height: int, char: str = "|", style: Style = PLAIN) -> None:
+        """Draw a clipped vertical line."""
+
         for offset in range(max(0, height)):
             self.set(x, y + offset, char, style)
 
     def border(self, rect: Rect, style: Style = PLAIN) -> None:
+        """Draw an ASCII ``+``, ``-``, ``|`` border inside ``rect``."""
+
         if rect.is_empty:
             return
         if rect.height == 1:
@@ -100,6 +130,8 @@ class Canvas:
             self.set(x, y, "+", style)
 
     def lines(self, *, color: bool = False) -> list[str]:
+        """Return all rows, optionally decorated with ANSI style sequences."""
+
         rendered: list[str] = []
         for row in self._cells:
             parts: list[str] = []
@@ -116,4 +148,6 @@ class Canvas:
         return rendered
 
     def text(self, *, color: bool = False) -> str:
+        """Return all rows joined by newline characters."""
+
         return "\n".join(self.lines(color=color))

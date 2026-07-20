@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="260" viewBox="0 0 900 260" role="img" aria-labelledby="title desc">
+  <title id="title">thebitlab-tui responsibility flow</title>
+  <desc id="desc">Application data is adapted to widgets, laid out on a canvas, and returned by the renderer. Terminal input follows a separate key event path.</desc>
+  <rect width="900" height="260" fill="#fbfbfb"/>
+  <g fill="#fff" stroke="#333" stroke-width="2" font-family="sans-serif" font-size="16" text-anchor="middle">
+    <rect x="25" y="45" width="130" height="50"/><text x="90" y="76">App data</text>
+    <rect x="190" y="45" width="130" height="50"/><text x="255" y="76">Adapter</text>
+    <rect x="355" y="45" width="130" height="50"/><text x="420" y="76">Widgets</text>
+    <rect x="520" y="45" width="130" height="50"/><text x="585" y="76">Layout</text>
+    <rect x="685" y="45" width="90" height="50"/><text x="730" y="76">Canvas</text>
+    <rect x="800" y="45" width="80" height="50"/><text x="840" y="76">Rows</text>
+    <rect x="25" y="165" width="130" height="50"/><text x="90" y="196">Terminal input</text>
+    <rect x="220" y="165" width="130" height="50"/><text x="285" y="196">OS adapter</text>
+    <rect x="415" y="165" width="130" height="50"/><text x="480" y="196">KeyEvent</text>
+    <rect x="610" y="165" width="130" height="50"/><text x="675" y="196">App state</text>
+  </g>
+  <g stroke="#555" stroke-width="2" fill="none">
+    <path d="M155 70H190M320 70H355M485 70H520M650 70H685M775 70H800"/>
+    <path d="M155 190H220M350 190H415M545 190H610M675 165V120H255V95"/>
+  </g>
+</svg>

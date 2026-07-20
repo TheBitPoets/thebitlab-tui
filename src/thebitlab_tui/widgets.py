@@ -15,10 +15,15 @@ from .styles import PLAIN, Style, strip_ansi, truncate
 class Widget(Protocol):
     """Structural widget protocol; implementations only need ``draw``."""
 
-    def draw(self, canvas: Canvas, rect: Rect) -> None: ...
+    def draw(self, canvas: Canvas, rect: Rect) -> None:
+        """Draw inside ``rect`` while relying on canvas clipping."""
+
+        ...
 
 
 def draw_widget(widget: Widget | str, canvas: Canvas, rect: Rect) -> None:
+    """Draw a widget or adapt a plain string to a :class:`Label`."""
+
     if isinstance(widget, str):
         Label(widget).draw(canvas, rect)
     else:
@@ -27,6 +32,19 @@ def draw_widget(widget: Widget | str, canvas: Canvas, rect: Rect) -> None:
 
 @dataclass(slots=True)
 class Label:
+    """Draw text with alignment, wrapping, or ellipsis truncation.
+
+    Args:
+        text: Text to draw; explicit newlines create logical rows.
+        align: ``left``, ``center``, or ``right``.
+        wrap: Wrap long logical rows when true.
+        truncate: Use ellipsis when wrapping is disabled and text is too wide.
+        style: Cell style applied to visible text.
+
+    ``wrap=True`` takes precedence over truncation. Explicit newlines create logical rows. Layout
+    containers may use the optional fixed, minimum, and maximum dimensions.
+    """
+
     text: str
     align: str = "left"
     wrap: bool = False
@@ -65,6 +83,8 @@ class Label:
         return result
 
     def draw(self, canvas: Canvas, rect: Rect) -> None:
+        """Draw the visible text rows inside ``rect`` without printing."""
+
         area = rect.intersect(canvas.rect)
         if area.is_empty:
             return
@@ -86,6 +106,19 @@ class Label:
 
 @dataclass(slots=True)
 class Panel:
+    """Frame content with an optional ASCII border and title.
+
+    Args:
+        content: Child widget or plain string adapted to :class:`Label`.
+        title: Text embedded in the top border.
+        focused: Show the textual focus marker and focus style.
+        collapsed: Draw only the three-row frame and hide content.
+        border: Draw the ASCII frame when true.
+
+    Focus and collapsed state remain presentation inputs owned by the caller. Both states include
+    textual markers, so they remain visible with ANSI disabled.
+    """
+
     content: Widget | str
     title: str = ""
     focused: bool = False
@@ -102,6 +135,8 @@ class Panel:
     max_height: int | None = None
 
     def draw(self, canvas: Canvas, rect: Rect) -> None:
+        """Draw the frame, title markers, and visible content inside ``rect``."""
+
         if rect.is_empty or rect.intersect(canvas.rect).is_empty:
             return
         panel_height = min(rect.height, 3) if self.collapsed else rect.height

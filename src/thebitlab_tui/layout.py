@@ -11,7 +11,16 @@ from .widgets import Widget, draw_widget
 
 @dataclass(frozen=True, slots=True)
 class Size:
-    """A fixed or proportional size with soft minimum/maximum constraints."""
+    """A fixed or proportional size with soft minimum/maximum constraints.
+
+    Args:
+        fixed: Exact cell count, or ``None`` for proportional allocation.
+        flex: Relative share of unallocated space.
+        min_size: Preferred minimum before unavoidable clipping.
+        max_size: Optional upper bound.
+
+    Minimum sizes yield to clipping only when the available terminal extent cannot fit them all.
+    """
 
     fixed: int | None = None
     flex: int = 1
@@ -28,10 +37,14 @@ class Size:
 
     @classmethod
     def fixed_size(cls, value: int) -> Size:
+        """Create a size fixed to exactly ``value`` cells."""
+
         return cls(fixed=value, flex=0, min_size=value, max_size=value)
 
     @classmethod
     def flexible(cls, flex: int = 1, *, minimum: int = 0, maximum: int | None = None) -> Size:
+        """Create a proportional size with optional lower and upper bounds."""
+
         return cls(flex=flex, min_size=minimum, max_size=maximum)
 
 
@@ -87,6 +100,15 @@ def allocate(total: int, specs: list[Size]) -> list[int]:
 
 @dataclass(slots=True)
 class Row:
+    """Lay children horizontally and stack them when minimum widths do not fit.
+
+    Args:
+        children: Widgets drawn in order.
+        sizes: Optional width constraints corresponding one-to-one with ``children``.
+        gap: Blank columns between horizontal children and rows when stacked.
+        stack_when_narrow: Enable automatic vertical fallback.
+    """
+
     children: list[Widget]
     sizes: list[Size] | None = None
     gap: int = 1
@@ -105,6 +127,8 @@ class Row:
             raise ValueError("sizes must match children")
 
     def draw(self, canvas: Canvas, rect: Rect) -> None:
+        """Allocate child widths for the current rectangle and draw one responsive frame."""
+
         if not self.children or rect.is_empty:
             return
         specs = [
@@ -125,6 +149,14 @@ class Row:
 
 @dataclass(slots=True)
 class Column:
+    """Lay children out vertically using fixed or proportional heights.
+
+    Args:
+        children: Widgets drawn from top to bottom.
+        sizes: Optional height constraints corresponding one-to-one with ``children``.
+        gap: Blank rows between children.
+    """
+
     children: list[Widget]
     sizes: list[Size] | None = None
     gap: int = 0
@@ -142,6 +174,8 @@ class Column:
             raise ValueError("sizes must match children")
 
     def draw(self, canvas: Canvas, rect: Rect) -> None:
+        """Allocate child heights for the current rectangle and draw them in order."""
+
         if not self.children or rect.is_empty:
             return
         specs = [

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="430" height="340" viewBox="0 0 430 340" role="img" aria-labelledby="title desc">
+  <title id="title">Narrow stacked ASCII layout</title>
+  <desc id="desc">Assignment, Activity, and Tests panels are stacked vertically.</desc>
+  <rect width="430" height="340" rx="8" fill="#171717"/>
+  <text x="20" y="32" fill="#f4f4f4" font-family="Consolas, monospace" font-size="16" xml:space="preserve">
+    <tspan x="20" dy="0">+ Assignment ------------------+</tspan>
+    <tspan x="20" dy="22">|Exercise 01                   |</tspan>
+    <tspan x="20" dy="22">+------------------------------+</tspan>
+    <tspan x="20" dy="38">+ Activity --------------------+</tspan>
+    <tspan x="20" dy="22">|No recent events              |</tspan>
+    <tspan x="20" dy="22">+------------------------------+</tspan>
+    <tspan x="20" dy="38">+ &gt; Tests -------------------+</tspan>
+    <tspan x="20" dy="22">|3 passed                      |</tspan>
+    <tspan x="20" dy="22">+------------------------------+</tspan>
+  </text>
+</svg>
