@@ -128,12 +128,21 @@ class Panel:
     def _draw_title(self, canvas: Canvas, rect: Rect, *, bordered: bool) -> None:
         if rect.is_empty or not (self.title or self.focused or self.collapsed):
             return
-        marker = "[+] " if self.collapsed else "> " if self.focused else ""
         available = max(0, rect.width - 4 if bordered else rect.width)
-        if self.focused and available == 1:
-            title = ">"
+        if self.collapsed:
+            marker = "+" if available < 3 else "[+]"
+        elif self.focused:
+            marker = ">"
         else:
-            title = truncate(marker + self.title, available)
+            marker = ""
+        if marker:
+            prefix = marker[:available]
+            if len(prefix) < available:
+                prefix += " "
+            remaining = max(0, available - len(prefix))
+            title = prefix + truncate(self.title, remaining)
+        else:
+            title = truncate(self.title, available)
         if not title:
             return
         styled = self.focus_style if self.focused else self.title_style

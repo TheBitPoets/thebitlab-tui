@@ -1,3 +1,5 @@
+import pytest
+
 from thebitlab_tui import Label, Panel, Style, render_lines, visible_width
 
 
@@ -60,5 +62,27 @@ def test_borderless_panel_reserves_title_row() -> None:
     ]
 
 
-def test_focus_marker_survives_minimum_width() -> None:
-    assert render_lines(Panel("", title="Active", focused=True), 5, 3)[0] == "+ > +"
+@pytest.mark.parametrize(
+    ("width", "expected"),
+    [
+        (5, "+ > +"),
+        (6, "+ >  +"),
+        (7, "+ > . +"),
+        (8, "+ > .. +"),
+    ],
+)
+def test_focus_marker_survives_narrow_widths(width: int, expected: str) -> None:
+    assert render_lines(Panel("", title="Active", focused=True), width, 3)[0] == expected
+
+
+@pytest.mark.parametrize(
+    ("width", "expected"),
+    [
+        (5, "+ + +"),
+        (6, "+ +  +"),
+        (7, "+ [+] +"),
+        (8, "+ [+]  +"),
+    ],
+)
+def test_collapsed_marker_survives_narrow_widths(width: int, expected: str) -> None:
+    assert render_lines(Panel("", title="Active", collapsed=True), width, 3)[0] == expected
