@@ -8,7 +8,7 @@ from typing import Protocol, runtime_checkable
 
 from .canvas import Canvas
 from .geometry import Rect
-from .styles import PLAIN, Style, truncate
+from .styles import PLAIN, Style, strip_ansi, truncate
 
 
 @runtime_checkable
@@ -47,7 +47,7 @@ class Label:
         if width <= 0:
             return []
         result: list[str] = []
-        for source in self.text.splitlines() or [""]:
+        for source in strip_ansi(self.text).splitlines() or [""]:
             if self.wrap:
                 result.extend(
                     textwrap.wrap(
@@ -102,27 +102,72 @@ class Panel:
     max_height: int | None = None
 
     def draw(self, canvas: Canvas, rect: Rect) -> None:
-        area = rect.intersect(canvas.rect)
-        if area.is_empty:
+        if rect.is_empty or rect.intersect(canvas.rect).is_empty:
             return
         panel_height = min(rect.height, 3) if self.collapsed else rect.height
-        panel_rect = Rect(rect.x, rect.y, rect.width, panel_height).intersect(canvas.rect)
+        panel_rect = Rect(rect.x, rect.y, rect.width, panel_height)
         if self.border:
             canvas.border(panel_rect, self.focus_style if self.focused else self.style)
-        self._draw_title(canvas, panel_rect)
+        has_header = bool(self.title or self.focused or self.collapsed)
+        self._draw_title(canvas, panel_rect, bordered=self.border)
         if self.collapsed:
             return
-        inset = 1 if self.border else 0
-        content_rect = panel_rect.inset(inset)
+        if self.border:
+            content_rect = panel_rect.inset(1)
+        elif has_header:
+            content_rect = Rect(
+                panel_rect.x,
+                panel_rect.y + 1,
+                panel_rect.width,
+                max(0, panel_rect.height - 1),
+            )
+        else:
+            content_rect = panel_rect
         draw_widget(self.content, canvas, content_rect)
 
-    def _draw_title(self, canvas: Canvas, rect: Rect) -> None:
-        if rect.width <= 2 or not (self.title or self.focused or self.collapsed):
+    def _draw_title(self, canvas: Canvas, rect: Rect, *, bordered: bool) -> None:
+        if rect.is_empty or not (self.title or self.focused or self.collapsed):
             return
-        marker = "[+] " if self.collapsed else "> " if self.focused else ""
-        available = max(0, rect.width - 4)
-        title = truncate(marker + self.title, available)
+        inner_width = max(0, rect.width - 2) if bordered else rect.width
+        padding = 1 if bordered else 0
+        available = max(0, inner_width - (padding * 2))
+
+        # Decorative title padding is expendable when a narrow panel needs the
+        # cells to communicate state. Focus wins if only one cell is available.
+        needs_state_cell = available < 1 <= inner_width
+        needs_combined_state_cells = (
+            self.focused and self.collapsed and available < 2 <= inner_width
+        )
+        if needs_state_cell or needs_combined_state_cells:
+            padding = 0
+            available = inner_width
+
+        if self.focused and self.collapsed:
+            if available >= 4:
+                marker = ">[+]"
+            elif available >= 2:
+                marker = ">+"
+            else:
+                marker = ">"
+        elif self.focused:
+            marker = ">"
+        elif self.collapsed:
+            marker = "+" if available < 3 else "[+]"
+        else:
+            marker = ""
+        if marker:
+            prefix = marker[:available]
+            if len(prefix) < available:
+                prefix += " "
+            remaining = max(0, available - len(prefix))
+            title = prefix + truncate(self.title, remaining)
+        else:
+            title = truncate(self.title, available)
         if not title:
             return
         styled = self.focus_style if self.focused else self.title_style
-        canvas.write(rect.x + 1, rect.y, f" {title} ", max_width=rect.width - 2, style=styled)
+        if bordered:
+            rendered_title = f" {title} " if padding else title
+            canvas.write(rect.x + 1, rect.y, rendered_title, max_width=inner_width, style=styled)
+        else:
+            canvas.write(rect.x, rect.y, title, max_width=rect.width, style=styled)

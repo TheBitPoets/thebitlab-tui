@@ -8,6 +8,12 @@ def test_truncation_with_ellipsis_preserves_canvas_width() -> None:
     assert len(canvas.lines()[0]) == 8
 
 
+def test_canvas_uses_available_width_for_default_ellipsis() -> None:
+    canvas = Canvas(5, 1)
+    canvas.write(0, 0, "abcdef")
+    assert canvas.lines() == ["ab..."]
+
+
 def test_short_text_keeps_stable_line_width() -> None:
     canvas = Canvas(8, 1)
     canvas.write(0, 0, "short", max_width=8)
@@ -32,4 +38,3 @@ def test_ascii_border_snapshot() -> None:
     canvas = Canvas(6, 3)
     canvas.border(Rect(0, 0, 6, 3))
     assert canvas.lines() == ["+----+", "|    |", "+----+"]
-
