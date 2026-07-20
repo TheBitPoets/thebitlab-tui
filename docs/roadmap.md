@@ -55,7 +55,7 @@ sync with the parent issue's checklist and implementation traceability.
 
 | Milestone | Status | Target | Dependencies | Parent issue | Outcome / deferred work |
 | --- | --- | --- | --- | --- | --- |
-| Project foundations v0.1 | Complete | 2026-07-20 | Core scaffold | [#2](https://github.com/TheBitPoets/thebitlab-tui/issues/2) | Governance, docstrings, Sphinx, CI; merged in PRs #5 and #6 |
+| Project foundations v0.1 | Complete | 2026-07-27 | Core scaffold | [#2](https://github.com/TheBitPoets/thebitlab-tui/issues/2) | Completed 2026-07-20; governance, docstrings, Sphinx, CI; merged in PRs #5 and #6 |
 | Phase 1 - Core rendering | Complete | 2026-07-20 | None | Pre-tracking | Initial ASCII rendering scaffold |
 | Interactive widgets v0.2 | In progress | 2026-08-17 | Stable core API | [#7](https://github.com/TheBitPoets/thebitlab-tui/issues/7) | Divider, status badges, selection, scrolling, modal; input adapters deferred |
 | Phase 3 - Terminal adapters | Planned | To schedule | Phase 2 | To create | Windows/Linux input and student adapter |
