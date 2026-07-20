@@ -1,5 +1,1 @@
 blank_issues_enabled: true
-contact_links:
-  - name: Design discussion
-    url: https://github.com/TheBitPoets/thebitlab-tui/discussions
-    about: Discuss open architectural alternatives before they become a stable contract.

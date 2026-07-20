@@ -43,6 +43,9 @@ Milestone
 La Discussion conserva alternative e ragionamento. La documentazione del repository conserva la
 decisione consolidata.
 
+Se GitHub Discussions non è abilitato, usare una issue con label `status:needs-discussion`. Non
+pubblicare nel selettore delle issue un collegamento a una funzionalità disabilitata.
+
 ### Milestone
 
 Una milestone rappresenta un risultato misurabile, per esempio `Core widgets v0.2`, `Interactive
@@ -104,6 +107,9 @@ informazione operativa.
   `kind:roadmap`;
 - `priority:p0`, `priority:p1`, `priority:p2`;
 - `status:needs-discussion`, `status:ready`, `status:blocked`, `status:needs-docs`.
+
+Le label predefinite dichiarate nei template devono esistere nel repository prima del merge.
+Verificarle con `gh label list` insieme alla validazione YAML dei template.
 
 ## Pull request
 
