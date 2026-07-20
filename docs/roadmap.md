@@ -18,9 +18,9 @@
 - modal.
 
 Phase 2 keeps focus, selection, and viewport state owned by the calling application. Before any
-new public signature is implemented, the first implementation issue must record the chosen state,
-sizing, clipping, and narrow-terminal contracts. Input decoding and event dispatch remain Phase 3
-work.
+new public signature is implemented, a dedicated design issue must record and approve the chosen
+state, sizing, clipping, and narrow-terminal contracts. Input decoding and event dispatch remain
+Phase 3 work.
 
 ### Phase 2 delivery sequence
 
@@ -34,6 +34,11 @@ work.
 The design gate in step 1 is intentionally reversible: implementation issues and exact signatures
 are created only after the contracts have been reviewed. Phase 2 does not add an event loop,
 terminal input adapter, application persistence, or direct student TUI integration.
+
+The proposed contract is versioned in
+[`docs/architecture/phase-2-contracts.rst`](architecture/phase-2-contracts.rst) and tracked by
+[issue #10](https://github.com/TheBitPoets/thebitlab-tui/issues/10). It remains a proposal until its
+design pull request is reviewed and merged.
 
 ## Phase 3
 
