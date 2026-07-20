@@ -58,3 +58,16 @@ cannot fit, clipping wins over horizontal overflow.
 See `docs/architecture.md`, `docs/integration.md`, and `docs/roadmap.md` for design and migration
 details.
 
+## Documentation
+
+Public API documentation is generated from docstrings with Sphinx. The documentation also
+contains an architecture overview, user guide, developer guide, executable examples, and
+reproducible SVG illustrations.
+
+```console
+python -m pip install -e ".[docs]"
+python -m sphinx -W --keep-going -b html docs docs/_build/html
+```
+
+Open `docs/_build/html/index.html` after a successful build. Documentation tooling is optional and
+does not add runtime dependencies.

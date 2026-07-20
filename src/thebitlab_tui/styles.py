@@ -55,7 +55,17 @@ def truncate(text: str, width: int) -> str:
 
 @dataclass(frozen=True, slots=True)
 class Style:
-    """Optional SGR attributes for text drawn on a :class:`Canvas`."""
+    """Optional SGR attributes for text drawn on a canvas.
+
+    Args:
+        bold: Emit the ANSI bold attribute.
+        bright: Use bright white text independently of ``foreground``.
+        foreground: Optional named foreground color.
+        background: Optional named background color.
+
+    Color names use the standard eight ANSI colors and their ``bright_*`` variants. Invalid names
+    raise :class:`ValueError` during construction.
+    """
 
     bold: bool = False
     bright: bool = False
@@ -70,9 +80,13 @@ class Style:
 
     @property
     def is_plain(self) -> bool:
+        """Return whether the style would emit no ANSI attributes."""
+
         return not (self.bold or self.bright or self.foreground or self.background)
 
     def apply(self, text: str, *, color: bool = True) -> str:
+        """Wrap text in ANSI SGR sequences when color output is enabled."""
+
         if not color or self.is_plain or not text:
             return text
         codes: list[str] = []
@@ -88,4 +102,3 @@ class Style:
 
 
 PLAIN = Style()
-

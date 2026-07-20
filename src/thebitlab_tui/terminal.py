@@ -12,23 +12,44 @@ from typing import TextIO
 
 @dataclass(frozen=True, slots=True)
 class TerminalSize:
+    """Current terminal width and height in cells.
+
+    Args:
+        width: Number of columns, clamped to at least one by :func:`get_terminal_size`.
+        height: Number of rows, clamped to at least one by :func:`get_terminal_size`.
+    """
+
     width: int
     height: int
 
 
 def get_terminal_size(fallback: tuple[int, int] = (80, 24)) -> TerminalSize:
+    """Read the terminal size and clamp both dimensions to at least one.
+
+    Args:
+        fallback: Width and height used when the OS cannot report a terminal size.
+    """
+
     size = shutil.get_terminal_size(fallback)
     return TerminalSize(max(1, size.columns), max(1, size.lines))
 
 
 class ResizeWatcher:
-    """Detect size changes by polling an injectable size reader."""
+    """Detect size changes by polling an injectable size reader.
+
+    Args:
+        reader: Injectable size reader used by :meth:`poll`.
+
+    The first :meth:`poll` returns the initial size; unchanged subsequent polls return ``None``.
+    """
 
     def __init__(self, reader: Callable[[], TerminalSize] = get_terminal_size) -> None:
         self._reader = reader
         self._last: TerminalSize | None = None
 
     def poll(self) -> TerminalSize | None:
+        """Return the new size when it differs from the preceding poll."""
+
         current = self._reader()
         if current == self._last:
             return None
@@ -43,7 +64,17 @@ def supports_color(
     environ: Mapping[str, str] | None = None,
     platform: str | None = None,
 ) -> bool:
-    """Apply a conservative ANSI policy on Linux and Windows."""
+    """Apply a conservative ANSI policy on Linux and Windows.
+
+    Args:
+        no_color: Explicitly disable ANSI output.
+        stream: Output stream used for the TTY check; defaults to standard output.
+        environ: Injectable environment mapping; defaults to ``os.environ``.
+        platform: Injectable platform name; defaults to ``sys.platform``.
+
+    Returns:
+        ``True`` only when ANSI output is allowed and plausibly supported.
+    """
 
     if no_color:
         return False
@@ -57,4 +88,3 @@ def supports_color(
     if current_platform == "win32":
         return any(key in env for key in ("WT_SESSION", "ANSICON", "TERM_PROGRAM"))
     return env.get("TERM") != "dumb"
-

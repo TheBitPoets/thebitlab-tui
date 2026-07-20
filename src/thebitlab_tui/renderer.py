@@ -17,6 +17,8 @@ def render_lines(widget: Widget, width: int, height: int, *, color: bool = False
 
 
 def render(widget: Widget, width: int, height: int, *, color: bool = False) -> str:
+    """Render a widget to one newline-separated string without printing."""
+
     return "\n".join(render_lines(widget, width, height, color=color))
 
 
