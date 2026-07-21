@@ -218,7 +218,8 @@ pending Escape. Decoder priority and replay are deterministic:
   Escape-prefixed multibyte text scalar at its Escape deadline is consumed as unknown and is never
   replayed as application commands.
 
-The private control-sequence buffer is bounded. Reaching the bound consumes the sequence as
+The private control-sequence buffer accepts lengths up to and including its bound. An append that
+would make the fragment longer than that bound consumes the buffered fragment and the new byte as
 unknown. These outcomes depend on bytes and monotonic deadlines, not on how reads split the bytes.
 
 An empty ``os.read()`` result latches EOF. Already-complete queued events are returned first, then
@@ -351,6 +352,8 @@ Pure and facade tests on all CI platforms must cover:
   points;
 - supported, unsupported-complete, malformed, and overlong CSI/SS3 sequences at every split point,
   without false characters and with following valid text preserved;
+- control fragments of bound minus one, exactly the bound, and bound plus one bytes, including all
+  split points and preservation of following valid text;
 - ``None``, zero, positive, negative, infinite, and NaN read-timeout values;
 - positive, zero, negative, infinite, and NaN ``escape_timeout`` constructor values;
 - already-queued continuation units at a zero or expired deadline;
