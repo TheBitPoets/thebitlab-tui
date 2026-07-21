@@ -4,8 +4,8 @@ Phase 3 release verification
 Version ``0.3.0`` consolidates the dependency-free terminal input adapters without changing the
 approved public signatures or moving command, state, event-loop, or redraw ownership into the
 library. This page is the versioned evidence index for child issue `#39
-<https://github.com/TheBitPoets/thebitlab-tui/issues/39>`_. A separate closeout issue will publish
-the tag and GitHub release only after this evidence is complete.
+<https://github.com/TheBitPoets/thebitlab-tui/issues/39>`_. Formal milestone closeout and release
+publication are tracked by issue `#41 <https://github.com/TheBitPoets/thebitlab-tui/issues/41>`_.
 
 Compatibility and evidence matrix
 ---------------------------------
@@ -146,7 +146,8 @@ Release boundary
 The ``0.3.0`` source metadata and changelog are prepared here, but no tag or release is evidence
 until all manual rows pass, CI is green, and two consecutive clean PR review rounds refer to the
 same HEAD. ``tests/test_release_metadata.py`` keeps package, Sphinx, changelog, and dependency
-metadata aligned. The follow-up closeout change must merge first. Then verify CI on its exact
-``master`` commit, create annotated tag ``v0.3.0`` on that commit, publish the matching GitHub
-release, close the closeout child, close parent #24, and finally close milestone ``Terminal
-adapters v0.3``.
+metadata aligned. The closeout change tracked by issue #41 must merge first. Then verify CI on its
+exact ``master`` commit, create annotated tag ``v0.3.0`` on that commit, publish the matching
+GitHub release, close issue #41, close parent #24, and finally close milestone ``Terminal adapters
+v0.3``. This ordering keeps the completed roadmap and verification record inside the released
+source.
