@@ -75,7 +75,14 @@ columns. Width one keeps the marker, and item text uses the normal stable ellips
 
    state = {"active_index": 2, "scroll_offset": 1, "focused": True}
    listing = ListView(
-       ["setup", "exercise-01", "exercise-02", "exercise-03"],
+       [
+           "setup",
+           "exercise-01",
+           "exercise-02",
+           "exercise-03",
+           "exercise-04",
+           "exercise-05",
+       ],
        **state,
    )
    frame = render(Panel(listing, title="Exercises", focused=True), 28, 7)
