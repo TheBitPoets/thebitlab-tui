@@ -105,8 +105,9 @@ def test_list_view_materializes_items_as_a_stable_tuple() -> None:
     assert render_lines(view, 7, 2) == ["  one  ", "* two  "]
 
 
-def test_list_view_normalizes_ansi_and_newlines() -> None:
-    view = ListView(["\x1b[31mred\x1b[0m\nnow"])
+@pytest.mark.parametrize("newline", ["\n", "\r\n", "\r"])
+def test_list_view_normalizes_ansi_and_newlines(newline: str) -> None:
+    view = ListView([f"\x1b[31mred\x1b[0m{newline}now"])
     assert render_lines(view, 9, 1) == ["  red now"]
 
 

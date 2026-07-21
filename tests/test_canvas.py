@@ -1,3 +1,5 @@
+import pytest
+
 from thebitlab_tui import Canvas, Rect
 
 
@@ -18,6 +20,13 @@ def test_short_text_keeps_stable_line_width() -> None:
     canvas = Canvas(8, 1)
     canvas.write(0, 0, "short", max_width=8)
     assert canvas.lines() == ["short   "]
+
+
+@pytest.mark.parametrize("newline", ["\n", "\r\n", "\r"])
+def test_canvas_normalizes_line_endings_to_one_space(newline: str) -> None:
+    canvas = Canvas(8, 1)
+    canvas.write(0, 0, f"one{newline}two", max_width=8)
+    assert canvas.lines() == ["one two "]
 
 
 def test_tiny_ellipsis_widths() -> None:
