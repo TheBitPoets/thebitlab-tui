@@ -174,6 +174,29 @@ reports changes without installing signals or an event loop.
 Always provide keyboard commands without Alt or Ctrl when input adapters are added: those
 modifiers are not transmitted consistently by every Windows terminal.
 
+Terminal input facade
+---------------------
+
+``KeyReader`` is the small, application-neutral input boundary approved for Phase 3.  It is a
+single-use context manager: the application owns polling cadence, command mapping, resize checks,
+state, and redraws.
+
+.. code-block:: python
+
+   from thebitlab_tui import KeyReader
+
+   with KeyReader(escape_timeout=0.05) as keys:
+       event = keys.read(timeout=0.1)
+
+``read`` returns one normalized event or ``None`` at the total deadline.  ``timeout=None`` waits,
+zero polls, and positive finite values wait for at most that many seconds.  The facade is now
+available for API integration, but real POSIX and Windows input backends are delivered by the next
+Phase 3 slices; entering it raises ``io.UnsupportedOperation`` until one of those backends lands.
+Construction itself never reads or changes the terminal.
+
+Applications should pair a small finite input timeout with ``ResizeWatcher.poll()`` when they need
+resize-aware redraws.  The library still installs no event loop or signal handler.
+
 .. image:: ../_static/images/three-panels-narrow.svg
    :alt: The same three ASCII panels stacked in a narrow terminal.
    :align: center

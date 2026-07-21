@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add the approved public `KeyReader` facade with deterministic lifecycle, total monotonic
+  deadlines, private backend seams, and no terminal side effects during construction.
+- Document that real POSIX and Windows input backends remain separate Phase 3 delivery slices.
+
 ## 0.2.0 - 2026-07-21
 
 - Add public style-preserving `Canvas.blit` composition with deterministic overlapping self-copy.

@@ -15,6 +15,7 @@ PUBLIC_API = (
     "Divider",
     "Key",
     "KeyEvent",
+    "KeyReader",
     "Label",
     "ListView",
     "Modal",
