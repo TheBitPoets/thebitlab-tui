@@ -104,4 +104,12 @@ replace this with raw mode, non-blocking descriptor flags, signal handlers, or i
 Linux PTY tests provide the operating-system evidence; injected operations cover deadlines,
 interruption, EOF, setup compensation, and restoration retry on Windows CI as well.
 
+The private Windows implementation separates pure console-record decoding from ``ctypes`` I/O.
+It obtains the borrowed handle through ``sys.stdin.fileno()`` and ``msvcrt.get_osfhandle()``,
+requires processed input, and binds only ``GetConsoleMode``, ``WaitForSingleObject``, and
+``ReadConsoleInputW``.  It never calls ``SetConsoleMode`` or ``CloseHandle``.  Fixed-width ABI
+structures and injected operations keep normalization, absolute deadlines, repeat runs, and
+UTF-16 surrogate handling deterministic on every CI platform.  Keep ``msvcrt`` and kernel32
+loading inside the Windows-only default-operation factory.
+
 See ``docs/it/00-regole-operative.md`` for milestone, issue, PR, finding, and review rules.

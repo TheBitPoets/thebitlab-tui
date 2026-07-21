@@ -293,6 +293,6 @@ def test_public_reader_selects_injected_posix_backend(
 def test_unsupported_platform_factory_stays_lazy(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setattr(terminal.sys, "platform", "win32")
+    monkeypatch.setattr(terminal.sys, "platform", "darwin")
     with pytest.raises(UnsupportedOperation, match="not implemented for this platform"):
         KeyReader().__enter__()

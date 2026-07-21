@@ -89,10 +89,10 @@ Exit gates:
    the public facade, timeout, decoding, failure, and restoration contracts without implementation.
 2. Completed in [#33](https://github.com/TheBitPoets/thebitlab-tui/issues/33) and PR #34: add the
    shared facade, timeout policy, pure backend seams, and public docs.
-3. In progress in [#35](https://github.com/TheBitPoets/thebitlab-tui/issues/35): add the POSIX
-   backend with PTY integration and exact-restoration tests.
-4. Add the Windows console-record backend with injected virtual-key, modifier, repeat, and Unicode
-   tests.
+3. Completed in [#35](https://github.com/TheBitPoets/thebitlab-tui/issues/35) and PR #36: add the
+   POSIX backend with PTY integration and exact-restoration tests.
+4. In progress in [#37](https://github.com/TheBitPoets/thebitlab-tui/issues/37): add the Windows
+   console-record backend with injected virtual-key, modifier, repeat, and Unicode tests.
 5. Consolidate the cross-platform example, manual protocol, guides, images, and release evidence.
 
 The design gate in step 1 preserved reversibility until approval. Later platform child issues and

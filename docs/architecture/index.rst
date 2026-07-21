@@ -22,7 +22,7 @@ responsibilities.
 Event flow
 ----------
 
-Future Windows and Linux adapters translate terminal input into ``KeyEvent``. The application
+Private Windows and Linux adapters translate terminal input into ``KeyEvent``. The application
 updates its own focus, selection, collapse, and persistence state, rebuilds the widget tree, then
 renders another complete frame. Modifier-free commands remain mandatory fallbacks.
 

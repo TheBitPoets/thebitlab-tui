@@ -40,6 +40,10 @@ def _create_backend(escape_timeout: float) -> _InputBackend:
         from ._posix_input import _PosixInputBackend
 
         return _PosixInputBackend(escape_timeout)
+    if sys.platform == "win32":
+        from ._windows_input import _WindowsInputBackend
+
+        return _WindowsInputBackend(escape_timeout)
     raise UnsupportedOperation("terminal input backend is not implemented for this platform")
 
 
@@ -67,8 +71,9 @@ class KeyReader:
             zero, negative, infinite, NaN, and overflow-sized values.
 
     Construction validates scalar arguments but does not inspect or mutate a terminal.  Entering
-    selects and activates a private platform backend.  Linux TTY input is supported; Windows and
-    other platforms raise ``io.UnsupportedOperation`` until their bounded backend slice lands.
+    selects and activates a private platform backend. Linux TTYs and Windows consoles are
+    supported; redirected, non-interactive, and other unsupported inputs raise
+    ``io.UnsupportedOperation``.
 
     Instances are neither reusable nor thread-safe.  The application owns its event loop, commands,
     resize handling, state updates, and redraws.

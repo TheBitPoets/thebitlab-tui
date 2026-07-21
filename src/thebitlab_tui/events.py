@@ -1,4 +1,4 @@
-"""Abstract keys shared by future platform-specific input adapters."""
+"""Abstract keys shared by private platform-specific input adapters."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from enum import Enum
 
 
 class Key(str, Enum):
-    """Platform-neutral keys emitted by future terminal input adapters."""
+    """Platform-neutral keys emitted by terminal input adapters."""
 
     UP = "up"
     DOWN = "down"

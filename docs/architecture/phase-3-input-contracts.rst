@@ -9,7 +9,9 @@ This design record was approved in issue `#30
 <https://github.com/TheBitPoets/thebitlab-tui/pull/31>`_ under parent issue `#24
 <https://github.com/TheBitPoets/thebitlab-tui/issues/24>`_. Issue `#33
 <https://github.com/TheBitPoets/thebitlab-tui/issues/33>`_ implements the approved shared facade;
-platform backends remain split into later child issues and pull requests.
+the POSIX backend was delivered in issue `#35
+<https://github.com/TheBitPoets/thebitlab-tui/issues/35>`_, and issue `#37
+<https://github.com/TheBitPoets/thebitlab-tui/issues/37>`_ implements the Windows backend.
 
 Goals and boundaries
 --------------------
@@ -34,7 +36,7 @@ Approved public namespace
 
 The contract was approved in issue #30 and PR #31.  Issue #33 and PR #34 implement the shared
 facade, lifecycle, deadline policy, and private backend seams.  Issue #35 implements the bounded
-POSIX decoder/backend slice; the Windows backend remains separate.
+POSIX decoder/backend slice; issue #37 implements the separate Windows console-record slice.
 
 Phase 3 adds one public concrete facade and leaves ``Key`` and ``KeyEvent`` unchanged:
 
