@@ -111,6 +111,7 @@ class _PosixInputBackend:
 
         if self._fd is None or self._decoder is None:
             raise RuntimeError("POSIX backend is not active")
+        poll_before_deadline = True
         drain_before_expiry = False
         while True:
             event = self._decoder.pop()
@@ -130,12 +131,21 @@ class _PosixInputBackend:
                 event = self._decoder.pop()
                 if event is not None:
                     return event
+            if (
+                not poll_before_deadline
+                and not drain_before_expiry
+                and deadline is not None
+                and now >= deadline
+            ):
+                return None
             effective = self._earliest(deadline, escape_deadline)
             timeout = None if effective is None else max(0.0, effective - now)
             try:
                 ready, _, _ = self._ops.select([self._fd], [], [], timeout)
             except InterruptedError:
+                poll_before_deadline = False
                 continue
+            poll_before_deadline = False
             drain_before_expiry = False
 
             if ready:
@@ -152,7 +162,7 @@ class _PosixInputBackend:
                         return event
                     raise EOFError("terminal input reached EOF")
                 self._decoder.feed(data, self._ops.monotonic())
-                drain_before_expiry = True
+                drain_before_expiry = self._decoder.has_partial
                 continue
 
             now = self._ops.monotonic()

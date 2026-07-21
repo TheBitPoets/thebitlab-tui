@@ -185,6 +185,25 @@ def test_incomplete_alt_multibyte_is_discarded_at_escape_deadline() -> None:
     assert drain(decoder) == []
 
 
+def test_alt_multibyte_is_chunk_invariant_and_all_prefixes_expire() -> None:
+    scalar = chr(0x1F642)
+    encoded = scalar.encode()
+    sequence = b"\x1b" + encoded
+
+    for split in range(1, len(sequence)):
+        decoder = _PosixDecoder("utf-8", 0.05)
+        decoder.feed(sequence[:split], 1.0)
+        decoder.feed(sequence[split:], 1.01)
+        assert drain(decoder) == [KeyEvent(Key.CHARACTER, scalar, alt=True)]
+
+    for prefix_length in range(1, len(encoded)):
+        decoder = _PosixDecoder("utf-8", 0.05)
+        decoder.feed(b"\x1b", 1.0)
+        decoder.feed(encoded[:prefix_length], 1.01)
+        decoder.expire(1.05)
+        assert drain(decoder) == []
+
+
 def test_malformed_alt_replays_valid_suffix_with_current_timestamp() -> None:
     decoder = _PosixDecoder("utf-8", 0.05)
     decoder.feed(b"\x1b\xc3\x1b", 4.0)

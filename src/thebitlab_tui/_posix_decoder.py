@@ -75,6 +75,14 @@ class _PosixDecoder:
 
         return self._escape_deadline
 
+    @property
+    def has_partial(self) -> bool:
+        """Return whether more bytes can complete the current logical input unit."""
+
+        return self._state is not _State.NORMAL or self._decoder_pending(
+            self._text_decoder
+        )
+
     def pop(self) -> KeyEvent | None:
         """Return the oldest complete event."""
 
