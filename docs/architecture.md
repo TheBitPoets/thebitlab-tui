@@ -92,3 +92,11 @@ The delivery matrix, cross-platform manual protocol, example, and release bounda
 versioned evidence records successful maintainer checks in a Linux PTY and in Windows Terminal
 with both PowerShell and `cmd.exe`, all using Python 3.11.15.
 
+## Phase 4 integration boundary
+
+The integration contract is versioned in
+[`docs/architecture/phase-4-adapter-contracts.rst`](architecture/phase-4-adapter-contracts.rst).
+It keeps the reference adapter outside the installed package, preserves consumer-owned persisted
+layout state, and adds no student-domain model to the public API. Approval is recorded by merging
+PR #44 for issue #43.
+
