@@ -83,10 +83,22 @@ Exit gates:
   pass;
 - version `0.3.0`, tag, and release are published after the verified closeout merge.
 
-Tracked by [parent issue #24](https://github.com/TheBitPoets/thebitlab-tui/issues/24). The first
-child is the product-roadmap alignment in
-[issue #28](https://github.com/TheBitPoets/thebitlab-tui/issues/28); adapter signatures remain a
-separate reversible design gate.
+#### Phase 3 delivery sequence
+
+1. In progress in #30: approve the public facade, timeout, decoding, failure, and restoration
+   contracts without implementation.
+2. After approval: add the shared facade, timeout policy, pure decoder seams, and public docs.
+3. Add the POSIX backend with PTY integration and exact-restoration tests.
+4. Add the Windows console-record backend with injected virtual-key, modifier, repeat, and Unicode
+   tests.
+5. Consolidate the cross-platform example, manual protocol, guides, images, and release evidence.
+
+The design gate in step 1 is intentionally reversible. Later child issues and exact internal file
+placement are created only after the contract is approved. The proposed contract is versioned in
+[`docs/architecture/phase-3-input-contracts.rst`](architecture/phase-3-input-contracts.rst) and
+tracked by [issue #30](https://github.com/TheBitPoets/thebitlab-tui/issues/30). The parent plan is
+[issue #24](https://github.com/TheBitPoets/thebitlab-tui/issues/24); product-roadmap alignment was
+completed in [issue #28](https://github.com/TheBitPoets/thebitlab-tui/issues/28) and PR #29.
 
 ### Phase 4 - Integration-ready v0.4
 
