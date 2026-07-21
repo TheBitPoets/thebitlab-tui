@@ -138,10 +138,11 @@ Tracked by [parent issue #25](https://github.com/TheBitPoets/thebitlab-tui/issue
 5. Link separately authorized consumer evidence, then run a documentation-only closeout before
    publishing `v0.4.0` and closing the parent and milestone in the documented order.
 
-The proposed normative contract is
+The normative contract is
 [`docs/architecture/phase-4-adapter-contracts.rst`](architecture/phase-4-adapter-contracts.rst).
-No implementation slice may add a public adapter/model or modify `2cornot2c` without a new design
-decision and explicit repository authorization.
+Its approval is recorded by merging PR #44 for issue #43. No implementation slice may add a
+public adapter/model or modify `2cornot2c` without a new design decision and explicit repository
+authorization.
 
 ### Phase 5 - Release candidate v0.9
 

@@ -4,10 +4,20 @@ Phase 4 student TUI adapter contracts
 Status
 ------
 
-This design record is proposed in issue `#43
+Approval of this design record is recorded by merging PR `#44
+<https://github.com/TheBitPoets/thebitlab-tui/pull/44>`_ for issue `#43
 <https://github.com/TheBitPoets/thebitlab-tui/issues/43>`_ under parent issue `#25
-<https://github.com/TheBitPoets/thebitlab-tui/issues/25>`_. It must be approved before the
-reference adapter, neutral fixtures, or consumer integration are implemented.
+<https://github.com/TheBitPoets/thebitlab-tui/issues/25>`_. The reference adapter, neutral
+fixtures, and consumer integration must not begin before that merge.
+
+Compatibility provenance
+------------------------
+
+The compatibility baseline comes from a read-only inspection of ``TheBitPoets/2cornot2c`` commit
+``7a538d2edd1dca44c8f062888f508845f3441f1c``. The relevant files were
+``scripts/student_lab_layout.py``, ``scripts/student_lab_cli.py``, and
+``tests/test_student_lab_layout.py``; their inspected working-tree copies matched that commit.
+This repository neither imports nor checks out the consumer during tests.
 
 Decision
 --------
@@ -146,9 +156,8 @@ Phase 4 preserves the meaning of these fields without making their parser part o
 
 ``left_width``
    The consumer supplies its existing normalized value. In a wide horizontal frame the adapter
-   treats it as the requested left-column width, then reduces it when necessary to preserve the
-   right-column minimum and the one-cell gap. The value stored on disk is not changed by a
-   responsive frame.
+   applies the legacy allocation exactly. The value stored on disk is not changed by a responsive
+   frame.
 
 ``collapsed``
    Membership maps directly to ``Panel(collapsed=True)``. A collapsed panel has a three-row
@@ -172,10 +181,10 @@ initial compatibility breakpoint is 90 columns, matching the observed consumer b
   the first five panels form the left ``Column`` and the remaining five form the right ``Column``;
 * vertical orientation, or any width below 90 columns, creates one ``Column`` containing all ten
   panels in exact persisted order;
-* the horizontal path uses an explicit one-cell gap, an effective fixed left width, and a flexible
-  right width with a 30-cell preferred minimum;
-* the effective left width is no greater than the persisted ``left_width`` and no greater than the
-  space left after the gap and right minimum;
+* the horizontal path retains the visible three-cell ASCII separator ``" | "``;
+* the exact legacy allocation is
+  ``effective_left = min(left_width, max(36, terminal_width - 39))`` followed by
+  ``right_width = max(30, terminal_width - effective_left - 3)``;
 * the narrow fallback is selected explicitly before constructing the tree. It does not rely on
   ``Row.stack_when_narrow`` because stacking two pre-grouped columns would not reproduce the
   persisted all-panel order.
@@ -228,6 +237,8 @@ The reference-adapter slice must add neutral fixtures and deterministic checks f
 * first, middle, and out-of-range scroll and selection inputs without state mutation;
 * modal open and closed composition;
 * resize sequences that rebuild at fixed injected terminal sizes;
+* allocation boundaries at widths 89, 90, and 100 with persisted ``left_width`` values 36, 62,
+  and 120, without mutating the persisted mapping;
 * Windows and Linux example smoke tests without a runtime dependency;
 * an unchanged public API manifest and strict Sphinx documentation.
 
@@ -261,4 +272,3 @@ consumer migration and snapshot review.
 New public exports or signatures, library acceptance of student dictionaries, library ownership
 of persistence/defaults, a widget measurement protocol, an event loop, or application commands
 are high-cost decisions. They are deferred and require a new design issue before implementation.
-
