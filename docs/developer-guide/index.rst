@@ -43,4 +43,8 @@ Update the user guide for observable behavior, this developer guide for contribu
 the architecture guide for responsibility or dependency changes. Images must be reproducible SVG
 or generated screenshots with useful alternative text.
 
+Phase 2 API changes must follow the :doc:`../architecture/phase-2-contracts` design record. Update
+the record before implementation when review changes state ownership, constructor fields, marker
+semantics, clipping, or narrow-terminal behavior.
+
 See ``docs/it/00-regole-operative.md`` for milestone, issue, PR, finding, and review rules.

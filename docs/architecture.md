@@ -49,3 +49,11 @@ dependency direction is one-way from the application to `thebitlab_tui`.
 Animations are intentionally absent. If later justified, they can be represented as pure
 sequences of widget trees or frames while timing remains the application's responsibility.
 
+## Phase 2 state ownership
+
+The Phase 2 widgets keep focus, active selection, modal visibility, and scroll offsets as explicit
+caller-provided presentation state. They may clamp an effective offset for the current viewport but
+never mutate application state, dispatch events, or install an event loop. The proposed public
+signatures, ASCII markers, clipping behavior, rejected alternatives, and required snapshots are
+recorded in [`docs/architecture/phase-2-contracts.rst`](architecture/phase-2-contracts.rst).
+

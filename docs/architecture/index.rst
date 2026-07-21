@@ -30,3 +30,11 @@ application.
 The adapter must be compatible with ``scripts/student_lab_layout.py`` and preserve its ASCII,
 optional ANSI, responsive, and Windows/Linux behavior. No application code or data model is copied
 into this library.
+
+Phase design records
+--------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   phase-2-contracts
