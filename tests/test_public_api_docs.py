@@ -9,6 +9,42 @@ from thebitlab_tui import canvas, events, geometry, layout, renderer, styles, te
 
 
 MODULES = (canvas, events, geometry, layout, renderer, styles, terminal, widgets)
+PUBLIC_API = (
+    "Canvas",
+    "Column",
+    "Divider",
+    "Key",
+    "KeyEvent",
+    "Label",
+    "ListView",
+    "Modal",
+    "Panel",
+    "Rect",
+    "ResizeWatcher",
+    "Row",
+    "ScrollView",
+    "Size",
+    "Style",
+    "StatusBadge",
+    "TerminalSize",
+    "Widget",
+    "get_terminal_size",
+    "render",
+    "render_lines",
+    "render_terminal",
+    "strip_ansi",
+    "supports_color",
+    "truncate",
+    "visible_width",
+)
+
+
+def test_public_api_manifest_is_stable() -> None:
+    """Protect the complete documented namespace against accidental drift."""
+
+    assert tuple(thebitlab_tui.__all__) == PUBLIC_API
+    assert len(thebitlab_tui.__all__) == len(set(thebitlab_tui.__all__))
+    assert all(hasattr(thebitlab_tui, name) for name in PUBLIC_API)
 
 
 def test_exported_api_has_docstrings() -> None:

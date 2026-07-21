@@ -57,3 +57,4 @@ Phase design records
    :maxdepth: 1
 
    phase-2-contracts
+   phase-2-verification
