@@ -1,5 +1,10 @@
 # Integration with `scripts/student_lab_layout.py`
 
+The normative Phase 4 design is
+[`docs/architecture/phase-4-adapter-contracts.rst`](architecture/phase-4-adapter-contracts.rst).
+The snippets below illustrate the current public widgets; they are not a public adapter API or a
+schema for the consumer's dictionaries.
+
 Integration belongs in the `2cornot2c` repository, not in this library. The initial adapter can
 have one pure function per application section and one composition function:
 
@@ -65,10 +70,10 @@ def student_screen(data: dict[str, object], collapsed: set[str], focus: str) -> 
     return Row([workspace, activity, guide], stack_when_narrow=True)
 ```
 
-The real adapter should create panels for assignment detail, workspace, activity, allowed help,
-help requests, report, tests, grading, runner, and quick guide. It may initially split the current
-text renderer into lines, but direct dictionary-to-widget conversion is clearer and avoids
-parsing headings.
+The real adapter should create panels with the persisted identifiers `assignment`, `workspace`,
+`activity`, `support`, `help`, `report`, `tests`, `grading`, `runner`, and `guide`. It should
+project application dictionaries directly into neutral logical rows before building widgets. Parsing
+already-rendered headings is a rollout bridge only, not the approved adapter boundary.
 
 At redraw time the existing CLI should read its own state, build the tree, call
 `render_terminal(tree, color=...)`, and decide how to clear and print. A future adapter can enter
@@ -86,4 +91,26 @@ small application-owned composite can draw ``student_screen(...)`` first and
 ``quick_help_modal(...)`` second into the same rectangle. Escape or a modifier-free fallback such
 as ``q`` updates the application's ``open`` value; ``Modal`` itself does not handle keys, callbacks,
 z-order, or dimming. No change to ``scripts/student_lab_layout.py`` is required.
+
+## Persisted state and responsive translation
+
+The consumer continues to load, normalize, and save `orientation`, `order`, `left_width`,
+`collapsed`, and `focus`. The adapter receives only normalized state. At each redraw it also
+receives the current terminal dimensions:
+
+- horizontal layout at 90 columns or wider uses two groups of five ordered panels;
+- explicit vertical layout or a terminal below 90 columns uses one column in exact persisted
+  order;
+- the requested left width yields enough room for the right column and never writes a responsive
+  reduction back to the JSON file;
+- missing sections remain visible with a neutral placeholder;
+- all panel and dashboard scroll offsets remain caller-owned.
+
+Do not depend on stacking a `Row` containing two pre-grouped columns: that would place the entire
+left group before the right group in the narrow frame for reasons unrelated to persisted order.
+Choose the wide or narrow tree explicitly from the current size.
+
+The actual migration should keep the existing text renderer as a feature/failure fallback. No
+byte-for-byte identity is promised, but ASCII markers, persisted meanings, no-overflow behavior,
+ANSI-independent geometry, and modifier-free commands must remain available.
 
