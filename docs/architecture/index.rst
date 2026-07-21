@@ -60,3 +60,4 @@ Phase design records
    phase-2-contracts
    phase-2-verification
    phase-3-input-contracts
+   phase-3-verification

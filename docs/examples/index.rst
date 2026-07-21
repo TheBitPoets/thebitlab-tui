@@ -74,3 +74,30 @@ application-owned composite. Run the stable ASCII snapshot with:
 
 The example owns z-order and the ``open`` value. ``[x]`` is a textual affordance; there is no input
 reader, callback, dimming layer, or event loop in the widget.
+
+Terminal input and responsive redraw
+------------------------------------
+
+``examples/terminal_input.py`` is an application example, not a new framework layer. Its stable
+snapshot mode builds three panels from caller-owned state and never opens standard input:
+
+.. code-block:: console
+
+   python examples/terminal_input.py --snapshot --no-color
+
+Use ``--interactive`` only in a real Linux terminal or Windows console. The example enters
+``KeyReader`` visibly, uses finite reads so ``ResizeWatcher`` can be polled, maps both semantic
+keys and modifier-free commands, rebuilds the widget tree, and chooses when to replace the frame.
+Its loop, commands, mutable state, clear/home sequences, and printing stay outside the library.
+
+.. code-block:: console
+
+   python examples/terminal_input.py --interactive --no-color
+
+The portable command pairs are Up/``k``, Down/``j``, Tab/``n``, Enter/Space, and Escape/``q``.
+Redirected input is rejected rather than reinterpreted as an interactive keyboard. See
+:doc:`../architecture/phase-3-verification` for the exact manual protocol.
+
+.. image:: ../_static/images/terminal-input.svg
+   :alt: Three responsive ASCII panels showing terminal size, selected application item, and portable keyboard commands.
+   :align: center

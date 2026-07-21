@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="240" viewBox="0 0 800 240" role="img" aria-labelledby="title desc">
+  <title id="title">Application-owned terminal input dashboard</title>
+  <desc id="desc">Three responsive ASCII panels show session state, caller-owned selection, and modifier-free keyboard commands.</desc>
+  <rect width="800" height="230" rx="8" fill="#171717"/>
+  <text x="20" y="34" fill="#f4f4f4" font-family="Consolas, monospace" font-size="16" xml:space="preserve">
+    <tspan x="20" dy="0">+ &gt; Session ---------+ + Selection --------+ + Commands -------------+</tspan>
+    <tspan x="20" dy="24">|Size: 70x8          | |* assignment       | |Up/k previous          |</tspan>
+    <tspan x="20" dy="24">|Last: none          | |  workspace        | |Down/j next            |</tspan>
+    <tspan x="20" dy="24">|Activations: 0      | |  activity         | |Tab/n focus            |</tspan>
+    <tspan x="20" dy="24">|                    | |  tests            | |Enter/Space activate   |</tspan>
+    <tspan x="20" dy="24">|                    | |                   | |Esc/q quit             |</tspan>
+    <tspan x="20" dy="24">|                    | |                   | |                       |</tspan>
+    <tspan x="20" dy="24">+--------------------+ +-------------------+ +-----------------------+</tspan>
+  </text>
+</svg>

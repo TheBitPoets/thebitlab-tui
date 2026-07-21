@@ -40,6 +40,9 @@ reported by Windows Terminal and PowerShell.
 On each redraw the application reads the terminal size (or calls `render_terminal`), builds or
 updates the widget tree, and renders a complete frame. `ResizeWatcher` tells a caller when a
 polled size differs from the preceding one. The application decides when to clear and print.
+The executable `examples/terminal_input.py` demonstrates this boundary with finite `KeyReader`
+calls, application-owned commands, and an application-owned presenter; it adds no loop or screen
+writer to the package.
 
 For list navigation the flow is equally explicit: the terminal adapter produces a `KeyEvent`, the
 application computes new `active_index` and `scroll_offset` values, and the next redraw constructs
@@ -79,4 +82,12 @@ caller-provided presentation state. They may clamp an effective offset for the c
 never mutate application state, dispatch events, or install an event loop. The implemented public
 signatures, ASCII markers, clipping behavior, rejected alternatives, and required snapshots are
 recorded in [`docs/architecture/phase-2-contracts.rst`](architecture/phase-2-contracts.rst).
+
+## Phase 3 verification
+
+The public input contract and private platform responsibilities are recorded in
+[`docs/architecture/phase-3-input-contracts.rst`](architecture/phase-3-input-contracts.rst).
+The delivery matrix, cross-platform manual protocol, example, and release boundary are recorded in
+[`docs/architecture/phase-3-verification.rst`](architecture/phase-3-verification.rst). Manual
+results remain `NOT RUN` until a maintainer exercises real Linux and Windows terminals.
 

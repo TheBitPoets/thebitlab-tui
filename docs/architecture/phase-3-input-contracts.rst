@@ -10,8 +10,10 @@ This design record was approved in issue `#30
 <https://github.com/TheBitPoets/thebitlab-tui/issues/24>`_. Issue `#33
 <https://github.com/TheBitPoets/thebitlab-tui/issues/33>`_ implements the approved shared facade;
 the POSIX backend was delivered in issue `#35
-<https://github.com/TheBitPoets/thebitlab-tui/issues/35>`_, and issue `#37
-<https://github.com/TheBitPoets/thebitlab-tui/issues/37>`_ implements the Windows backend.
+<https://github.com/TheBitPoets/thebitlab-tui/issues/35>`_, and the Windows backend was delivered
+in issue `#37 <https://github.com/TheBitPoets/thebitlab-tui/issues/37>`_ and PR `#38
+<https://github.com/TheBitPoets/thebitlab-tui/pull/38>`_. Phase 3 verification and documentation
+are consolidated in issue `#39 <https://github.com/TheBitPoets/thebitlab-tui/issues/39>`_.
 
 Goals and boundaries
 --------------------
@@ -35,8 +37,9 @@ Approved public namespace
 -------------------------
 
 The contract was approved in issue #30 and PR #31.  Issue #33 and PR #34 implement the shared
-facade, lifecycle, deadline policy, and private backend seams.  Issue #35 implements the bounded
-POSIX decoder/backend slice; issue #37 implements the separate Windows console-record slice.
+facade, lifecycle, deadline policy, and private backend seams. Issue #35 implements the bounded
+POSIX decoder/backend slice; issue #37 and PR #38 implement the separate Windows console-record
+slice. The evidence matrix and manual protocol are in :doc:`phase-3-verification`.
 
 Phase 3 adds one public concrete facade and leaves ``Key`` and ``KeyEvent`` unchanged:
 
@@ -336,8 +339,8 @@ After approval, implementation remains split into focused child issues:
 1. shared ``KeyReader`` facade, timeout policy, pure decoder seams, and public documentation;
 2. POSIX backend, decoder, PTY integration tests, and restoration tests;
 3. Windows console-record backend, UTF-16 decoding, and injected platform tests;
-4. cross-platform example, manual verification protocol, guide/image updates, and release
-   closeout.
+4. cross-platform example, manual verification protocol, guide/image updates, and verification
+   consolidation, followed by a separate release closeout.
 
 Exact internal module names, buffer limits, Windows wait-slice duration, and issue numbering remain
 reversible until those slices are created. No implementation pull request may broaden the public

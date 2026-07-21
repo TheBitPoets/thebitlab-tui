@@ -71,9 +71,11 @@ text renderer into lines, but direct dictionary-to-widget conversion is clearer 
 parsing headings.
 
 At redraw time the existing CLI should read its own state, build the tree, call
-`render_terminal(tree, color=...)`, and decide how to clear and print. Its platform-specific key
-reader can later return `KeyEvent` values. Existing fallback commands without Alt/Ctrl should be
-retained. No change to `scripts/student_lab_layout.py` is required for this scaffold.
+`render_terminal(tree, color=...)`, and decide how to clear and print. A future adapter can enter
+the library's `KeyReader`, map returned `KeyEvent` values to existing application commands, and
+poll `ResizeWatcher` after finite reads. Existing fallback commands without Alt/Ctrl must be
+retained. The loop, dictionaries, persistence, and redraw policy stay in `2cornot2c`; no change to
+`scripts/student_lab_layout.py` is required for this scaffold.
 
 The first adapter should pass explicit logical rows to ``ScrollView`` as above. If it later wraps
 text responsively, the application must recalculate ``content_height`` from the current width on

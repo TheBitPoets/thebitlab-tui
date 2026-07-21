@@ -12,13 +12,15 @@ from examples.basic_panels import build_screen as build_panels
 from examples.modal import HelpOverlay
 from examples.scroll_view import build_screen as build_scroll_view
 from examples.selectable_list import build_screen as build_selectable_list
-from thebitlab_tui import render
+from examples.terminal_input import ApplicationState, render_frame as render_input_frame
+from thebitlab_tui import TerminalSize, render
 
 
 SVG_NAMESPACE = {"svg": "http://www.w3.org/2000/svg"}
 ROOT = Path(__file__).parents[1]
 IMAGES = ROOT / "docs" / "_static" / "images"
 EVIDENCE_INDEX = ROOT / "docs" / "architecture" / "phase-2-verification.rst"
+PHASE_3_EVIDENCE_INDEX = ROOT / "docs" / "architecture" / "phase-3-verification.rst"
 REQUIRED_EVIDENCE = {
     "docs/api/index.rst",
     "docs/user-guide/index.rst",
@@ -39,6 +41,24 @@ REQUIRED_EVIDENCE = {
     "tests/test_modal.py",
     "tests/test_renderer.py",
     "tests/test_scroll_view.py",
+}
+REQUIRED_PHASE_3_EVIDENCE = {
+    "docs/api/index.rst",
+    "docs/user-guide/index.rst",
+    "docs/developer-guide/index.rst",
+    "docs/_static/images/terminal-input.svg",
+    "examples/terminal_input.py",
+    "tests/test_key_reader.py",
+    "tests/test_posix_decoder.py",
+    "tests/test_posix_input.py",
+    "tests/test_posix_pty.py",
+    "tests/test_public_api_docs.py",
+    "tests/test_windows_decoder.py",
+    "tests/test_windows_input.py",
+    "tests/test_terminal_input_example.py",
+    "tests/test_examples.py",
+    "tests/test_docs_assets.py",
+    "tests/test_release_metadata.py",
 }
 
 
@@ -87,6 +107,14 @@ def test_terminal_images_match_example_frames(
     assert _terminal_rows(IMAGES / image_name) == expected
 
 
+def test_terminal_input_image_matches_deterministic_snapshot() -> None:
+    """Keep the Phase 3 image derived from the non-interactive example frame."""
+
+    expected = render_input_frame(ApplicationState(), TerminalSize(70, 8), color=False)
+
+    assert _terminal_rows(IMAGES / "terminal-input.svg") == expected
+
+
 def test_phase_2_evidence_index_references_existing_files() -> None:
     """Reject stale paths in the versioned Phase 2 release matrix."""
 
@@ -96,4 +124,16 @@ def test_phase_2_evidence_index_references_existing_files() -> None:
     )
 
     assert REQUIRED_EVIDENCE <= referenced_paths
+    assert all((ROOT / relative_path).is_file() for relative_path in referenced_paths)
+
+
+def test_phase_3_evidence_index_references_existing_files() -> None:
+    """Reject stale paths in the versioned Phase 3 release matrix."""
+
+    document = PHASE_3_EVIDENCE_INDEX.read_text(encoding="utf-8")
+    referenced_paths = set(
+        re.findall(r"``((?:docs|examples|tests)/[^`]+)``", document)
+    )
+
+    assert REQUIRED_PHASE_3_EVIDENCE <= referenced_paths
     assert all((ROOT / relative_path).is_file() for relative_path in referenced_paths)
