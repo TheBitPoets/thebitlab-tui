@@ -96,4 +96,12 @@ restoration itself because the facade cannot know whether a safe snapshot exists
 error stays primary and a restoration ``OSError`` is attached as a note; platform slices must test
 that invariant with injected operations.
 
+The private POSIX implementation keeps byte decoding separate from descriptor I/O.  Its decoder
+is pure and tested on every platform; the backend lazily imports POSIX modules only after Linux is
+selected.  Activation deep-copies the complete ``termios`` snapshot, clears only ``ECHO`` and
+``ICANON``, sets ``VMIN=1`` and ``VTIME=0``, and restores that snapshot with ``TCSANOW``.  Do not
+replace this with raw mode, non-blocking descriptor flags, signal handlers, or input flushing.
+Linux PTY tests provide the operating-system evidence; injected operations cover deadlines,
+interruption, EOF, setup compensation, and restoration retry on Windows CI as well.
+
 See ``docs/it/00-regole-operative.md`` for milestone, issue, PR, finding, and review rules.

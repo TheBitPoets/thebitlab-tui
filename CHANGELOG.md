@@ -4,7 +4,9 @@
 
 - Add the approved public `KeyReader` facade with deterministic lifecycle, total monotonic
   deadlines, private backend seams, and no terminal side effects during construction.
-- Document that real POSIX and Windows input backends remain separate Phase 3 delivery slices.
+- Add the dependency-free Linux POSIX input backend with conservative cbreak mode, exact terminal
+  restoration, deterministic Escape/Alt/CSI/SS3 decoding, injected tests, and Linux PTY evidence.
+- Keep the Windows console input backend as a separate Phase 3 delivery slice.
 
 ## 0.2.0 - 2026-07-21
 

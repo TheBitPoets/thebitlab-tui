@@ -32,9 +32,9 @@ animation timing, and a library-owned event loop remain outside this phase.
 Approved public namespace
 -------------------------
 
-The contract was approved in issue #30 and PR #31.  Issue #33 implements the shared facade,
-lifecycle, deadline policy, and private backend seams; platform input remains in later bounded
-slices.
+The contract was approved in issue #30 and PR #31.  Issue #33 and PR #34 implement the shared
+facade, lifecycle, deadline policy, and private backend seams.  Issue #35 implements the bounded
+POSIX decoder/backend slice; the Windows backend remains separate.
 
 Phase 3 adds one public concrete facade and leaves ``Key`` and ``KeyEvent`` unchanged:
 

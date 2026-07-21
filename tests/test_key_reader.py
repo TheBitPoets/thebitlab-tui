@@ -278,9 +278,12 @@ def test_read_errors_propagate_and_context_restores(
     assert backend.restored == 1
 
 
-def test_backend_factory_is_lazy_and_unavailable_until_platform_slice() -> None:
+def test_backend_factory_is_lazy_and_unavailable_until_platform_slice(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(terminal.sys, "platform", "win32")
     reader = KeyReader()
-    with pytest.raises(UnsupportedOperation, match="not implemented yet"):
+    with pytest.raises(UnsupportedOperation, match="not implemented for this platform"):
         reader.__enter__()
     with pytest.raises(RuntimeError, match="single-use"):
         reader.__enter__()
