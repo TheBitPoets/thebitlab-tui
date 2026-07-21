@@ -11,6 +11,8 @@ Responsibility boundaries
 Widgets describe presentation and draw within rectangles. Layout containers assign rectangles to
 children. ``Canvas`` owns fixed-size cells and clipping. The renderer creates a canvas and returns
 rows or text. The terminal layer reads dimensions and color capability but never clears or prints.
+``ListView`` presents a tuple of strings plus caller-owned selection and viewport state; it does
+not navigate, accept events, or mutate that state.
 
 Event flow
 ----------
@@ -18,6 +20,10 @@ Event flow
 Future Windows and Linux adapters translate terminal input into ``KeyEvent``. The application
 updates its own focus, selection, collapse, and persistence state, rebuilds the widget tree, then
 renders another complete frame. Modifier-free commands remain mandatory fallbacks.
+
+For a list, that flow is ``KeyEvent`` to application-owned ``active_index`` and ``scroll_offset``
+to a newly constructed ``ListView`` to renderer output. Clamping during drawing is local to the
+current viewport and never becomes hidden application state.
 
 Student TUI adapter
 -------------------

@@ -1,10 +1,10 @@
-"""Pure leaf, framing, divider, and semantic-status widgets."""
+"""Pure leaf, framing, selection, divider, and semantic-status widgets."""
 
 from __future__ import annotations
 
 import textwrap
 from dataclasses import dataclass, field
-from typing import ClassVar, Literal, Protocol, runtime_checkable
+from typing import ClassVar, Literal, Protocol, Sequence, runtime_checkable
 
 from .canvas import Canvas
 from .geometry import Rect
@@ -281,6 +281,109 @@ class StatusBadge:
                 max_width=rect.width - 2,
                 style=style,
             )
+
+
+@dataclass(slots=True)
+class ListView:
+    """Draw a caller-owned selection and vertical viewport.
+
+    Args:
+        items: Strings to snapshot as one immutable item per row.
+        active_index: Selected item, or ``None`` for no selection. A supplied index must refer to
+            an item.
+        scroll_offset: Requested first item. Drawing clamps the effective offset to the current
+            viewport without changing this field.
+        focused: Use ``>`` instead of ``*`` for the active-row marker.
+        style: Style applied to inactive rows.
+        active_style: Style applied to the complete active row.
+        width: Optional fixed layout width.
+        height: Optional fixed layout height.
+        min_width: Soft minimum layout width.
+        min_height: Soft minimum layout height.
+        max_width: Optional maximum layout width.
+        max_height: Optional maximum layout height.
+
+    Each item occupies exactly one row. Inactive rows reserve the same two marker columns as the
+    active row. Width one preserves only the marker column; longer text is truncated with an
+    ellipsis. The widget never accepts events, changes selection, or scrolls automatically.
+    Invalid indices, negative offsets, or invalid size hints raise :class:`ValueError`.
+    """
+
+    items: Sequence[str]
+    active_index: int | None = field(default=None, kw_only=True)
+    scroll_offset: int = field(default=0, kw_only=True)
+    focused: bool = field(default=False, kw_only=True)
+    style: Style = field(default=PLAIN, kw_only=True)
+    active_style: Style = field(
+        default=Style(bold=True, bright=True),
+        kw_only=True,
+    )
+    width: int | None = field(default=None, kw_only=True)
+    height: int | None = field(default=None, kw_only=True)
+    min_width: int = field(default=1, kw_only=True)
+    min_height: int = field(default=1, kw_only=True)
+    max_width: int | None = field(default=None, kw_only=True)
+    max_height: int | None = field(default=None, kw_only=True)
+
+    def __post_init__(self) -> None:
+        self.items = tuple(self.items)
+        if self.active_index is not None and not 0 <= self.active_index < len(self.items):
+            raise ValueError("active_index must refer to an existing item")
+        if self.scroll_offset < 0:
+            raise ValueError("scroll_offset must be non-negative")
+        _validate_size_hints(
+            width=self.width,
+            min_width=self.min_width,
+            max_width=self.max_width,
+            height=self.height,
+            min_height=self.min_height,
+            max_height=self.max_height,
+        )
+
+    def draw(self, canvas: Canvas, rect: Rect) -> None:
+        """Draw the effective viewport without mutating caller-owned state."""
+
+        if rect.is_empty or rect.intersect(canvas.rect).is_empty:
+            return
+        canvas.fill(rect)
+        maximum_offset = max(0, len(self.items) - rect.height)
+        effective_offset = min(self.scroll_offset, maximum_offset)
+        for row, item in enumerate(
+            self.items[effective_offset : effective_offset + rect.height]
+        ):
+            item_index = effective_offset + row
+            active = item_index == self.active_index
+            marker = ">" if active and self.focused else "*" if active else " "
+            row_style = self.active_style if active else self.style
+            canvas.fill(
+                Rect(rect.x, rect.y + row, rect.width, 1),
+                style=row_style,
+            )
+            canvas.write(
+                rect.x,
+                rect.y + row,
+                marker,
+                max_width=min(1, rect.width),
+                style=row_style,
+                ellipsis=False,
+            )
+            if rect.width >= 2:
+                canvas.write(
+                    rect.x + 1,
+                    rect.y + row,
+                    " ",
+                    max_width=1,
+                    style=row_style,
+                    ellipsis=False,
+                )
+            if rect.width >= 3:
+                canvas.write(
+                    rect.x + 2,
+                    rect.y + row,
+                    item,
+                    max_width=rect.width - 2,
+                    style=row_style,
+                )
 
 
 @dataclass(slots=True)

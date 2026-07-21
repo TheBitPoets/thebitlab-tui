@@ -2,9 +2,10 @@
 
 ## Responsibilities
 
-Widgets describe presentation and draw into a supplied rectangle. `Label` handles text and
-`Panel` adds a title, state markers, and an ASCII border. Widgets do not print, read input, or
-know where their data came from.
+Widgets describe presentation and draw into a supplied rectangle. `Label` handles text,
+`Panel` adds a title, state markers, and an ASCII border, and `ListView` presents caller-owned
+selection and viewport state. Widgets do not print, read input, or know where their data came
+from.
 
 Layout containers assign rectangles to children. `Row` allocates fixed and proportional widths;
 when the children's minimum widths do not fit, it delegates to vertical stacking. `Column` does
@@ -32,6 +33,11 @@ reported by Windows Terminal and PowerShell.
 On each redraw the application reads the terminal size (or calls `render_terminal`), builds or
 updates the widget tree, and renders a complete frame. `ResizeWatcher` tells a caller when a
 polled size differs from the preceding one. The application decides when to clear and print.
+
+For list navigation the flow is equally explicit: the terminal adapter produces a `KeyEvent`, the
+application computes new `active_index` and `scroll_offset` values, and the next redraw constructs
+a new `ListView`. The widget only clamps an effective offset for its assigned height; it never
+changes state or automatically reveals the active item.
 
 ## Data and presentation
 

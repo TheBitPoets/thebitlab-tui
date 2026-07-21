@@ -37,6 +37,12 @@ visible-width behavior are public compatibility commitments. Changes require exa
 ANSI snapshots with equal visible widths, and width-zero/one coverage. These widgets remain pure
 presentation objects and must not acquire callbacks or application state.
 
+``ListView`` materializes items as a tuple and treats ``active_index``, ``focused``, and
+``scroll_offset`` as immutable presentation inputs. Its ``>`` and ``*`` markers, two-column prefix,
+viewport clamp, and no-auto-scroll behavior are compatibility commitments. Cover empty and clipped
+viewports, offsets beyond the maximum, active items outside the viewport, ANSI/no-color, and widths
+zero through three. Navigation and event dispatch belong to the application.
+
 Documentation workflow
 ----------------------
 

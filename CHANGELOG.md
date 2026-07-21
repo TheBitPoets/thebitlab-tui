@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add the public `ListView` widget with caller-owned focus, selection, and vertical scrolling.
+- Add empty, narrow, clipped, ANSI, layout, validation, and scrolling snapshots for `ListView`.
+- Add `ListView` user/developer guidance, integration notes, an executable example, and an SVG.
 - Add public ASCII `Divider` and semantic `StatusBadge` widgets with optional ANSI styles.
 - Add narrow, clipping, layout, validation, and color snapshots for the Phase 2 primitives.
 - Add user/developer guidance and an executable divider/status example.

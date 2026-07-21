@@ -40,6 +40,8 @@ The approved contract is versioned in
 [issue #10](https://github.com/TheBitPoets/thebitlab-tui/issues/10); it was approved in
 [PR #11](https://github.com/TheBitPoets/thebitlab-tui/pull/11). Divider and status-badge
 implementation is tracked by [issue #12](https://github.com/TheBitPoets/thebitlab-tui/issues/12).
+Caller-owned focus and `ListView` implementation is tracked by
+[issue #14](https://github.com/TheBitPoets/thebitlab-tui/issues/14).
 
 ## Phase 3
 

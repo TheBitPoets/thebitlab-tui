@@ -72,7 +72,12 @@ class Canvas:
 
         if y < 0 or y >= self.height:
             return
-        plain = strip_ansi(text).replace("\n", " ")
+        plain = (
+            strip_ansi(text)
+            .replace("\r\n", " ")
+            .replace("\r", " ")
+            .replace("\n", " ")
+        )
         available = self.width - x if max_width is None else max_width
         if available <= 0:
             return
