@@ -36,6 +36,31 @@ using fixed or flexible ``Size`` values; ``Column`` distributes height.
 When the minimum widths of a row no longer fit, its children stack vertically. If even the minimum
 dimensions cannot fit, clipping prevents horizontal overflow.
 
+Dividers and status badges
+--------------------------
+
+``Divider`` draws ``-`` horizontally or ``|`` vertically. A custom character must be one printable
+ASCII cell. When a layout assigns more than one row or column, the line stays centered with any odd
+spare cell below or to the right.
+
+``StatusBadge`` keeps semantic state visible without color. The stable marker mapping is ``.`` for
+neutral, ``i`` for information, ``+`` for success, ``!`` for warning, and ``x`` for error.
+``style=None`` selects the semantic style: plain for neutral and bright blue, green, yellow, or red
+for the colored states. An explicit ``Style`` overrides color but not the marker. At width one the
+marker wins, and ``color=False`` removes ANSI without changing geometry.
+
+.. code-block:: python
+
+   from thebitlab_tui import Column, Divider, StatusBadge, render
+
+   screen = Column([
+       StatusBadge("running", status="info"),
+       Divider(),
+       StatusBadge("passed", status="success"),
+   ])
+
+   frame = render(screen, width=20, height=3, color=False)
+
 Color and terminals
 -------------------
 

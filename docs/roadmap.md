@@ -35,10 +35,11 @@ The design gate in step 1 is intentionally reversible: implementation issues and
 are created only after the contracts have been reviewed. Phase 2 does not add an event loop,
 terminal input adapter, application persistence, or direct student TUI integration.
 
-The proposed contract is versioned in
+The approved contract is versioned in
 [`docs/architecture/phase-2-contracts.rst`](architecture/phase-2-contracts.rst) and tracked by
-[issue #10](https://github.com/TheBitPoets/thebitlab-tui/issues/10). It remains a proposal until its
-design pull request is reviewed and merged.
+[issue #10](https://github.com/TheBitPoets/thebitlab-tui/issues/10); it was approved in
+[PR #11](https://github.com/TheBitPoets/thebitlab-tui/pull/11). Divider and status-badge
+implementation is tracked by [issue #12](https://github.com/TheBitPoets/thebitlab-tui/issues/12).
 
 ## Phase 3
 

@@ -1,14 +1,56 @@
-"""Leaf and framed widgets. Widgets draw but never print."""
+"""Pure leaf, framing, divider, and semantic-status widgets."""
 
 from __future__ import annotations
 
 import textwrap
 from dataclasses import dataclass, field
-from typing import Protocol, runtime_checkable
+from typing import ClassVar, Literal, Protocol, runtime_checkable
 
 from .canvas import Canvas
 from .geometry import Rect
 from .styles import PLAIN, Style, strip_ansi, truncate
+
+
+_BADGE_MARKERS = {
+    "neutral": ".",
+    "info": "i",
+    "success": "+",
+    "warning": "!",
+    "error": "x",
+}
+_BADGE_STYLES = {
+    "neutral": PLAIN,
+    "info": Style(foreground="bright_blue"),
+    "success": Style(foreground="bright_green"),
+    "warning": Style(foreground="bright_yellow"),
+    "error": Style(foreground="bright_red"),
+}
+
+
+def _validate_size_hints(
+    *,
+    width: int | None,
+    min_width: int,
+    max_width: int | None,
+    height: int | None = None,
+    min_height: int = 0,
+    max_height: int | None = None,
+) -> None:
+    values = {
+        "width": width,
+        "height": height,
+        "min_width": min_width,
+        "min_height": min_height,
+        "max_width": max_width,
+        "max_height": max_height,
+    }
+    for name, value in values.items():
+        if value is not None and value < 0:
+            raise ValueError(f"{name} must be non-negative")
+    if max_width is not None and max_width < min_width:
+        raise ValueError("max_width cannot be smaller than min_width")
+    if max_height is not None and max_height < min_height:
+        raise ValueError("max_height cannot be smaller than min_height")
 
 
 @runtime_checkable
@@ -101,6 +143,143 @@ class Label:
                 line,
                 max_width=rect.width - offset,
                 style=self.style,
+            )
+
+
+@dataclass(slots=True)
+class Divider:
+    """Draw one centered horizontal or vertical ASCII line.
+
+    Args:
+        orientation: ``"horizontal"`` or ``"vertical"``.
+        char: Optional printable one-cell ASCII character. The defaults are ``-`` horizontally
+            and ``|`` vertically.
+        style: Style applied to every visible divider cell.
+        width: Optional fixed layout width.
+        height: Optional fixed layout height.
+        min_width: Soft minimum layout width.
+        min_height: Soft minimum layout height.
+        max_width: Optional maximum layout width.
+        max_height: Optional maximum layout height.
+
+    A horizontal divider defaults to a fixed height of one cell; a vertical divider defaults to a
+    fixed width of one cell. Larger assigned rectangles place an odd spare cell below or to the
+    right of the line. Invalid orientation, characters, or size hints raise :class:`ValueError`.
+    """
+
+    orientation: Literal["horizontal", "vertical"] = "horizontal"
+    char: str | None = field(default=None, kw_only=True)
+    style: Style = field(default=PLAIN, kw_only=True)
+    width: int | None = field(default=None, kw_only=True)
+    height: int | None = field(default=None, kw_only=True)
+    min_width: int = field(default=1, kw_only=True)
+    min_height: int = field(default=1, kw_only=True)
+    max_width: int | None = field(default=None, kw_only=True)
+    max_height: int | None = field(default=None, kw_only=True)
+
+    def __post_init__(self) -> None:
+        if self.orientation not in ("horizontal", "vertical"):
+            raise ValueError("orientation must be 'horizontal' or 'vertical'")
+        if self.char is not None and (
+            not isinstance(self.char, str)
+            or len(self.char) != 1
+            or not self.char.isascii()
+            or not self.char.isprintable()
+        ):
+            raise ValueError("char must be one printable ASCII cell")
+        if self.orientation == "horizontal" and self.height is None:
+            self.height = 1
+        if self.orientation == "vertical" and self.width is None:
+            self.width = 1
+        _validate_size_hints(
+            width=self.width,
+            min_width=self.min_width,
+            max_width=self.max_width,
+            height=self.height,
+            min_height=self.min_height,
+            max_height=self.max_height,
+        )
+
+    def draw(self, canvas: Canvas, rect: Rect) -> None:
+        """Draw the line inside ``rect`` while relying on canvas clipping."""
+
+        if rect.is_empty:
+            return
+        if self.orientation == "horizontal":
+            char = "-" if self.char is None else self.char
+            y = rect.y + (rect.height - 1) // 2
+            canvas.hline(rect.x, y, rect.width, char, self.style)
+        else:
+            char = "|" if self.char is None else self.char
+            x = rect.x + (rect.width - 1) // 2
+            canvas.vline(x, rect.y, rect.height, char, self.style)
+
+
+@dataclass(slots=True)
+class StatusBadge:
+    """Draw a one-row semantic status with a stable ASCII marker.
+
+    Args:
+        text: Short label drawn after the marker and one separating space.
+        status: ``neutral``, ``info``, ``success``, ``warning``, or ``error``.
+        style: Explicit style override. ``None`` selects the status's semantic style: plain for
+            neutral and bright blue, green, yellow, or red for the colored states.
+        width: Optional fixed layout width.
+        min_width: Soft minimum layout width.
+        max_width: Optional maximum layout width.
+
+    The public marker mapping is ``.``, ``i``, ``+``, ``!``, and ``x`` respectively. The marker
+    always wins when the rectangle is narrow, and ANSI styling never changes visible geometry.
+    Read-only ``height``, ``min_height``, and ``max_height`` attributes are all one, so structural
+    layout always allocates exactly one row. Invalid statuses or size hints raise
+    :class:`ValueError`.
+    """
+
+    height: ClassVar[int] = 1
+    min_height: ClassVar[int] = 1
+    max_height: ClassVar[int] = 1
+
+    text: str
+    status: Literal["neutral", "info", "success", "warning", "error"] = field(
+        default="neutral", kw_only=True
+    )
+    style: Style | None = field(default=None, kw_only=True)
+    width: int | None = field(default=None, kw_only=True)
+    min_width: int = field(default=1, kw_only=True)
+    max_width: int | None = field(default=None, kw_only=True)
+
+    def __post_init__(self) -> None:
+        if self.status not in tuple(_BADGE_MARKERS):
+            raise ValueError(f"unknown status: {self.status}")
+        _validate_size_hints(
+            width=self.width,
+            min_width=self.min_width,
+            max_width=self.max_width,
+        )
+
+    def draw(self, canvas: Canvas, rect: Rect) -> None:
+        """Draw one clipped badge row inside ``rect`` without mutating state."""
+
+        if rect.is_empty:
+            return
+        style = _BADGE_STYLES[self.status] if self.style is None else self.style
+        canvas.write(
+            rect.x,
+            rect.y,
+            _BADGE_MARKERS[self.status],
+            max_width=min(1, rect.width),
+            style=style,
+            ellipsis=False,
+        )
+        if rect.width >= 2:
+            canvas.write(rect.x + 1, rect.y, " ", max_width=1, style=style, ellipsis=False)
+        if rect.width >= 3:
+            canvas.write(
+                rect.x + 2,
+                rect.y,
+                self.text,
+                max_width=rect.width - 2,
+                style=style,
             )
 
 
