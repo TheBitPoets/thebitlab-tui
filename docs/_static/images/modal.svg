@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="390" viewBox="0 0 820 390" role="img" aria-labelledby="title desc">
+  <title id="title">Caller-owned centered Modal</title>
+  <desc id="desc">A Quick help ASCII modal centered over a Workspace panel while the surrounding base frame remains visible.</desc>
+  <rect width="820" height="390" rx="8" fill="#171717"/>
+  <text x="20" y="35" fill="#f4f4f4" font-family="Consolas, monospace" font-size="17" xml:space="preserve">
+    <tspan x="20" dy="0">+ Workspace -----------------------------------+</tspan>
+    <tspan x="20" dy="28">|Exercise 01                                   |</tspan>
+    <tspan x="20" dy="28">|Tests:+ [x] Quick help ----------------+      |</tspan>
+    <tspan x="20" dy="28">|Status|Press Escape or q to close      |      |</tspan>
+    <tspan x="20" dy="28">|      |                                |      |</tspan>
+    <tspan x="20" dy="28">|      |                                |      |</tspan>
+    <tspan x="20" dy="28">|      |                                |      |</tspan>
+    <tspan x="20" dy="28">|      |                                |      |</tspan>
+    <tspan x="20" dy="28">|      +--------------------------------+      |</tspan>
+    <tspan x="20" dy="28">|                                              |</tspan>
+    <tspan x="20" dy="28">|                                              |</tspan>
+    <tspan x="20" dy="28">+----------------------------------------------+</tspan>
+  </text>
+</svg>

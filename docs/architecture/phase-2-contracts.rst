@@ -38,7 +38,8 @@ Public namespace
 implementation tracked by issue `#14
 <https://github.com/TheBitPoets/thebitlab-tui/issues/14>`_. ``Canvas.blit`` and ``ScrollView``
 follow in the implementation tracked by issue `#16
-<https://github.com/TheBitPoets/thebitlab-tui/issues/16>`_. ``Modal`` remains a later slice.
+<https://github.com/TheBitPoets/thebitlab-tui/issues/16>`_. ``Modal`` follows in the implementation
+tracked by issue `#18 <https://github.com/TheBitPoets/thebitlab-tui/issues/18>`_.
 Orientation and status remain string literals, so Phase 2 adds no public enum, state manager,
 callback type, or abstract base class.
 
@@ -273,7 +274,8 @@ Implementation is split into focused pull requests:
    (issue #12).
 2. ``ListView`` and focus/selection snapshots, including empty and narrow viewports (issue #14).
 3. ``Canvas.blit`` and ``ScrollView`` with style-preserving clipping tests (issue #16).
-4. ``Modal`` with centering, closed-state, under-minimum, and overlay-preservation snapshots.
+4. ``Modal`` with centering, closed-state, under-minimum, and overlay-preservation snapshots
+   (issue #18).
 5. Final Phase 2 documentation, examples, images, and cross-platform manual verification.
 
 Required verification
@@ -334,8 +336,9 @@ Reversibility and compatibility
 
 Before the first implementation merge, constructor names, defaults, marker choices, and internal
 file placement remain reversible through this design review. After release, state ownership,
-constructor parameters, accepted status/orientation values, ASCII markers, offset semantics, and
-``Canvas.blit`` clipping become public compatibility commitments.
+constructor parameters, accepted status/orientation values, ASCII markers, offset semantics,
+``Canvas.blit`` clipping, modal preferred sizing, soft minima, ``[x]`` priority, and underlay
+preservation become public compatibility commitments.
 
 Later support for additional badge statuses, widget list items, horizontal offsets, modal backdrop
 helpers, or pure navigation helpers can be additive. None is implemented pre-emptively. Existing

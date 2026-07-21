@@ -17,6 +17,9 @@ The renderer creates a fixed-size `Canvas`, asks the root widget to draw, and re
 `Canvas.blit` copies clipped character/style cells and snapshots its source before overlapping
 self-copies. `ScrollView` draws its child on a viewport-sized canvas and blits that isolated result,
 so a child cannot overwrite adjacent layout cells.
+`Modal` computes a centered inner frame inside its assigned outer rectangle, clears only that
+frame, and delegates its ASCII border and content to `Panel`. The application owns visibility and
+draw order, so the library never dims or clears the surrounding underlay.
 The terminal adapter only reports current dimensions, color capability, and resize changes. It
 does not clear the screen or run a loop.
 
@@ -46,6 +49,11 @@ For arbitrary scrolling, the application also supplies `content_height`, because
 small `Widget` protocol has no measurement method. It updates `scroll_offset` after input and
 rebuilds `ScrollView`; drawing clamps only the effective offset for the current viewport. There is
 no horizontal scrolling or hidden measurement pass.
+
+For a modal, the application converts Escape or another modifier-free command into a new `open`
+value and rebuilds the widget tree. If an overlay is needed, an application-owned composite draws
+the base widget first and `Modal` second. The `[x]` marker communicates the close affordance but
+does not receive events or invoke callbacks.
 
 ## Data and presentation
 
