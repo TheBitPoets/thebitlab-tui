@@ -29,7 +29,7 @@ Phase 3 work.
 3. Done in #14 / PR #15: add focus presentation and `ListView` with caller-owned state.
 4. Done in #16 / PR #17: add `ScrollView` with deterministic clipping and no overflow.
 5. Done in #18 / PR #19: add `Modal` with centered composition and narrow fallback.
-6. In progress in #20: consolidate documentation, examples, images, and verification.
+6. In progress in #20 / PR #21: consolidate documentation, examples, images, and verification.
 
 The design gate in step 1 is intentionally reversible: implementation issues and exact signatures
 are created only after the contracts have been reviewed. Phase 2 does not add an event loop,
