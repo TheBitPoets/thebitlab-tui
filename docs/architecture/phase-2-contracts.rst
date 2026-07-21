@@ -7,10 +7,18 @@ Status
 This design record was approved in pull request `#11
 <https://github.com/TheBitPoets/thebitlab-tui/pull/11>`_ for issue `#10
 <https://github.com/TheBitPoets/thebitlab-tui/issues/10>`_ under parent issue `#7
-<https://github.com/TheBitPoets/thebitlab-tui/issues/7>`_. Issue `#12
-<https://github.com/TheBitPoets/thebitlab-tui/issues/12>`_ implements the first approved slice,
-``Divider`` and ``StatusBadge``. Each remaining implementation stays in a separate issue and pull
-request with its own snapshots and compatibility review.
+<https://github.com/TheBitPoets/thebitlab-tui/issues/7>`_. The approved slices were implemented
+and reviewed separately: ``Divider`` and ``StatusBadge`` in issue `#12
+<https://github.com/TheBitPoets/thebitlab-tui/issues/12>`_ and pull request `#13
+<https://github.com/TheBitPoets/thebitlab-tui/pull/13>`_, ``ListView`` in issue `#14
+<https://github.com/TheBitPoets/thebitlab-tui/issues/14>`_ and pull request `#15
+<https://github.com/TheBitPoets/thebitlab-tui/pull/15>`_, ``Canvas.blit`` and ``ScrollView`` in
+issue `#16 <https://github.com/TheBitPoets/thebitlab-tui/issues/16>`_ and pull request `#17
+<https://github.com/TheBitPoets/thebitlab-tui/pull/17>`_, and ``Modal`` in issue `#18
+<https://github.com/TheBitPoets/thebitlab-tui/issues/18>`_ and pull request `#19
+<https://github.com/TheBitPoets/thebitlab-tui/pull/19>`_. Final documentation and release
+verification are tracked in issue `#20
+<https://github.com/TheBitPoets/thebitlab-tui/issues/20>`_.
 
 Goals and boundaries
 --------------------

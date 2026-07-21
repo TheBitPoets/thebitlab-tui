@@ -6,10 +6,12 @@
     <tspan x="20" dy="0">+ Assignment ------------------+</tspan>
     <tspan x="20" dy="22">|Exercise 01                   |</tspan>
     <tspan x="20" dy="22">+------------------------------+</tspan>
-    <tspan x="20" dy="38">+ Activity --------------------+</tspan>
+    <tspan x="20" dy="22">                                </tspan>
+    <tspan x="20" dy="22">+ Activity --------------------+</tspan>
     <tspan x="20" dy="22">|No recent events              |</tspan>
     <tspan x="20" dy="22">+------------------------------+</tspan>
-    <tspan x="20" dy="38">+ &gt; Tests -------------------+</tspan>
+    <tspan x="20" dy="22">                                </tspan>
+    <tspan x="20" dy="22">+ &gt; Tests ---------------------+</tspan>
     <tspan x="20" dy="22">|3 passed                      |</tspan>
     <tspan x="20" dy="22">+------------------------------+</tspan>
   </text>

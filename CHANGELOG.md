@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.0 - 2026-07-21
+
 - Add public style-preserving `Canvas.blit` composition with deterministic overlapping self-copy.
 - Add public `ScrollView` with caller-owned content height and vertical viewport state.
 - Add public `Modal` with caller-owned visibility, centered ASCII composition, and stable `[x]`

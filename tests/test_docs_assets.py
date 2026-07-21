@@ -3,11 +3,50 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 from xml.etree import ElementTree
+
+import pytest
+
+from examples.basic_panels import build_screen as build_panels
+from examples.modal import HelpOverlay
+from examples.scroll_view import build_screen as build_scroll_view
+from examples.selectable_list import build_screen as build_selectable_list
+from thebitlab_tui import render
 
 
 SVG_NAMESPACE = {"svg": "http://www.w3.org/2000/svg"}
-IMAGES = Path(__file__).parents[1] / "docs" / "_static" / "images"
+ROOT = Path(__file__).parents[1]
+IMAGES = ROOT / "docs" / "_static" / "images"
+EVIDENCE_INDEX = ROOT / "docs" / "architecture" / "phase-2-verification.rst"
+REQUIRED_EVIDENCE = {
+    "docs/api/index.rst",
+    "docs/user-guide/index.rst",
+    "docs/_static/images/modal.svg",
+    "docs/_static/images/scroll-view.svg",
+    "docs/_static/images/selectable-list.svg",
+    "docs/_static/images/three-panels-narrow.svg",
+    "docs/_static/images/three-panels-wide.svg",
+    "examples/basic_panels.py",
+    "examples/divider_badges.py",
+    "examples/modal.py",
+    "examples/scroll_view.py",
+    "examples/selectable_list.py",
+    "tests/test_canvas.py",
+    "tests/test_divider_status_badge.py",
+    "tests/test_layout.py",
+    "tests/test_list_view.py",
+    "tests/test_modal.py",
+    "tests/test_renderer.py",
+    "tests/test_scroll_view.py",
+}
+
+
+def _terminal_rows(path: Path) -> list[str]:
+    """Return the literal terminal rows stored in an SVG capture."""
+
+    root = ElementTree.parse(path).getroot()
+    return [node.text or "" for node in root.findall(".//svg:tspan", SVG_NAMESPACE)]
 
 
 def test_svg_images_include_accessible_text() -> None:
@@ -27,3 +66,34 @@ def test_architecture_labels_contrast_with_white_nodes() -> None:
 
     assert labels
     assert all(label.get("fill") not in {None, "#fff", "#ffffff"} for label in labels)
+
+
+@pytest.mark.parametrize(
+    ("image_name", "widget", "width", "height"),
+    [
+        ("three-panels-wide.svg", build_panels(), 66, 4),
+        ("three-panels-narrow.svg", build_panels(), 32, 11),
+        ("selectable-list.svg", build_selectable_list(), 28, 7),
+        ("scroll-view.svg", build_scroll_view(), 40, 8),
+        ("modal.svg", HelpOverlay(), 48, 12),
+    ],
+)
+def test_terminal_images_match_example_frames(
+    image_name: str, widget: object, width: int, height: int
+) -> None:
+    """Keep reproducible SVG captures synchronized with executable examples."""
+
+    expected = render(widget, width=width, height=height, color=False).splitlines()
+    assert _terminal_rows(IMAGES / image_name) == expected
+
+
+def test_phase_2_evidence_index_references_existing_files() -> None:
+    """Reject stale paths in the versioned Phase 2 release matrix."""
+
+    document = EVIDENCE_INDEX.read_text(encoding="utf-8")
+    referenced_paths = set(
+        re.findall(r"``((?:docs|examples|tests)/[^`]+)``", document)
+    )
+
+    assert REQUIRED_EVIDENCE <= referenced_paths
+    assert all((ROOT / relative_path).is_file() for relative_path in referenced_paths)

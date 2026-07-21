@@ -3,12 +3,12 @@
   <desc id="desc">An ASCII Exercises panel showing exercise-02 as the focused active row.</desc>
   <rect width="470" height="220" rx="8" fill="#171717"/>
   <text x="20" y="35" fill="#f4f4f4" font-family="Consolas, monospace" font-size="17" xml:space="preserve">
-    <tspan x="20" dy="0">+ &gt; Exercises ----------------+</tspan>
-    <tspan x="20" dy="26">|  exercise-01                |</tspan>
-    <tspan x="20" dy="26">|&gt; exercise-02                |</tspan>
-    <tspan x="20" dy="26">|  exercise-03                |</tspan>
-    <tspan x="20" dy="26">|  exercise-04                |</tspan>
-    <tspan x="20" dy="26">|  exercise-05                |</tspan>
-    <tspan x="20" dy="26">+-----------------------------+</tspan>
+    <tspan x="20" dy="0">+ &gt; Exercises -------------+</tspan>
+    <tspan x="20" dy="26">|  exercise-01             |</tspan>
+    <tspan x="20" dy="26">|&gt; exercise-02             |</tspan>
+    <tspan x="20" dy="26">|  exercise-03             |</tspan>
+    <tspan x="20" dy="26">|  exercise-04             |</tspan>
+    <tspan x="20" dy="26">|  exercise-05             |</tspan>
+    <tspan x="20" dy="26">+--------------------------+</tspan>
   </text>
 </svg>

@@ -24,12 +24,12 @@ Phase 3 work.
 
 ### Phase 2 delivery sequence
 
-1. Approve the public contracts and compatibility decisions.
-2. Add `Divider` and `StatusBadge` with ASCII and `no-color` snapshots.
-3. Add focus presentation and `ListView` with caller-owned selection and viewport state.
-4. Add `ScrollView` with deterministic clipping and no horizontal overflow.
-5. Add `Modal` with centered composition and predictable narrow-terminal fallback.
-6. Consolidate Sphinx documentation, examples, images, and cross-platform verification.
+1. Done in #10 / PR #11: approve the public contracts and compatibility decisions.
+2. Done in #12 / PR #13: add `Divider` and `StatusBadge` with ASCII and `no-color` snapshots.
+3. Done in #14 / PR #15: add focus presentation and `ListView` with caller-owned state.
+4. Done in #16 / PR #17: add `ScrollView` with deterministic clipping and no overflow.
+5. Done in #18 / PR #19: add `Modal` with centered composition and narrow fallback.
+6. In progress in #20: consolidate documentation, examples, images, and verification.
 
 The design gate in step 1 is intentionally reversible: implementation issues and exact signatures
 are created only after the contracts have been reviewed. Phase 2 does not add an event loop,
@@ -46,6 +46,8 @@ Style-preserving canvas composition and `ScrollView` implementation are tracked 
 [issue #16](https://github.com/TheBitPoets/thebitlab-tui/issues/16).
 Centered modal composition and narrow-terminal fallback are tracked by
 [issue #18](https://github.com/TheBitPoets/thebitlab-tui/issues/18).
+Release documentation and cross-platform verification are tracked by
+[issue #20](https://github.com/TheBitPoets/thebitlab-tui/issues/20).
 
 ## Phase 3
 
