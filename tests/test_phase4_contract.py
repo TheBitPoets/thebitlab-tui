@@ -65,6 +65,13 @@ EVIDENCE_RULES = (
     "unchanged public API manifest",
 )
 
+COMPATIBILITY_RULES = (
+    "Compatibility is semantic, not byte-for-byte",
+    "inter-column separator ``\" | \"`` remains binding",
+    "separately approved consumer migration",
+    "consumer-owned legacy renderer",
+)
+
 
 def _section(document: str, heading: str, next_heading: str) -> str:
     """Return one bounded RST section for contract assertions."""
@@ -132,6 +139,16 @@ def test_phase4_contract_protects_ownership_and_fallback() -> None:
     document = CONTRACT.read_text(encoding="utf-8")
 
     assert all(rule in document for rule in OWNERSHIP_AND_FALLBACK_RULES)
+
+
+def test_phase4_contract_keeps_the_legacy_separator_binding() -> None:
+    """Prevent snapshot freedom from weakening the inter-column compatibility boundary."""
+
+    document = CONTRACT.read_text(encoding="utf-8")
+    compatibility = _section(document, "Compatibility promise", "Required implementation evidence")
+
+    assert all(rule in compatibility for rule in COMPATIBILITY_RULES)
+    assert "padding, panel heights, and separators" not in compatibility
 
 
 def test_phase4_contract_protects_required_evidence() -> None:

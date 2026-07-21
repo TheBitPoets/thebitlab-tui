@@ -221,9 +221,10 @@ compatible adapter preserves:
 * modifier-free alternatives for every consumer workflow;
 * a consumer-owned legacy renderer as a rollout and failure fallback.
 
-The new widget frames may use different padding, panel heights, and separators. Those differences
-must be approved through deterministic snapshots; they must not silently change persisted state or
-hide semantic information.
+The new widget frames may use different padding, panel heights, and internal panel decoration.
+Those differences must be approved through deterministic snapshots; they must not silently change
+persisted state or hide semantic information. The inter-column separator ``" | "`` remains binding
+unless a separately approved consumer migration changes the compatibility baseline.
 
 Required implementation evidence
 --------------------------------
