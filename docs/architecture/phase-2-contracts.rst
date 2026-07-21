@@ -42,13 +42,16 @@ Shared size and validation rules
 New widgets use the existing ``width``, ``height``, ``min_width``, ``min_height``, ``max_width``,
 and ``max_height`` attributes where they participate in ``Row`` or ``Column`` allocation. Minimum
 sizes remain soft when the terminal cannot fit them. Fixed sizes continue to use the current layout
-rules. Phase 2 does not introduce a shared size-hints base class.
+rules. ``Modal`` is the exception: it deliberately omits fixed ``width`` and ``height`` attributes
+so a layout can assign a flexible outer rectangle, then uses distinct preferred dimensions for the
+centered inner frame. Phase 2 does not introduce a shared size-hints base class.
 
 Widget-specific enum-like inputs use documented strings and raise ``ValueError`` for unknown
 values. Negative offsets, content extents, or explicit dimensions raise ``ValueError``. Offsets
 larger than the current content are safe: drawing clamps an effective offset without modifying the
-public field. Text is normalized through ``Canvas.write``, which removes existing ANSI sequences
-and replaces embedded newlines on a single rendered row.
+public field. A maximum smaller than its corresponding minimum raises ``ValueError``. Text is
+normalized through ``Canvas.write``, which removes existing ANSI sequences and replaces embedded
+newlines on a single rendered row.
 
 ``Canvas.blit``
 ---------------
@@ -213,8 +216,8 @@ Proposed constructor:
        *,
        title: str = "",
        open: bool = True,
-       width: int | None = 40,
-       height: int | None = 10,
+       preferred_width: int | None = 40,
+       preferred_height: int | None = 10,
        min_width: int = 5,
        min_height: int = 3,
        max_width: int | None = None,
@@ -223,10 +226,16 @@ Proposed constructor:
        title_style: Style = Style(bold=True, bright=True),
    )
 
-``open=False`` draws nothing. When open, desired and maximum dimensions are applied first, minimum
-dimensions are preferred next, and the result is finally clamped to the available rectangle. This
-makes minima soft only when the terminal is too small. Centering uses integer division; an odd spare
-cell remains on the right or bottom.
+``open=False`` draws nothing. ``preferred_width=None`` or ``preferred_height=None`` requests all of
+the corresponding available extent, still bounded by a maximum. When open, each preferred extent
+is limited by its maximum, raised to its soft minimum, and finally clamped to the available
+rectangle. This makes minima soft only when the terminal is too small. Centering uses integer
+division; an odd spare cell remains on the right or bottom.
+
+``Modal`` exposes minimum and maximum layout attributes but no fixed ``width`` or ``height``. A
+``Row`` or ``Column`` therefore allocates a flexible outer rectangle using the existing layout
+rules; the preferred dimensions size the centered inner frame only. As a root widget, the renderer's
+full rectangle is the outer area.
 
 The modal clears its own rectangle, draws an ASCII ``Panel``, and prefixes the title with ``[x]``.
 The close marker is a presentation affordance, not a button or callback. The application handles
@@ -261,6 +270,7 @@ Implementation pull requests must cover:
 - active items both inside and outside the requested viewport;
 - source and destination clipping plus style preservation for ``Canvas.blit``;
 - modal centering for odd/even spare space and no writes outside its rectangle;
+- flexible ``Row``/``Column`` modal allocation independently from preferred inner-frame sizing;
 - Windows/Linux Python 3.11-3.13 CI, compileall, Sphinx warning-as-error, and manual examples.
 
 Rejected alternatives
