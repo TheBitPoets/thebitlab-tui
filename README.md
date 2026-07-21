@@ -5,7 +5,7 @@ interfaces. It uses only the Python standard library, targets Python 3.11+, and 
 layout, rendering, and terminal I/O separate.
 
 It is not a replacement for Textual, Urwid, or Rich. It does not own an event loop, print from
-widgets, contain application logic, or require Unicode borders. The initial release focuses on
+widgets, contain application logic, or require Unicode borders. The public surface focuses on
 `Rect`, `Canvas`, `Style`, `Label`, `Panel`, `Divider`, `StatusBadge`, responsive `Row`/`Column`,
 and pure ASCII rendering.
 

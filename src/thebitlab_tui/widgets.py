@@ -222,7 +222,8 @@ class StatusBadge:
     Args:
         text: Short label drawn after the marker and one separating space.
         status: ``neutral``, ``info``, ``success``, ``warning``, or ``error``.
-        style: Explicit style override. ``None`` selects the status's semantic color.
+        style: Explicit style override. ``None`` selects the status's semantic style: plain for
+            neutral and bright blue, green, yellow, or red for the colored states.
         width: Optional fixed layout width.
         min_width: Soft minimum layout width.
         max_width: Optional maximum layout width.
