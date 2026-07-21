@@ -218,7 +218,7 @@ Proposed constructor:
        open: bool = True,
        preferred_width: int | None = 40,
        preferred_height: int | None = 10,
-       min_width: int = 5,
+       min_width: int = 7,
        min_height: int = 3,
        max_width: int | None = None,
        max_height: int | None = None,
@@ -240,7 +240,10 @@ full rectangle is the outer area.
 The modal clears its own rectangle, draws an ASCII ``Panel``, and prefixes the title with ``[x]``.
 The close marker is a presentation affordance, not a button or callback. The application handles
 Escape or another modifier-free command by rebuilding with ``open=False``. On widths below the
-five-cell minimum, ordinary canvas clipping wins; borders never move outside the assigned area.
+seven-cell minimum, ordinary canvas clipping wins; borders never move outside the assigned area.
+Seven cells leave three title cells after the panel border and decorative padding, so ``[x]`` is
+fully visible at the declared minimum. At width six and below, the marker may truncate according to
+the ordinary narrow-title rules.
 
 ``Modal`` does not dim or own an underlay and does not introduce an ``Overlay`` container. An
 application that needs an overlay draws its base widget first and the modal second in its own small
@@ -271,6 +274,7 @@ Implementation pull requests must cover:
 - source and destination clipping plus style preservation for ``Canvas.blit``;
 - modal centering for odd/even spare space and no writes outside its rectangle;
 - flexible ``Row``/``Column`` modal allocation independently from preferred inner-frame sizing;
+- the complete ``[x]`` marker at width seven and documented truncation at width six;
 - Windows/Linux Python 3.11-3.13 CI, compileall, Sphinx warning-as-error, and manual examples.
 
 Rejected alternatives
