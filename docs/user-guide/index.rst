@@ -191,13 +191,17 @@ state, and redraws.
 ``read`` returns one normalized event or ``None`` at the total deadline.  ``timeout=None`` waits,
 zero polls, and positive finite values wait for at most that many seconds.  On Linux, entering the
 facade borrows an interactive standard-input TTY and uses conservative cbreak mode; leaving the
-context restores the exact saved attributes.  Redirected input raises ``io.UnsupportedOperation``.
-The Windows console backend remains a later Phase 3 slice, so entering the facade on Windows is
-not supported yet.  Construction itself never reads or changes the terminal.
+context restores the exact saved attributes.  On Windows, it borrows the CRT handle for standard
+input, reads console records, and never changes console mode or closes the handle.  Redirected or
+non-interactive input raises ``io.UnsupportedOperation`` on both platforms.  Construction itself
+never reads or changes the terminal.
 
 POSIX input recognizes arrows, Enter, Escape, Tab, printable text, and supported modifiers.  A
 lone Escape waits for ``escape_timeout`` so the decoder can distinguish it from an Alt-prefixed
 character or control sequence.  Ctrl+C remains terminal signal input rather than a ``KeyEvent``.
+Windows input recognizes the same semantic keys from console records, preserves reported
+Shift/Alt/Ctrl state, combines UTF-16 surrogate pairs, and emits repeated records one event at a
+time.  Synthetic Ctrl+C records are consumed so Python remains responsible for interruption.
 Applications must always expose equivalent commands that do not require Alt or Ctrl.
 
 Applications should pair a small finite input timeout with ``ResizeWatcher.poll()`` when they need

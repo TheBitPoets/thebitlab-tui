@@ -20,8 +20,9 @@ so a child cannot overwrite adjacent layout cells.
 `Modal` computes a centered inner frame inside its assigned outer rectangle, clears only that
 frame, and delegates its ASCII border and content to `Panel`. The application owns visibility and
 draw order, so the library never dims or clears the surrounding underlay.
-The terminal adapter only reports current dimensions, color capability, and resize changes. It
-does not clear the screen or run a loop.
+The terminal layer reports current dimensions, color capability, resize changes, and normalized
+input from private platform adapters. It does not clear or print the screen, map application
+commands, own redraw, or run a loop.
 
 ```text
 application data -> application adapter -> widget tree -> layout rectangles
@@ -32,7 +33,7 @@ terminal input -> platform adapter -> KeyEvent -> application state -> next widg
 ## Events and redraws
 
 `KeyEvent` names arrows, Enter, Escape, Tab, and ordinary characters, with optional modifier
-flags. A future Windows/Linux adapter translates bytes or console records into these values.
+flags. Private Linux and Windows adapters translate bytes or console records into these values.
 Applications must provide unmodified-key alternatives because Ctrl and Alt are not uniformly
 reported by Windows Terminal and PowerShell.
 
