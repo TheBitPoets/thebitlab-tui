@@ -75,4 +75,25 @@ Phase 2 API changes must follow the :doc:`../architecture/phase-2-contracts` des
 the record before implementation when review changes state ownership, constructor fields, marker
 semantics, clipping, or narrow-terminal behavior.
 
+Terminal input development
+--------------------------
+
+Phase 3 follows :doc:`../architecture/phase-3-input-contracts`.  Public ``KeyReader`` owns only
+single-use lifecycle and one absolute monotonic deadline per read.  Private backends own platform
+readiness, decoding, partial state, and their FIFO.  Tests replace the private backend factory and
+clock; these seams must not become constructor parameters, protocols, or factories in the public
+namespace.
+
+Keep platform imports lazy.  The shared facade must import on Windows and Linux without loading
+``termios`` or Win32 bindings, and construction must have no terminal side effects.  A backend
+receives an absolute deadline and returns at most one ``KeyEvent``; it must check already-buffered
+or already-queued input before reporting expiration.  The application retains ownership of
+commands, resize polling, state, and redraw.
+
+Private backends may use the shared event FIFO, but retain ownership of decoding and partial input
+state.  If activation fails after changing caller-owned state, the backend performs compensating
+restoration itself because the facade cannot know whether a safe snapshot exists.  The activation
+error stays primary and a restoration ``OSError`` is attached as a note; platform slices must test
+that invariant with injected operations.
+
 See ``docs/it/00-regole-operative.md`` for milestone, issue, PR, finding, and review rules.

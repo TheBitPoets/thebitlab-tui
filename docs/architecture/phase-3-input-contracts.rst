@@ -4,11 +4,12 @@ Phase 3 terminal input contracts
 Status
 ------
 
-This design record is proposed in issue `#30
-<https://github.com/TheBitPoets/thebitlab-tui/issues/30>`_ under parent issue `#24
-<https://github.com/TheBitPoets/thebitlab-tui/issues/24>`_. It adds no implementation or public
-export. The names and signatures below become approved only when the design pull request merges;
-implementation remains split into later child issues and pull requests.
+This design record was approved in issue `#30
+<https://github.com/TheBitPoets/thebitlab-tui/issues/30>`_ and merged in PR `#31
+<https://github.com/TheBitPoets/thebitlab-tui/pull/31>`_ under parent issue `#24
+<https://github.com/TheBitPoets/thebitlab-tui/issues/24>`_. Issue `#33
+<https://github.com/TheBitPoets/thebitlab-tui/issues/33>`_ implements the approved shared facade;
+platform backends remain split into later child issues and pull requests.
 
 Goals and boundaries
 --------------------
@@ -28,8 +29,12 @@ architecture:
 Mouse input, drag and drop, tmux-specific behavior, application integration, global hotkeys,
 animation timing, and a library-owned event loop remain outside this phase.
 
-Proposed public namespace
+Approved public namespace
 -------------------------
+
+The contract was approved in issue #30 and PR #31.  Issue #33 implements the shared facade,
+lifecycle, deadline policy, and private backend seams; platform input remains in later bounded
+slices.
 
 Phase 3 adds one public concrete facade and leaves ``Key`` and ``KeyEvent`` unchanged:
 
@@ -40,7 +45,7 @@ Phase 3 adds one public concrete facade and leaves ``Key`` and ``KeyEvent`` unch
    with KeyReader(escape_timeout=0.05) as keys:
        event = keys.read(timeout=0.1)
 
-The proposed shape is:
+The approved shape is:
 
 .. code-block:: python
 

@@ -85,16 +85,17 @@ Exit gates:
 
 #### Phase 3 delivery sequence
 
-1. In progress in #30: approve the public facade, timeout, decoding, failure, and restoration
-   contracts without implementation.
-2. After approval: add the shared facade, timeout policy, pure decoder seams, and public docs.
+1. Completed in [#30](https://github.com/TheBitPoets/thebitlab-tui/issues/30) and PR #31: approve
+   the public facade, timeout, decoding, failure, and restoration contracts without implementation.
+2. In progress in [#33](https://github.com/TheBitPoets/thebitlab-tui/issues/33): add the shared
+   facade, timeout policy, pure backend seams, and public docs.
 3. Add the POSIX backend with PTY integration and exact-restoration tests.
 4. Add the Windows console-record backend with injected virtual-key, modifier, repeat, and Unicode
    tests.
 5. Consolidate the cross-platform example, manual protocol, guides, images, and release evidence.
 
-The design gate in step 1 is intentionally reversible. Later child issues and exact internal file
-placement are created only after the contract is approved. The proposed contract is versioned in
+The design gate in step 1 preserved reversibility until approval. Later platform child issues and
+exact internal file placement are created only when their slices begin. The approved contract is versioned in
 [`docs/architecture/phase-3-input-contracts.rst`](architecture/phase-3-input-contracts.rst) and
 tracked by [issue #30](https://github.com/TheBitPoets/thebitlab-tui/issues/30). The parent plan is
 [issue #24](https://github.com/TheBitPoets/thebitlab-tui/issues/24); product-roadmap alignment was

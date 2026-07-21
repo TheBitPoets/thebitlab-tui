@@ -45,6 +45,11 @@ source tree.
 
 Geometry and rendering are platform-independent. `get_terminal_size()` uses the standard
 library and reads the current size on every frame requested through `render_terminal()`.
+
+The additive Phase 3 `KeyReader` facade is available for API integration, with a single-use
+context lifecycle and deterministic timeout policy. Real POSIX and Windows input backends are the
+next delivery slices, so entering the facade currently raises `io.UnsupportedOperation` without
+mutating the terminal. The library still owns no event loop, commands, or redraw policy.
 `ResizeWatcher` provides polling-based resize detection without installing signal handlers or
 creating an event loop.
 
