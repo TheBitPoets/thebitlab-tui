@@ -32,6 +32,11 @@ Use exact lists of ASCII rows for small snapshots. Each row must have the reques
 Cover truncation, clipping, minimum dimensions, narrow stacking, focus/collapse, ANSI and
 ``no-color``. Terminal policy changes require explicit Windows and Linux cases.
 
+``Divider`` orientation strings and ``StatusBadge`` status strings, markers, exceptions, and
+visible-width behavior are public compatibility commitments. Changes require exact ASCII snapshots,
+ANSI snapshots with equal visible widths, and width-zero/one coverage. These widgets remain pure
+presentation objects and must not acquire callbacks or application state.
+
 Documentation workflow
 ----------------------
 

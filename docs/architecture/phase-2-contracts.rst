@@ -4,11 +4,13 @@ Phase 2 public contracts
 Status
 ------
 
-This is the proposed design record for issue `#10
+This design record was approved in pull request `#11
+<https://github.com/TheBitPoets/thebitlab-tui/pull/11>`_ for issue `#10
 <https://github.com/TheBitPoets/thebitlab-tui/issues/10>`_ under parent issue `#7
-<https://github.com/TheBitPoets/thebitlab-tui/issues/7>`_. Merging the design PR approves these
-contracts for implementation; it does not add the APIs. Each implementation remains a separate
-issue and pull request with its own snapshots and compatibility review.
+<https://github.com/TheBitPoets/thebitlab-tui/issues/7>`_. Issue `#12
+<https://github.com/TheBitPoets/thebitlab-tui/issues/12>`_ implements the first approved slice,
+``Divider`` and ``StatusBadge``. Each remaining implementation stays in a separate issue and pull
+request with its own snapshots and compatibility review.
 
 Goals and boundaries
 --------------------
@@ -31,10 +33,12 @@ introduced. The existing structural ``Widget`` protocol remains sufficient.
 Public namespace
 ----------------
 
-``Divider``, ``StatusBadge``, ``ListView``, ``ScrollView``, and ``Modal`` will be exported from
-``thebitlab_tui`` and listed in ``thebitlab_tui.__all__``. ``Canvas.blit`` is a public method on the
-existing class. Orientation and status remain string literals, so Phase 2 adds no public enum,
-state manager, callback type, or abstract base class.
+``Divider`` and ``StatusBadge`` are exported from ``thebitlab_tui`` and listed in
+``thebitlab_tui.__all__`` by the implementation tracked in issue #12. ``ListView``, ``ScrollView``,
+and ``Modal`` will follow in their implementation slices. ``Canvas.blit`` will be a public method
+on the existing class.
+Orientation and status remain string literals, so Phase 2 adds no public enum, state manager,
+callback type, or abstract base class.
 
 Shared size and validation rules
 --------------------------------
@@ -79,7 +83,7 @@ onto itself must behave deterministically by reading the selected source cells b
 ``Divider``
 -----------
 
-Proposed constructor:
+Approved constructor:
 
 .. code-block:: python
 
@@ -106,7 +110,7 @@ zero and undersized rectangles.
 ``StatusBadge``
 ---------------
 
-Proposed constructor:
+Approved constructor:
 
 .. code-block:: python
 
@@ -141,7 +145,7 @@ Phase 2 does not add a global focus model. ``Panel.focused`` remains the standar
 indicator. ``ListView.focused`` only changes the marker for its active row; it does not accept
 events or change the active item.
 
-Proposed constructor:
+Approved constructor:
 
 .. code-block:: python
 
@@ -176,7 +180,7 @@ variable-height or widget items are not part of the first contract.
 ``ScrollView``
 --------------
 
-Proposed constructor:
+Approved constructor:
 
 .. code-block:: python
 
@@ -207,7 +211,7 @@ scrolling and cannot create horizontal overflow.
 ``Modal``
 ---------
 
-Proposed constructor:
+Approved constructor:
 
 .. code-block:: python
 
@@ -261,9 +265,10 @@ composite widget. This keeps z-order and application state outside the library.
 Implementation slices
 ---------------------
 
-After this design is approved, work remains split into focused pull requests:
+Implementation is split into focused pull requests:
 
-1. ``Divider`` and ``StatusBadge`` plus public exports, docstrings, snapshots, and guide examples.
+1. ``Divider`` and ``StatusBadge`` plus public exports, docstrings, snapshots, and guide examples
+   (issue #12).
 2. ``ListView`` and focus/selection snapshots, including empty and narrow viewports.
 3. ``Canvas.blit`` and ``ScrollView`` with style-preserving clipping tests.
 4. ``Modal`` with centering, closed-state, under-minimum, and overlay-preservation snapshots.

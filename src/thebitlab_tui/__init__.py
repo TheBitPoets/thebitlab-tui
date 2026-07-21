@@ -1,4 +1,4 @@
-"""Public API for the first thebitlab-tui scaffold."""
+"""Stable public API for thebitlab-tui."""
 
 from .canvas import Canvas
 from .events import Key, KeyEvent
@@ -7,11 +7,12 @@ from .layout import Column, Row, Size
 from .renderer import render, render_lines, render_terminal
 from .styles import Style, strip_ansi, truncate, visible_width
 from .terminal import ResizeWatcher, TerminalSize, get_terminal_size, supports_color
-from .widgets import Label, Panel, Widget
+from .widgets import Divider, Label, Panel, StatusBadge, Widget
 
 __all__ = [
     "Canvas",
     "Column",
+    "Divider",
     "Key",
     "KeyEvent",
     "Label",
@@ -21,6 +22,7 @@ __all__ = [
     "Row",
     "Size",
     "Style",
+    "StatusBadge",
     "TerminalSize",
     "Widget",
     "get_terminal_size",

@@ -6,7 +6,8 @@ layout, rendering, and terminal I/O separate.
 
 It is not a replacement for Textual, Urwid, or Rich. It does not own an event loop, print from
 widgets, contain application logic, or require Unicode borders. The initial release focuses on
-`Rect`, `Canvas`, `Style`, `Label`, `Panel`, responsive `Row`/`Column`, and pure ASCII rendering.
+`Rect`, `Canvas`, `Style`, `Label`, `Panel`, `Divider`, `StatusBadge`, responsive `Row`/`Column`,
+and pure ASCII rendering.
 
 ## Minimal example
 
@@ -23,7 +24,8 @@ frame = render(screen, width=80, height=8, color=False)
 print(frame)  # The application, not the library, chooses when to print.
 ```
 
-The full three-panel example is in `examples/basic_panels.py`.
+The full three-panel example is in `examples/basic_panels.py`. See
+`examples/divider_badges.py` for ASCII dividers and semantic status markers.
 
 ## Development and tests
 
