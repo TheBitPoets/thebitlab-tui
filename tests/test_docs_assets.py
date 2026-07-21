@@ -137,3 +137,14 @@ def test_phase_3_evidence_index_references_existing_files() -> None:
 
     assert REQUIRED_PHASE_3_EVIDENCE <= referenced_paths
     assert all((ROOT / relative_path).is_file() for relative_path in referenced_paths)
+
+
+def test_phase_3_manual_evidence_is_complete() -> None:
+    """Prevent completed interactive checks from reverting to placeholder results."""
+
+    document = PHASE_3_EVIDENCE_INDEX.read_text(encoding="utf-8")
+
+    assert "NOT RUN" not in document
+    assert document.count("\n     - PASS\n") == 3
+    assert document.count("Python 3.11.15") == 3
+    assert document.count("``5e88c35``") == 3

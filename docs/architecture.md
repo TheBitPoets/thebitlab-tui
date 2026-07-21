@@ -88,6 +88,7 @@ recorded in [`docs/architecture/phase-2-contracts.rst`](architecture/phase-2-con
 The public input contract and private platform responsibilities are recorded in
 [`docs/architecture/phase-3-input-contracts.rst`](architecture/phase-3-input-contracts.rst).
 The delivery matrix, cross-platform manual protocol, example, and release boundary are recorded in
-[`docs/architecture/phase-3-verification.rst`](architecture/phase-3-verification.rst). Manual
-results remain `NOT RUN` until a maintainer exercises real Linux and Windows terminals.
+[`docs/architecture/phase-3-verification.rst`](architecture/phase-3-verification.rst). The
+versioned evidence records successful maintainer checks in a Linux PTY and in Windows Terminal
+with both PowerShell and `cmd.exe`, all using Python 3.11.15.
 

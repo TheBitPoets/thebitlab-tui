@@ -78,8 +78,10 @@ interactive checks below.
 Manual terminal protocol
 ------------------------
 
-Run every row on the exact commit proposed for merge. Record date, OS version, terminal, shell,
-Python version, commit, result, and notes. A redirected Codex or CI shell is **not** an interactive
+Run every row with a supported Python version (3.11 or newer) on the runtime commit proposed for
+merge. Record date, OS version, terminal, shell, Python version, commit, result, and notes. An
+evidence-only follow-up may record those results without repeating the interactive protocol when
+it changes no runtime or example code. A redirected Codex or CI shell is **not** an interactive
 terminal and cannot be recorded as a pass.
 
 .. list-table:: Required interactive environments
@@ -90,14 +92,21 @@ terminal and cannot be recorded as a pass.
      - Current result
      - Evidence
    * - Linux terminal
-     - NOT RUN
-     - Maintainer must record real terminal evidence before merge.
+     - PASS
+     - 2026-07-21; Debian GNU/Linux 13 (trixie) container in Docker Desktop 28.3.2;
+       Linux PTY hosted by Windows Terminal; Python 3.11.15; commit ``5e88c35``. The maintainer
+       completed the full protocol, including resize, restoration, failure, and redirected-input
+       checks.
    * - Windows Terminal with PowerShell
-     - NOT RUN
-     - Maintainer must record real console evidence before merge.
+     - PASS
+     - 2026-07-21; Windows 11 Pro 10.0.26200.8875; Windows Terminal 1.24.11321.0;
+       PowerShell 5.1.26100.8875; isolated Python 3.11.15 virtual environment; commit
+       ``5e88c35``. The maintainer completed the full protocol.
    * - Windows Terminal with ``cmd.exe``
-     - NOT RUN
-     - Maintainer must record real console evidence before merge.
+     - PASS
+     - 2026-07-21; Windows 11 Pro 10.0.26200.8875; Windows Terminal 1.24.11321.0;
+       ``cmd.exe`` 10.0.26200.8875; isolated Python 3.11.15 virtual environment; commit
+       ``5e88c35``. The maintainer completed the full protocol.
 
 For each environment:
 
