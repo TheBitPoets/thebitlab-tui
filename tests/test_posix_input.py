@@ -216,7 +216,7 @@ def test_expired_escape_precedes_newly_ready_text_on_later_read() -> None:
     assert backend.read(11.0) == KeyEvent(Key.CHARACTER, "x")
 
 
-def test_select_interruption_cannot_bypass_escape_expiry() -> None:
+def test_interrupted_pre_deadline_wait_drains_ready_escape_continuation() -> None:
     harness = Harness(ready=[True, False], reads=[b"\x1b"])
     backend = _PosixInputBackend(0.05, ops=harness.ops())
     backend.activate()
@@ -225,9 +225,8 @@ def test_select_interruption_cannot_bypass_escape_expiry() -> None:
     harness.now = 10.04
     harness.select_interrupt_advance = 0.02
     harness.ready.extend([InterruptedError(), True])
-    harness.reads.append(b"x")
-    assert backend.read(11.0) == KeyEvent(Key.ESCAPE)
-    assert backend.read(11.0) == KeyEvent(Key.CHARACTER, "x")
+    harness.reads.append(b"[A")
+    assert backend.read(11.0) == KeyEvent(Key.UP)
 
 
 def test_ready_continuation_survives_repeated_interruptions() -> None:
