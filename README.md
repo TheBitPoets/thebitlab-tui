@@ -29,6 +29,8 @@ The full three-panel example is in `examples/basic_panels.py`. See
 `examples/selectable_list.py` shows caller-owned focus, selection, and vertical viewport state.
 `examples/scroll_view.py` demonstrates isolated scrolling for arbitrary widget content.
 `examples/modal.py` shows application-owned z-order around a centered modal frame.
+`examples/terminal_input.py` shows an application-owned finite input/resize loop and provides a
+deterministic `--snapshot --no-color` mode for completely ANSI-free output.
 
 ## Development and tests
 
@@ -36,6 +38,7 @@ The full three-panel example is in `examples/basic_panels.py`. See
 python -m pytest
 python -m compileall -q src tests examples
 python examples/basic_panels.py --no-color
+python examples/terminal_input.py --snapshot --no-color
 ```
 
 There are no runtime dependencies. `pytest` is needed only to run the test suite from this
@@ -54,6 +57,11 @@ redirected or non-interactive input is rejected with `io.UnsupportedOperation`. 
 owns no event loop, commands, or redraw policy.
 `ResizeWatcher` provides polling-based resize detection without installing signal handlers or
 creating an event loop.
+
+Run `python examples/terminal_input.py --interactive --no-color` in a real terminal for the
+cross-platform example. Up/`k`, Down/`j`, Tab/`n`, Enter/Space, and Escape/`q` keep every workflow
+available without modifiers. Redirected input is rejected. The example, not the library, owns its
+loop, mutable state, clear/home presenter, and redraw timing.
 
 ANSI colors are opt-in (`color=True`). Use `color=False` or the example's `--no-color` flag for
 plain output. `supports_color()` follows `NO_COLOR`, checks whether the output is a TTY, and uses

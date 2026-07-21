@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- No changes yet.
+
+## 0.3.0 - 2026-07-21
+
 - Add the approved public `KeyReader` facade with deterministic lifecycle, total monotonic
   deadlines, private backend seams, and no terminal side effects during construction.
 - Add the dependency-free Linux POSIX input backend with conservative cbreak mode, exact terminal
@@ -9,6 +13,8 @@
 - Add the dependency-free Windows console-record backend with non-mutating console policy,
   deterministic virtual-key, modifier, repeat, Ctrl+C, AltGr, and UTF-16 normalization, plus
   injected cross-platform tests.
+- Add a cross-platform application-owned input and resize example with deterministic ASCII
+  snapshots, reproducible documentation image, manual terminal protocol, and release evidence.
 
 ## 0.2.0 - 2026-07-21
 

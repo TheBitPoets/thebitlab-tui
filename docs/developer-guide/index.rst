@@ -113,4 +113,16 @@ structures and injected operations keep normalization, absolute deadlines, repea
 UTF-16 surrogate handling deterministic on every CI platform.  Keep ``msvcrt`` and kernel32
 loading inside the Windows-only default-operation factory.
 
+The cross-platform ownership example is ``examples/terminal_input.py``. Keep its
+``ApplicationState``, command mapping, finite polling loop, frame presenter, and resize/redraw
+decision outside ``src/thebitlab_tui``. Its snapshot mode must stay non-interactive and
+deterministic so Windows/Linux CI and the reproducible SVG can compare exact ASCII rows. Its
+interactive mode must reject redirected stdin with ``io.UnsupportedOperation`` rather than adding
+a pipe protocol to ``KeyReader``.
+
+Before the Phase 3 release, follow :doc:`../architecture/phase-3-verification`. Automated backend
+tests are necessary but do not prove terminal restoration or key delivery in a real terminal.
+Record separate manual results for Linux, Windows Terminal with PowerShell, and Windows Terminal
+with ``cmd.exe``; leave missing environments explicitly ``NOT RUN``.
+
 See ``docs/it/00-regole-operative.md`` for milestone, issue, PR, finding, and review rules.

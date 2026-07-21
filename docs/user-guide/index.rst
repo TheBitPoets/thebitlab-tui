@@ -207,6 +207,25 @@ Applications must always expose equivalent commands that do not require Alt or C
 Applications should pair a small finite input timeout with ``ResizeWatcher.poll()`` when they need
 resize-aware redraws.  The library still installs no event loop or signal handler.
 
+The executable ``examples/terminal_input.py`` shows the complete ownership boundary. Snapshot
+mode is safe for redirected output and emits no ANSI when ``--no-color`` is supplied:
+
+.. code-block:: console
+
+   python examples/terminal_input.py --snapshot --no-color
+
+Interactive mode requires a real Linux TTY or Windows console:
+
+.. code-block:: console
+
+   python examples/terminal_input.py --interactive --no-color
+
+It maps Up/``k``, Down/``j``, Tab/``n``, Enter/Space, and Escape/``q``. The alternatives without
+modifiers are the portable contract. A finite ``read`` timeout gives the application a chance to
+poll ``ResizeWatcher`` and render at the new width and height. ``--no-color`` disables SGR styles;
+the example presenter still uses clear/home control sequences for in-place interactive redraw.
+Use snapshot mode when the entire output stream must contain no ANSI at all.
+
 .. image:: ../_static/images/three-panels-narrow.svg
    :alt: The same three ASCII panels stacked in a narrow terminal.
    :align: center
