@@ -88,7 +88,17 @@ def test_escape_timeout_accepts_positive_finite_values(value: float) -> None:
     KeyReader(escape_timeout=value)
 
 
-@pytest.mark.parametrize("value", [0, -0.1, float("inf"), -float("inf"), float("nan")])
+@pytest.mark.parametrize(
+    "value",
+    [
+        0,
+        -0.1,
+        float("inf"),
+        -float("inf"),
+        float("nan"),
+        pytest.param(10**10000, id="overflowing-int"),
+    ],
+)
 def test_escape_timeout_rejects_non_positive_or_non_finite_values(value: float) -> None:
     with pytest.raises(ValueError, match="escape_timeout must be positive and finite"):
         KeyReader(escape_timeout=value)
@@ -143,7 +153,16 @@ def test_read_passes_one_absolute_deadline(
     assert backend.deadlines == [None if timeout is None else 100.0 + timeout]
 
 
-@pytest.mark.parametrize("timeout", [-0.1, float("inf"), -float("inf"), float("nan")])
+@pytest.mark.parametrize(
+    "timeout",
+    [
+        -0.1,
+        float("inf"),
+        -float("inf"),
+        float("nan"),
+        pytest.param(10**10000, id="overflowing-int"),
+    ],
+)
 def test_read_rejects_invalid_timeout(
     monkeypatch: pytest.MonkeyPatch, timeout: float
 ) -> None:

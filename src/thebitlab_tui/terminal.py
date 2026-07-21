@@ -43,9 +43,12 @@ def _create_backend(escape_timeout: float) -> _InputBackend:
 def _validate_duration(value: float, *, positive: bool, name: str) -> float:
     """Return a finite duration or raise the public timeout error."""
 
-    duration = float(value)
+    qualifier = "positive and finite" if positive else "non-negative and finite"
+    try:
+        duration = float(value)
+    except OverflowError:
+        raise ValueError(f"{name} must be {qualifier}") from None
     if not isfinite(duration) or duration < 0 or (positive and duration == 0):
-        qualifier = "positive and finite" if positive else "non-negative and finite"
         raise ValueError(f"{name} must be {qualifier}")
     return duration
 
@@ -55,6 +58,10 @@ class KeyReader:
 
     Args:
         escape_timeout: Positive finite ambiguity window, in seconds, used by platform decoders.
+
+    Raises:
+        ValueError: If ``escape_timeout`` cannot represent a positive finite duration, including
+            zero, negative, infinite, NaN, and overflow-sized values.
 
     Construction validates scalar arguments but does not inspect or mutate a terminal.  Entering
     selects and activates a private platform backend.  The POSIX and Windows backends are delivered
