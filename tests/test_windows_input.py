@@ -217,10 +217,16 @@ def test_partial_surrogate_drains_one_more_ready_batch() -> None:
 
 def test_partial_surrogate_stops_when_no_more_records_are_ready() -> None:
     high = _WindowsKeyRecord(True, 1, 0, 0xD83D, 0)
-    harness = Harness(waits=[_WAIT_OBJECT_0, _WAIT_TIMEOUT], batches=[[high]])
+    low = _WindowsKeyRecord(True, 1, 0, 0xDE00, 0)
+    harness = Harness(
+        waits=[_WAIT_OBJECT_0, _WAIT_TIMEOUT, _WAIT_OBJECT_0],
+        batches=[[high], [low]],
+    )
     backend = active_backend(harness)
+
     assert backend.read(10.0) is None
-    assert harness.wait_calls == [0, 0]
+    assert backend.read(10.0) == KeyEvent(Key.CHARACTER, chr(0x1F600))
+    assert harness.wait_calls == [0, 0, 0]
 
 
 def test_partial_surrogate_drains_all_already_ready_batches() -> None:
