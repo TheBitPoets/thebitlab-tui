@@ -117,13 +117,16 @@ class _WindowsRecordDecoder:
     def feed(self, record: _WindowsKeyRecord) -> None:
         """Consume one translated key record and retain normalized events.
 
-        Key-up records and zero-repeat records are ignored without disturbing
-        a pending high surrogate. Semantic virtual keys take priority and
-        discard partial text; other positive key-down records complete,
-        replace, or discard the pending surrogate deterministically.
+        Key-up records are ignored without disturbing a pending high
+        surrogate. A malformed zero-repeat key-down discards partial text.
+        Semantic virtual keys take priority; other positive key-down records
+        complete, replace, or discard the pending surrogate deterministically.
         """
 
-        if not record.key_down or record.repeat_count <= 0:
+        if not record.key_down:
+            return
+        if record.repeat_count <= 0:
+            self._pending_high = None
             return
         if not 0 <= record.unicode_unit <= 0xFFFF:
             self._pending_high = None

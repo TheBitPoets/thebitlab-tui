@@ -214,17 +214,25 @@ def test_partial_surrogate_drains_one_more_ready_batch() -> None:
     assert harness.wait_calls == [0, 0]
 
 
-def test_partial_surrogate_cannot_starve_an_expired_deadline() -> None:
+def test_partial_surrogate_stops_when_no_more_records_are_ready() -> None:
     high = _WindowsKeyRecord(True, 1, 0, 0xD83D, 0)
-    sentinel = AssertionError("partial input was over-drained")
-    harness = Harness(
-        waits=[_WAIT_OBJECT_0, _WAIT_OBJECT_0, _WAIT_OBJECT_0],
-        batches=[[high], [None], sentinel],
-    )
+    harness = Harness(waits=[_WAIT_OBJECT_0, _WAIT_TIMEOUT], batches=[[high]])
     backend = active_backend(harness)
     assert backend.read(10.0) is None
-    assert harness.batches == [sentinel]
     assert harness.wait_calls == [0, 0]
+
+
+def test_partial_surrogate_drains_all_already_ready_batches() -> None:
+    high = _WindowsKeyRecord(True, 1, 0, 0xD83D, 0)
+    low = _WindowsKeyRecord(True, 1, 0, 0xDE00, 0)
+    harness = Harness(
+        waits=[_WAIT_OBJECT_0, _WAIT_OBJECT_0, _WAIT_OBJECT_0],
+        batches=[[None] * 63 + [high], [None] * 64, [low]],
+    )
+    backend = active_backend(harness)
+
+    assert backend.read(10.0) == KeyEvent(Key.CHARACTER, chr(0x1F600))
+    assert harness.wait_calls == [0, 0, 0]
 
 
 def test_unbounded_waits_are_sliced_and_keyboard_interrupt_propagates() -> None:

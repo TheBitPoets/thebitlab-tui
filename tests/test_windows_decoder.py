@@ -267,14 +267,26 @@ def test_second_high_replaces_first_and_can_complete() -> None:
     assert drain(decoder) == [KeyEvent(Key.CHARACTER, chr(0x1F642))]
 
 
-def test_ignored_records_do_not_break_pending_surrogate() -> None:
+def test_key_up_record_does_not_break_pending_surrogate() -> None:
     decoder = _WindowsRecordDecoder()
     decoder.feed(record(unicode_unit=0xD83D))
     decoder.feed(record(unicode_unit=0xD83D, key_down=False))
-    decoder.feed(record(unicode_unit=0xDE42, repeat_count=0))
     assert decoder.has_partial
     decoder.feed(record(unicode_unit=0xDE42))
     assert drain(decoder) == [KeyEvent(Key.CHARACTER, chr(0x1F642))]
+
+
+@pytest.mark.parametrize("unicode_unit", [0xDE42, ord("x"), 0xD800])
+def test_zero_repeat_key_down_discards_pending_surrogate(
+    unicode_unit: int,
+) -> None:
+    decoder = _WindowsRecordDecoder()
+    decoder.feed(record(unicode_unit=0xD83D))
+    decoder.feed(record(unicode_unit=unicode_unit, repeat_count=0))
+    decoder.feed(record(unicode_unit=0xDE42))
+
+    assert not decoder.has_partial
+    assert drain(decoder) == []
 
 
 def test_invalid_injected_utf16_unit_discards_pending_state() -> None:

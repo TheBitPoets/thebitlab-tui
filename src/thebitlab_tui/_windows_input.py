@@ -220,7 +220,6 @@ class _WindowsInputBackend:
             raise RuntimeError("Windows backend is not active")
         poll_before_deadline = True
         drain_partial = False
-        partial_drain_budget = 1
         while True:
             event = self._decoder.pop()
             if event is not None:
@@ -235,7 +234,6 @@ class _WindowsInputBackend:
                 return None
             milliseconds = self._wait_milliseconds(deadline, now)
             result = self._ops.wait(self._handle, milliseconds)
-            using_partial_drain = drain_partial
             poll_before_deadline = False
             drain_partial = False
             if result == _WAIT_TIMEOUT:
@@ -248,11 +246,7 @@ class _WindowsInputBackend:
             for record in records:
                 if record is not None:
                     self._decoder.feed(record)
-            if using_partial_drain:
-                partial_drain_budget -= 1
-            drain_partial = (
-                self._decoder.has_partial and partial_drain_budget > 0
-            )
+            drain_partial = self._decoder.has_partial
 
     def restore(self) -> None:
         """Release private lifecycle state without closing or mutating the borrowed handle."""
