@@ -237,13 +237,22 @@ division; an odd spare cell remains on the right or bottom.
 rules; the preferred dimensions size the centered inner frame only. As a root widget, the renderer's
 full rectangle is the outer area.
 
-The modal clears its own rectangle, draws an ASCII ``Panel``, and prefixes the title with ``[x]``.
+The modal clears only its computed centered inner-frame rectangle and draws an ASCII ``Panel``
+there. It never clears cells in the assigned outer rectangle that fall outside that frame, so a
+base widget drawn first remains visible around it.
+
+The modal header uses marker-priority composition rather than truncating ``"[x] " + title`` as one
+string. Its available header width is the inner-frame width minus the border and the two decorative
+padding cells used by ``Panel``. The implementation first copies as much of the literal ``[x]`` as
+fits. When the complete marker and at least two more cells fit, it adds one separating space and
+truncates only the caller's title into the remaining cells. It passes this already-fitted header to
+``Panel``, so ``Panel`` never replaces the close marker with an ellipsis because of a long title.
+
 The close marker is a presentation affordance, not a button or callback. The application handles
-Escape or another modifier-free command by rebuilding with ``open=False``. On widths below the
-seven-cell minimum, ordinary canvas clipping wins; borders never move outside the assigned area.
-Seven cells leave three title cells after the panel border and decorative padding, so ``[x]`` is
-fully visible at the declared minimum. At width six and below, the marker may truncate according to
-the ordinary narrow-title rules.
+Escape or another modifier-free command by rebuilding with ``open=False``. Borders never move
+outside the assigned area. Seven cells leave three header cells after the panel border and
+decorative padding, so ``[x]`` is fully visible at the declared minimum for both empty and non-empty
+titles. Below seven cells, the literal marker prefix is clipped to the available header cells.
 
 ``Modal`` does not dim or own an underlay and does not introduce an ``Overlay`` container. An
 application that needs an overlay draws its base widget first and the modal second in its own small
@@ -272,9 +281,14 @@ Implementation pull requests must cover:
 - offsets at zero, middle, end, and beyond the current maximum;
 - active items both inside and outside the requested viewport;
 - source and destination clipping plus style preservation for ``Canvas.blit``;
+- overlapping self-blits left, right, up, and down plus one clipped overlap, with characters and
+  styles copied from the pre-write snapshot;
 - modal centering for odd/even spare space and no writes outside its rectangle;
+- sentinel-background modal snapshots proving that centered and clipped inner frames leave every
+  outer-rectangle cell outside the frame untouched;
 - flexible ``Row``/``Column`` modal allocation independently from preferred inner-frame sizing;
-- the complete ``[x]`` marker at width seven and documented truncation at width six;
+- empty and non-empty modal titles at widths six through ten in ANSI and no-color mode, including
+  the complete ``[x]`` marker at width seven and its deterministic literal prefix below minimum;
 - Windows/Linux Python 3.11-3.13 CI, compileall, Sphinx warning-as-error, and manual examples.
 
 Rejected alternatives
