@@ -46,6 +46,8 @@ The proposed shape is:
 
    KeyReader(*, escape_timeout: float = 0.05)
 
+   KeyReader.__enter__() -> Self
+
    KeyReader.read(timeout: float | None = None) -> KeyEvent | None
 
 ``KeyReader`` lives in ``thebitlab_tui.terminal``, is exported from ``thebitlab_tui``, and is
@@ -72,6 +74,10 @@ scalar arguments but has no terminal side effects. Its lifecycle is explicit:
 ``__exit__`` restores any state owned by an active backend and permanently changes the facade to
 exited, including when the context body or restoration raises. An attempted activation is also
 single-use: if setup fails, restoration is attempted where necessary and the facade becomes exited.
+
+``__enter__`` returns the same public facade instance, never a backend or proxy. After successful
+restoration, ``__exit__`` returns ``False`` and never suppresses an exception raised by the context
+body. A restoration failure follows the precedence rules below instead of returning normally.
 
 There is no public protocol, abstract base class, backend factory, ``open`` method, or ``close``
 method in the initial contract. Requiring ``with`` keeps the restoration boundary visible and
@@ -180,10 +186,23 @@ valid following text remains decodable. Every split point in a multibyte charact
 sequence must produce the same final event.
 
 The decoder recognizes CSI ``ESC [ A/B/C/D`` and SS3 ``ESC O A/B/C/D`` arrows before applying the
-printable-scalar rule. Unambiguous Ctrl-letter bytes ``0x01`` through ``0x1a`` produce the matching
-lowercase ``Key.CHARACTER`` with ``ctrl=True``, except Tab, line feed, carriage return, Escape, and
-Ctrl+C. The semantic controls retain their mappings; byte ``0x03`` is always consumed so Ctrl+C can
-never become an event even if the terminal's interrupt character was remapped or disabled.
+printable-scalar rule. Its byte grammar is exact:
+
+- after ``ESC [``, zero or more parameter bytes ``0x30`` through ``0x3f`` may be followed by zero
+  or more intermediate bytes ``0x20`` through ``0x2f`` and exactly one final byte ``0x40`` through
+  ``0x7e``;
+- after ``ESC O``, exactly one final byte ``0x40`` through ``0x7e`` completes the SS3 sequence;
+- only final ``A``, ``B``, ``C``, or ``D`` with no CSI parameter or intermediate bytes maps to an
+  arrow; every other syntactically complete sequence is consumed as unknown;
+- a byte outside the allowed position consumes the buffered control fragment including that byte
+  as malformed; the next byte starts normal decoding and is not swallowed;
+- the private length bound is checked after each byte is appended. Exceeding it consumes the whole
+  buffered fragment including the byte that crossed the bound; the exact bound remains private.
+
+Unambiguous Ctrl-letter bytes ``0x01`` through ``0x1a`` produce the matching lowercase
+``Key.CHARACTER`` with ``ctrl=True``, except Tab, line feed, carriage return, Escape, and Ctrl+C.
+The semantic controls retain their mappings; byte ``0x03`` is always consumed so Ctrl+C can never
+become an event even if the terminal's interrupt character was remapped or disabled.
 
 Escape is inherently ambiguous on a byte stream. A lone ``ESC`` becomes ``Key.ESCAPE`` only after
 ``escape_timeout``. If the caller's deadline expires first, ``read`` returns ``None`` and keeps the
@@ -225,11 +244,15 @@ console state to restore.
 ``WaitForSingleObject`` applies the common blocking, polling, and monotonic-deadline policy to the
 console handle. Even an unbounded read uses bounded private waits so Python can regularly observe a
 pending ``KeyboardInterrupt``. Once signalled, ``ReadConsoleInputW`` drains bounded batches of
-queued records. A failed wait or read raises ``OSError``; a successful zero-record read continues
-under the original deadline. Ignored records do not reset that deadline. Non-key records and key-up
-records are consumed and ignored without becoming false commands.
+queued records. A failed wait or read raises ``OSError``. Ignored records do not reset the original
+deadline. Non-key records and key-up records are consumed and ignored without becoming false
+commands. Per the Win32 contract, a successful read always contains at least one record; a
+zero-record success is not part of the backend contract.
 
-For a key-down ``KEY_EVENT_RECORD``, normalization uses this exact priority:
+Before normalizing a key-down ``KEY_EVENT_RECORD``, the backend consumes synthetic Ctrl+C when Ctrl
+is reported, the virtual key is C, and ``UnicodeChar`` is NUL, ETX, ``c``, or ``C``. A distinct
+printable scalar remains text even when Windows also reports Ctrl and Right Alt for an AltGr
+combination. All remaining records use this exact priority:
 
 1. virtual-key codes map arrows, Enter, Escape, and Tab;
 2. a text or paste record with virtual-key zero and ``UnicodeChar`` CR, LF, Tab, or Escape maps to
@@ -271,7 +294,9 @@ If POSIX activation fails after a state snapshot, the backend attempts restorati
 re-raising. Context exit restores the exact saved attributes after normal completion and every
 unwinding Python exception. A restoration failure on normal exit raises ``OSError``. If the body
 already raised, its exception remains primary and the restoration failure is attached as a note
-when supported rather than replacing it.
+when supported rather than replacing it. The same precedence applies when activation and its
+compensating restoration both fail: the activation error remains primary, the restoration error is
+attached as a note, and the facade remains exited.
 
 The library cannot restore state after ``SIGKILL``, ``os._exit()``, interpreter or process crash,
 or a terminating signal that does not unwind Python. It installs no ``atexit`` or signal handler;
@@ -324,7 +349,8 @@ Pure and facade tests on all CI platforms must cover:
 - the exact printable-scalar predicate, valid ``U+FFFD``, malformed input without replacement,
   codec selection, registered ASCII-incompatible rejection, and all required decoding split
   points;
-- unknown, overlong, malformed, and unsupported control sequences without false commands;
+- supported, unsupported-complete, malformed, and overlong CSI/SS3 sequences at every split point,
+  without false characters and with following valid text preserved;
 - ``None``, zero, positive, negative, infinite, and NaN read-timeout values;
 - positive, zero, negative, infinite, and NaN ``escape_timeout`` constructor values;
 - already-queued continuation units at a zero or expired deadline;
@@ -332,20 +358,23 @@ Pure and facade tests on all CI platforms must cover:
 - interrupted and failed operations without deadline reset;
 - reading in each lifecycle state, nested entry, attempted reuse after exit, normal exit,
   exceptional exit, and setup failure.
+- context entry returning the identical facade, body exceptions never being suppressed, and the
+  documented restoration-error precedence.
 
 POSIX-specific tests use injected operations plus a real Linux pseudo-terminal to verify the exact
 cbreak flag delta, no activation flush, reads, EOF, and exact restoration after normal completion,
 ``KeyboardInterrupt``, read error, and body exception. Restore-failure behavior and retryable
 internal state are deterministic unit tests. Injected decoding also verifies that byte ``0x03`` is
-ignored when terminal signal processing does not intercept it.
+ignored when terminal signal processing does not intercept it. A setup failure followed by a
+restoration failure verifies the primary exception, attached note, and permanently exited facade.
 
 Windows-specific tests inject console-mode, wait, record-read, and clock operations. They cover the
 ``ctypes`` ABI, all four arrows, key-up and non-key records, unsupported virtual keys, semantic
 virtual keys, virtual-key-zero CR/LF/Tab/Escape records, printable BMP text including ``U+00E0``,
 an AltGr-style Ctrl+Right-Alt record with printable text, supplementary characters, record
 modifiers, repeat counts, malformed surrogates, redirected input, processed-input rejection,
-wait/read failures and zero-record reads, Ctrl+C policy, and the absence of POSIX-only imports.
-Windows CI also performs an import and console-policy smoke test.
+wait/read failures, Ctrl+C records with NUL, ETX, ``c``, and ``C``, and the absence of POSIX-only
+imports. Windows CI also performs an import and console-policy smoke test.
 
 Required manual verification
 ----------------------------
