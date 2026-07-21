@@ -10,7 +10,8 @@ Responsibility boundaries
 
 Widgets describe presentation and draw within rectangles. Layout containers assign rectangles to
 children. ``Canvas`` owns fixed-size cells and clipping. The renderer creates a canvas and returns
-rows or text. The terminal layer reads dimensions and color capability but never clears or prints.
+rows or text. The terminal layer reads dimensions, color capability, and normalized input through
+private platform adapters, but never clears, prints, maps commands, or owns an event loop.
 ``ListView`` presents a tuple of strings plus caller-owned selection and viewport state; it does
 not navigate, accept events, or mutate that state.
 ``Canvas.blit`` composes clipped character/style cells from a pre-write snapshot. ``ScrollView``

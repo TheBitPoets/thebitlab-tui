@@ -170,7 +170,7 @@ sync with the parent issue's checklist and implementation traceability.
 | Project foundations v0.1 | Complete | 2026-07-20 | 2026-07-27 | Core scaffold | [#2](https://github.com/TheBitPoets/thebitlab-tui/issues/2) | Governance, docstrings, Sphinx, CI; merged in PRs #5 and #6 |
 | Phase 1 - Core rendering | Complete | 2026-07-20 | Pre-tracking | None | Pre-tracking | Initial ASCII rendering scaffold |
 | Interactive widgets v0.2 | Complete | 2026-07-21 | 2026-08-17 | Stable core API | [#7](https://github.com/TheBitPoets/thebitlab-tui/issues/7) | Released as [`v0.2.0`](https://github.com/TheBitPoets/thebitlab-tui/releases/tag/v0.2.0); terminal input and integration work deferred |
-| Terminal adapters v0.3 | Planned | 2026-08-14 | 2026-08-21 | v0.2 | [#24](https://github.com/TheBitPoets/thebitlab-tui/issues/24) | Dependency-free Windows/POSIX input; no event loop |
+| Terminal adapters v0.3 | In progress | 2026-08-14 | 2026-08-21 | v0.2 | [#24](https://github.com/TheBitPoets/thebitlab-tui/issues/24) | Dependency-free Windows/POSIX input; no event loop |
 | Integration-ready v0.4 | Planned | 2026-09-18 | 2026-09-25 | v0.3 and consumer availability | [#25](https://github.com/TheBitPoets/thebitlab-tui/issues/25) | Neutral adapter contract and evidence; implementation stays in `2cornot2c` |
 | Release candidate v0.9 | Planned | 2026-10-16 | 2026-10-23 | v0.4 and integration evidence | [#26](https://github.com/TheBitPoets/thebitlab-tui/issues/26) | Candidate API freeze, packaging, hardening, complete docs |
 | Stable product v1.0 | Planned | 2026-11-06 | 2026-11-13 | v0.9 feedback window | [#27](https://github.com/TheBitPoets/thebitlab-tui/issues/27) | Stable API and verified `v1.0.0` release; PyPI is a separate decision gate |

@@ -18,8 +18,9 @@ Design contracts
 ----------------
 
 Keep functions pure where practical. Widgets draw into a supplied ``Canvas`` and never print.
-Layout computes rectangles; the renderer produces a frame; terminal helpers only expose platform
-policy and dimensions. Application dictionaries and persisted state stay outside the package.
+Layout computes rectangles; the renderer produces a frame; terminal helpers expose platform
+policy, dimensions, and normalized input through private adapters. Applications retain commands,
+event loops, redraw, dictionaries, and persisted state outside the package.
 
 Names exported by ``thebitlab_tui.__all__`` are public API. Before changing a public signature,
 return type, exception, import path, or documented behavior, create an issue and record whether the
