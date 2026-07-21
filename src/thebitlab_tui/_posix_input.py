@@ -143,7 +143,6 @@ class _PosixInputBackend:
             try:
                 ready, _, _ = self._ops.select([self._fd], [], [], timeout)
             except InterruptedError:
-                poll_before_deadline = False
                 continue
             poll_before_deadline = False
             drain_before_expiry = False

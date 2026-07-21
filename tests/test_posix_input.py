@@ -190,14 +190,12 @@ def test_expired_deadline_does_not_drain_ignored_input_forever() -> None:
     assert harness.timeouts == [0.0]
 
 
-def test_interrupted_initial_poll_does_not_restart_expired_deadline() -> None:
-    sentinel = AssertionError("deadline was restarted after interruption")
-    harness = Harness(ready=[InterruptedError(), True], reads=[sentinel])
+def test_interrupted_initial_poll_retries_without_restarting_deadline() -> None:
+    harness = Harness(ready=[InterruptedError(), True], reads=[b"x"])
     backend = _PosixInputBackend(0.05, ops=harness.ops())
     backend.activate()
-    assert backend.read(10.0) is None
-    assert harness.reads == [sentinel]
-    assert harness.timeouts == [0.0]
+    assert backend.read(10.0) == KeyEvent(Key.CHARACTER, "x")
+    assert harness.timeouts == [0.0, 0.0]
 
 
 def test_outer_deadline_returns_none_and_preserves_pending_escape() -> None:
