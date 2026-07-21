@@ -18,6 +18,7 @@ from thebitlab_tui._windows_input import (
     _INPUT_RECORD,
     _KEY_EVENT,
     _KEY_EVENT_RECORD,
+    _PARTIAL_DRAIN_BATCH_LIMIT,
     _READ_BATCH_SIZE,
     _WAIT_OBJECT_0,
     _WAIT_TIMEOUT,
@@ -233,6 +234,24 @@ def test_partial_surrogate_drains_all_already_ready_batches() -> None:
 
     assert backend.read(10.0) == KeyEvent(Key.CHARACTER, chr(0x1F600))
     assert harness.wait_calls == [0, 0, 0]
+
+
+def test_partial_surrogate_cannot_starve_an_expired_deadline() -> None:
+    high = _WindowsKeyRecord(True, 1, 0, 0xD83D, 0)
+    sentinel = AssertionError("partial drain exceeded its deterministic bound")
+    harness = Harness(
+        waits=[_WAIT_OBJECT_0] * (_PARTIAL_DRAIN_BATCH_LIMIT + 2),
+        batches=(
+            [[high]]
+            + [[None] * _READ_BATCH_SIZE] * _PARTIAL_DRAIN_BATCH_LIMIT
+            + [sentinel]
+        ),
+    )
+    backend = active_backend(harness)
+
+    assert backend.read(10.0) is None
+    assert len(harness.wait_calls) == _PARTIAL_DRAIN_BATCH_LIMIT + 1
+    assert harness.batches == [sentinel]
 
 
 def test_unbounded_waits_are_sliced_and_keyboard_interrupt_propagates() -> None:

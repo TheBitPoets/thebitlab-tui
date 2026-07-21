@@ -29,6 +29,7 @@ _INVALID_HANDLE_VALUE = -1
 _ERROR_INVALID_HANDLE = 6
 _WAIT_SLICE_MS = 50
 _READ_BATCH_SIZE = 64
+_PARTIAL_DRAIN_BATCH_LIMIT = 16
 
 
 class _KEY_EVENT_RECORD(ctypes.Structure):
@@ -220,6 +221,7 @@ class _WindowsInputBackend:
             raise RuntimeError("Windows backend is not active")
         poll_before_deadline = True
         drain_partial = False
+        partial_drain_batches = 0
         while True:
             event = self._decoder.pop()
             if event is not None:
@@ -234,6 +236,7 @@ class _WindowsInputBackend:
                 return None
             milliseconds = self._wait_milliseconds(deadline, now)
             result = self._ops.wait(self._handle, milliseconds)
+            using_partial_drain = drain_partial
             poll_before_deadline = False
             drain_partial = False
             if result == _WAIT_TIMEOUT:
@@ -246,7 +249,12 @@ class _WindowsInputBackend:
             for record in records:
                 if record is not None:
                     self._decoder.feed(record)
-            drain_partial = self._decoder.has_partial
+            if using_partial_drain:
+                partial_drain_batches += 1
+            drain_partial = (
+                self._decoder.has_partial
+                and partial_drain_batches < _PARTIAL_DRAIN_BATCH_LIMIT
+            )
 
     def restore(self) -> None:
         """Release private lifecycle state without closing or mutating the borrowed handle."""
