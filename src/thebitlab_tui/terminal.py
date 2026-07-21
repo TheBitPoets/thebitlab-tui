@@ -138,7 +138,8 @@ class KeyReader:
 
         Raises:
             RuntimeError: If the reader is not inside its active context.
-            ValueError: If ``timeout`` is negative, infinite, or NaN.
+            ValueError: If ``timeout`` cannot represent a non-negative finite duration, including
+                negative, infinite, NaN, and overflow-sized values.
             EOFError: If a future POSIX backend reaches end of input.
             OSError: If a backend readiness or read operation fails.
         """
