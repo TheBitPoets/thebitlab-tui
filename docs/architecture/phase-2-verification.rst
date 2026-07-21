@@ -105,6 +105,8 @@ Run the same deterministic checks before publishing a release:
    python examples/scroll_view.py --no-color
    python examples/modal.py --no-color
 
-Tags and GitHub release publication happen only after this change is merged. Terminal adapters,
-direct student TUI integration, mouse support, drag and drop, tmux-specific behavior, and animation
-timing remain explicitly deferred.
+After the Phase 2 closeout change is merged, tag its resulting ``master`` commit as ``v0.2.0`` and
+publish the GitHub release from the matching changelog section. This ordering keeps the completed
+roadmap and verification record inside the released source. Terminal adapters, direct student TUI
+integration, mouse support, drag and drop, tmux-specific behavior, and animation timing remain
+explicitly deferred.
