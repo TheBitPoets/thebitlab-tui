@@ -189,10 +189,16 @@ state, and redraws.
        event = keys.read(timeout=0.1)
 
 ``read`` returns one normalized event or ``None`` at the total deadline.  ``timeout=None`` waits,
-zero polls, and positive finite values wait for at most that many seconds.  The facade is now
-available for API integration, but real POSIX and Windows input backends are delivered by the next
-Phase 3 slices; entering it raises ``io.UnsupportedOperation`` until one of those backends lands.
-Construction itself never reads or changes the terminal.
+zero polls, and positive finite values wait for at most that many seconds.  On Linux, entering the
+facade borrows an interactive standard-input TTY and uses conservative cbreak mode; leaving the
+context restores the exact saved attributes.  Redirected input raises ``io.UnsupportedOperation``.
+The Windows console backend remains a later Phase 3 slice, so entering the facade on Windows is
+not supported yet.  Construction itself never reads or changes the terminal.
+
+POSIX input recognizes arrows, Enter, Escape, Tab, printable text, and supported modifiers.  A
+lone Escape waits for ``escape_timeout`` so the decoder can distinguish it from an Alt-prefixed
+character or control sequence.  Ctrl+C remains terminal signal input rather than a ``KeyEvent``.
+Applications must always expose equivalent commands that do not require Alt or Ctrl.
 
 Applications should pair a small finite input timeout with ``ResizeWatcher.poll()`` when they need
 resize-aware redraws.  The library still installs no event loop or signal handler.

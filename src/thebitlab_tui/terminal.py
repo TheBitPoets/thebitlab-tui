@@ -34,10 +34,13 @@ class _ReaderState(Enum):
 
 
 def _create_backend(escape_timeout: float) -> _InputBackend:
-    """Create the platform backend when its bounded implementation slice lands."""
+    """Create a supported platform backend without eager platform-only imports."""
 
-    del escape_timeout
-    raise UnsupportedOperation("terminal input backends are not implemented yet")
+    if sys.platform.startswith("linux"):
+        from ._posix_input import _PosixInputBackend
+
+        return _PosixInputBackend(escape_timeout)
+    raise UnsupportedOperation("terminal input backend is not implemented for this platform")
 
 
 def _validate_duration(value: float, *, positive: bool, name: str) -> float:
@@ -64,8 +67,8 @@ class KeyReader:
             zero, negative, infinite, NaN, and overflow-sized values.
 
     Construction validates scalar arguments but does not inspect or mutate a terminal.  Entering
-    selects and activates a private platform backend.  The POSIX and Windows backends are delivered
-    by later Phase 3 slices; until then, entering raises ``io.UnsupportedOperation``.
+    selects and activates a private platform backend.  Linux TTY input is supported; Windows and
+    other platforms raise ``io.UnsupportedOperation`` until their bounded backend slice lands.
 
     Instances are neither reusable nor thread-safe.  The application owns its event loop, commands,
     resize handling, state updates, and redraws.
@@ -140,7 +143,7 @@ class KeyReader:
             RuntimeError: If the reader is not inside its active context.
             ValueError: If ``timeout`` cannot represent a non-negative finite duration, including
                 negative, infinite, NaN, and overflow-sized values.
-            EOFError: If a future POSIX backend reaches end of input.
+            EOFError: If the POSIX backend reaches end of input.
             OSError: If a backend readiness or read operation fails.
         """
 
