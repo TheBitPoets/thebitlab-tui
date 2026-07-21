@@ -13,6 +13,8 @@ children. ``Canvas`` owns fixed-size cells and clipping. The renderer creates a 
 rows or text. The terminal layer reads dimensions and color capability but never clears or prints.
 ``ListView`` presents a tuple of strings plus caller-owned selection and viewport state; it does
 not navigate, accept events, or mutate that state.
+``Canvas.blit`` composes clipped character/style cells from a pre-write snapshot. ``ScrollView``
+uses that operation to isolate oversized child rendering inside a viewport-sized canvas.
 
 Event flow
 ----------
@@ -24,6 +26,10 @@ renders another complete frame. Modifier-free commands remain mandatory fallback
 For a list, that flow is ``KeyEvent`` to application-owned ``active_index`` and ``scroll_offset``
 to a newly constructed ``ListView`` to renderer output. Clamping during drawing is local to the
 current viewport and never becomes hidden application state.
+
+``ScrollView`` follows the same ownership flow, with the application additionally supplying the
+logical ``content_height`` because the structural widget protocol has no measurement operation.
+The widget does not measure, navigate, or scroll horizontally.
 
 Student TUI adapter
 -------------------

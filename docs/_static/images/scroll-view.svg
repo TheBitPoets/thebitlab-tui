@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="690" height="270" viewBox="0 0 690 270" role="img" aria-labelledby="title desc">
+  <title id="title">Isolated vertical ScrollView</title>
+  <desc id="desc">An ASCII Activity panel showing six rows after a caller-provided vertical offset.</desc>
+  <rect width="690" height="270" rx="8" fill="#171717"/>
+  <text x="20" y="35" fill="#f4f4f4" font-family="Consolas, monospace" font-size="17" xml:space="preserve">
+    <tspan x="20" dy="0">+ &gt; Activity --------------------------+</tspan>
+    <tspan x="20" dy="28">|09:11 tests running                   |</tspan>
+    <tspan x="20" dy="28">|09:12 test 1 passed                   |</tspan>
+    <tspan x="20" dy="28">|09:12 test 2 passed                   |</tspan>
+    <tspan x="20" dy="28">|09:13 report generated                |</tspan>
+    <tspan x="20" dy="28">|09:14 grading pending                 |</tspan>
+    <tspan x="20" dy="28">|09:15 session saved                   |</tspan>
+    <tspan x="20" dy="28">+--------------------------------------+</tspan>
+  </text>
+</svg>

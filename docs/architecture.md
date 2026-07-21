@@ -14,6 +14,9 @@ all declared minima, clipping prevents overflow.
 
 The renderer creates a fixed-size `Canvas`, asks the root widget to draw, and returns either
 `list[str]` or one string. Styles live on canvas cells, so ANSI sequences never affect geometry.
+`Canvas.blit` copies clipped character/style cells and snapshots its source before overlapping
+self-copies. `ScrollView` draws its child on a viewport-sized canvas and blits that isolated result,
+so a child cannot overwrite adjacent layout cells.
 The terminal adapter only reports current dimensions, color capability, and resize changes. It
 does not clear the screen or run a loop.
 
@@ -38,6 +41,11 @@ For list navigation the flow is equally explicit: the terminal adapter produces 
 application computes new `active_index` and `scroll_offset` values, and the next redraw constructs
 a new `ListView`. The widget only clamps an effective offset for its assigned height; it never
 changes state or automatically reveals the active item.
+
+For arbitrary scrolling, the application also supplies `content_height`, because the deliberately
+small `Widget` protocol has no measurement method. It updates `scroll_offset` after input and
+rebuilds `ScrollView`; drawing clamps only the effective offset for the current viewport. There is
+no horizontal scrolling or hidden measurement pass.
 
 ## Data and presentation
 

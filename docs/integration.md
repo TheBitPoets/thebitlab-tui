@@ -6,7 +6,7 @@ have one pure function per application section and one composition function:
 ```python
 from collections.abc import Sequence
 
-from thebitlab_tui import Column, Label, ListView, Panel, Row
+from thebitlab_tui import Column, Label, ListView, Panel, Row, ScrollView
 
 
 def workspace_panel(workspace: dict[str, object]) -> Panel:
@@ -32,6 +32,18 @@ def exercise_list(
     return Panel(listing, title="Exercises", focused=focused, min_width=24)
 
 
+def report_panel(lines: Sequence[str], *, scroll_offset: int) -> Panel:
+    """Adapt explicit report rows while the application owns viewport state."""
+
+    content = Label("\n".join(lines))
+    viewport = ScrollView(
+        content,
+        content_height=len(lines),
+        scroll_offset=scroll_offset,
+    )
+    return Panel(viewport, title="Report", min_width=30)
+
+
 def student_screen(data: dict[str, object], collapsed: set[str], focus: str) -> Row:
     workspace = workspace_panel(data.get("workspace", {}))
     workspace.collapsed = "workspace" in collapsed
@@ -50,4 +62,8 @@ At redraw time the existing CLI should read its own state, build the tree, call
 `render_terminal(tree, color=...)`, and decide how to clear and print. Its platform-specific key
 reader can later return `KeyEvent` values. Existing fallback commands without Alt/Ctrl should be
 retained. No change to `scripts/student_lab_layout.py` is required for this scaffold.
+
+The first adapter should pass explicit logical rows to ``ScrollView`` as above. If it later wraps
+text responsively, the application must recalculate ``content_height`` from the current width on
+each redraw; the library intentionally does not measure child widgets or persist that value.
 

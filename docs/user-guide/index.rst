@@ -95,6 +95,35 @@ process keys. After input, the application computes new state and builds the nex
    :alt: An ASCII exercise panel with exercise-02 selected in a vertically scrolled ListView.
    :align: center
 
+Arbitrary content and ScrollView
+---------------------------------
+
+``ScrollView`` clips a string or widget that is logically taller than its assigned rectangle. The
+application supplies both the logical ``content_height`` and requested ``scroll_offset``; drawing
+clamps an effective offset without changing either value. A viewport-sized temporary canvas keeps
+child output out of adjacent layout cells, and ``Canvas.blit`` preserves character styles when the
+result is composed.
+
+.. code-block:: python
+
+   from thebitlab_tui import Label, Panel, ScrollView, render
+
+   lines = ["queued", "running", "test 1 passed", "test 2 passed", "done"]
+   viewport = ScrollView(
+       Label("\n".join(lines)),
+       content_height=len(lines),
+       scroll_offset=1,
+   )
+   frame = render(Panel(viewport, title="Activity"), width=28, height=6)
+
+The initial contract has no horizontal scrolling or child measurement. Use explicit logical rows
+as above. If an application wraps text according to terminal width, it must recalculate the
+corresponding height before constructing the next frame.
+
+.. image:: ../_static/images/scroll-view.svg
+   :alt: An ASCII Activity panel showing six rows inside a vertically scrolled viewport.
+   :align: center
+
 Color and terminals
 -------------------
 

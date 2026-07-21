@@ -6,8 +6,8 @@ layout, rendering, and terminal I/O separate.
 
 It is not a replacement for Textual, Urwid, or Rich. It does not own an event loop, print from
 widgets, contain application logic, or require Unicode borders. The public surface focuses on
-`Rect`, `Canvas`, `Style`, `Label`, `Panel`, `Divider`, `StatusBadge`, `ListView`, responsive
-`Row`/`Column`, and pure ASCII rendering.
+`Rect`, `Canvas`, `Style`, `Label`, `Panel`, `Divider`, `StatusBadge`, `ListView`, `ScrollView`,
+responsive `Row`/`Column`, and pure ASCII rendering.
 
 ## Minimal example
 
@@ -27,6 +27,7 @@ print(frame)  # The application, not the library, chooses when to print.
 The full three-panel example is in `examples/basic_panels.py`. See
 `examples/divider_badges.py` for ASCII dividers and semantic status markers.
 `examples/selectable_list.py` shows caller-owned focus, selection, and vertical viewport state.
+`examples/scroll_view.py` demonstrates isolated scrolling for arbitrary widget content.
 
 ## Development and tests
 
@@ -54,6 +55,10 @@ required to understand the interface.
 `ListView` uses `>` for a focused active row and `*` for an unfocused active row. The application
 owns `active_index` and `scroll_offset`; rendering only clamps an effective offset for the current
 height and never changes either value or handles input.
+
+`ScrollView` uses an explicit caller-provided `content_height`; it does not measure children or
+handle navigation. `Canvas.blit` composes clipped cell regions while preserving styles, including
+deterministic overlapping copies on the same canvas.
 
 ## Narrow terminals
 

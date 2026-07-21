@@ -99,6 +99,50 @@ class Canvas:
             for x in range(clipped.x, clipped.right):
                 self.set(x, y, char, style)
 
+    def blit(
+        self,
+        source: Canvas,
+        *,
+        x: int = 0,
+        y: int = 0,
+        source_rect: Rect | None = None,
+    ) -> None:
+        """Copy a clipped source region, including styles, onto this canvas.
+
+        Args:
+            source: Canvas whose cells are copied.
+            x: Destination column corresponding to the requested source rectangle's left edge.
+            y: Destination row corresponding to the requested source rectangle's top edge.
+            source_rect: Requested source region, or ``None`` for the complete source canvas.
+
+        Source and destination edges are clipped without changing their coordinate mapping. If a
+        requested source origin lies outside ``source``, its clipped cells retain their original
+        offset from destination ``(x, y)``. Copying a canvas onto itself reads every selected cell
+        before writing, so overlapping copies are deterministic. The operation never emits ANSI or
+        resizes either canvas.
+        """
+
+        requested = source.rect if source_rect is None else source_rect
+        destination_in_source = Rect(
+            requested.x - x,
+            requested.y - y,
+            self.width,
+            self.height,
+        )
+        clipped = requested.intersect(source.rect).intersect(destination_in_source)
+        snapshot = [
+            (
+                x + source_x - requested.x,
+                y + source_y - requested.y,
+                source._cells[source_y][source_x].char,
+                source._cells[source_y][source_x].style,
+            )
+            for source_y in range(clipped.y, clipped.bottom)
+            for source_x in range(clipped.x, clipped.right)
+        ]
+        for destination_x, destination_y, char, style in snapshot:
+            self.set(destination_x, destination_y, char, style)
+
     def hline(self, x: int, y: int, width: int, char: str = "-", style: Style = PLAIN) -> None:
         """Draw a clipped horizontal line."""
 

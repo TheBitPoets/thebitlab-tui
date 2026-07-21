@@ -49,6 +49,19 @@ snapshot without ANSI styling with:
 The example supplies ``active_index`` and ``scroll_offset`` directly. It intentionally has no key
 reader or event loop: an application updates those values and rebuilds the widget tree.
 
+Scrollable widget content
+-------------------------
+
+``examples/scroll_view.py`` renders explicit activity rows through an isolated ``ScrollView``.
+Run its stable snapshot without ANSI styling with:
+
+.. code-block:: console
+
+   python examples/scroll_view.py --no-color
+
+The application supplies both ``content_height`` and ``scroll_offset``. The example deliberately
+avoids wrapped auto-measurement and contains no input loop.
+
 Additional examples
 -------------------
 

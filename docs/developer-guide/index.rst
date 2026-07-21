@@ -43,6 +43,16 @@ viewport clamp, and no-auto-scroll behavior are compatibility commitments. Cover
 viewports, offsets beyond the maximum, active items outside the viewport, ANSI/no-color, and widths
 zero through three. Navigation and event dispatch belong to the application.
 
+``Canvas.blit`` preserves cell characters and styles, keeps the requested source origin when
+clipping, and snapshots all selected cells before an overlapping self-copy. Regression tests must
+cover source and destination clipping plus left, right, up, down, and clipped self-overlap.
+
+``ScrollView`` receives ``content_height`` and ``scroll_offset`` from the application. It draws on
+a canvas exactly as large as the assigned viewport, then blits the complete result so blank cells
+clear stale content and child output cannot escape. Cover short content, offsets beyond the
+maximum, clipped outer rectangles, ANSI/no-color, and min/max/fixed layout. Do not add implicit
+measurement, horizontal scrolling, navigation, or callbacks.
+
 Documentation workflow
 ----------------------
 

@@ -36,8 +36,9 @@ Public namespace
 ``Divider`` and ``StatusBadge`` are exported from ``thebitlab_tui`` and listed in
 ``thebitlab_tui.__all__`` by the implementation tracked in issue #12. ``ListView`` follows in the
 implementation tracked by issue `#14
-<https://github.com/TheBitPoets/thebitlab-tui/issues/14>`_. ``ScrollView`` and ``Modal`` remain
-later slices. ``Canvas.blit`` will be a public method on the existing class.
+<https://github.com/TheBitPoets/thebitlab-tui/issues/14>`_. ``Canvas.blit`` and ``ScrollView``
+follow in the implementation tracked by issue `#16
+<https://github.com/TheBitPoets/thebitlab-tui/issues/16>`_. ``Modal`` remains a later slice.
 Orientation and status remain string literals, so Phase 2 adds no public enum, state manager,
 callback type, or abstract base class.
 
@@ -271,7 +272,7 @@ Implementation is split into focused pull requests:
 1. ``Divider`` and ``StatusBadge`` plus public exports, docstrings, snapshots, and guide examples
    (issue #12).
 2. ``ListView`` and focus/selection snapshots, including empty and narrow viewports (issue #14).
-3. ``Canvas.blit`` and ``ScrollView`` with style-preserving clipping tests.
+3. ``Canvas.blit`` and ``ScrollView`` with style-preserving clipping tests (issue #16).
 4. ``Modal`` with centering, closed-state, under-minimum, and overlay-preservation snapshots.
 5. Final Phase 2 documentation, examples, images, and cross-platform manual verification.
 
