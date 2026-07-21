@@ -61,6 +61,33 @@ marker wins, and ``color=False`` removes ANSI without changing geometry.
 
    frame = render(screen, width=20, height=3, color=False)
 
+Selection and ListView
+----------------------
+
+``ListView`` renders one string per row while the application owns focus, selection, and the
+requested vertical offset. A focused active row starts with ``>`` followed by one space; an
+unfocused active row starts with ``*`` followed by one space; inactive rows reserve the same two
+columns. Width one keeps the marker, and item text uses the normal stable ellipsis behavior.
+
+.. code-block:: python
+
+   from thebitlab_tui import ListView, Panel, render
+
+   state = {"active_index": 2, "scroll_offset": 1, "focused": True}
+   listing = ListView(
+       ["setup", "exercise-01", "exercise-02", "exercise-03"],
+       **state,
+   )
+   frame = render(Panel(listing, title="Exercises", focused=True), 28, 7)
+
+Drawing clamps only the effective offset when the requested offset is beyond the last full
+viewport. It does not change ``scroll_offset``, move the viewport to reveal ``active_index``, or
+process keys. After input, the application computes new state and builds the next widget tree.
+
+.. image:: ../_static/images/selectable-list.svg
+   :alt: An ASCII exercise panel with exercise-02 selected in a vertically scrolled ListView.
+   :align: center
+
 Color and terminals
 -------------------
 

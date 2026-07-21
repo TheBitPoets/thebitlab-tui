@@ -7,7 +7,7 @@ from .layout import Column, Row, Size
 from .renderer import render, render_lines, render_terminal
 from .styles import Style, strip_ansi, truncate, visible_width
 from .terminal import ResizeWatcher, TerminalSize, get_terminal_size, supports_color
-from .widgets import Divider, Label, Panel, StatusBadge, Widget
+from .widgets import Divider, Label, ListView, Panel, StatusBadge, Widget
 
 __all__ = [
     "Canvas",
@@ -16,6 +16,7 @@ __all__ = [
     "Key",
     "KeyEvent",
     "Label",
+    "ListView",
     "Panel",
     "Rect",
     "ResizeWatcher",

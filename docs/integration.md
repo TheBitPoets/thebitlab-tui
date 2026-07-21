@@ -4,12 +4,32 @@ Integration belongs in the `2cornot2c` repository, not in this library. The init
 have one pure function per application section and one composition function:
 
 ```python
-from thebitlab_tui import Column, Label, Panel, Row
+from collections.abc import Sequence
+
+from thebitlab_tui import Column, Label, ListView, Panel, Row
 
 
 def workspace_panel(workspace: dict[str, object]) -> Panel:
     lines = [f"Path: {workspace.get('path', '-')}", f"Status: {workspace.get('status', '-')}"]
     return Panel(Label("\n".join(lines)), title="Workspace", min_width=30)
+
+
+def exercise_list(
+    titles: Sequence[str],
+    *,
+    active_index: int | None,
+    scroll_offset: int,
+    focused: bool,
+) -> Panel:
+    """Adapt application-owned list state without moving it into the library."""
+
+    listing = ListView(
+        titles,
+        active_index=active_index,
+        scroll_offset=scroll_offset,
+        focused=focused,
+    )
+    return Panel(listing, title="Exercises", focused=focused, min_width=24)
 
 
 def student_screen(data: dict[str, object], collapsed: set[str], focus: str) -> Row:
