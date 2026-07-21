@@ -1,4 +1,4 @@
-"""Pure leaf, framing, selection, divider, and semantic-status widgets."""
+"""Pure leaf, framing, selection, scrolling, divider, and semantic-status widgets."""
 
 from __future__ import annotations
 
@@ -384,6 +384,69 @@ class ListView:
                     max_width=rect.width - 2,
                     style=row_style,
                 )
+
+
+@dataclass(slots=True)
+class ScrollView:
+    """Draw oversized content through an isolated vertical viewport.
+
+    Args:
+        content: Child widget or plain string adapted to :class:`Label`.
+        content_height: Non-negative logical content height supplied by the caller.
+        scroll_offset: Requested first content row. Drawing clamps the effective value without
+            changing this field.
+        width: Optional fixed layout width.
+        height: Optional fixed layout height.
+        min_width: Soft minimum layout width.
+        min_height: Soft minimum layout height.
+        max_width: Optional maximum layout width.
+        max_height: Optional maximum layout height.
+
+    The child always receives the viewport width and its declared logical height, positioned at
+    the negative effective offset. A temporary canvas prevents child drawing from escaping the
+    assigned rectangle and preserves cell styles when composed. Horizontal scrolling, content
+    measurement, navigation, and state mutation are deliberately absent. Negative content height,
+    offset, or invalid size hints raise :class:`ValueError`.
+    """
+
+    content: Widget | str
+    content_height: int = field(kw_only=True)
+    scroll_offset: int = field(default=0, kw_only=True)
+    width: int | None = field(default=None, kw_only=True)
+    height: int | None = field(default=None, kw_only=True)
+    min_width: int = field(default=1, kw_only=True)
+    min_height: int = field(default=1, kw_only=True)
+    max_width: int | None = field(default=None, kw_only=True)
+    max_height: int | None = field(default=None, kw_only=True)
+
+    def __post_init__(self) -> None:
+        if self.content_height < 0:
+            raise ValueError("content_height must be non-negative")
+        if self.scroll_offset < 0:
+            raise ValueError("scroll_offset must be non-negative")
+        _validate_size_hints(
+            width=self.width,
+            min_width=self.min_width,
+            max_width=self.max_width,
+            height=self.height,
+            min_height=self.min_height,
+            max_height=self.max_height,
+        )
+
+    def draw(self, canvas: Canvas, rect: Rect) -> None:
+        """Draw the clipped effective viewport without mutating caller-owned state."""
+
+        if rect.is_empty or rect.intersect(canvas.rect).is_empty:
+            return
+        viewport = Canvas(rect.width, rect.height)
+        maximum_offset = max(0, self.content_height - rect.height)
+        effective_offset = min(self.scroll_offset, maximum_offset)
+        draw_widget(
+            self.content,
+            viewport,
+            Rect(0, -effective_offset, rect.width, self.content_height),
+        )
+        canvas.blit(viewport, x=rect.x, y=rect.y)
 
 
 @dataclass(slots=True)

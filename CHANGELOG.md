@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add public style-preserving `Canvas.blit` composition with deterministic overlapping self-copy.
+- Add public `ScrollView` with caller-owned content height and vertical viewport state.
+- Add clipping, isolation, ANSI, self-blit, layout, validation, guide, example, and SVG coverage.
 - Add the public `ListView` widget with caller-owned focus, selection, and vertical scrolling.
 - Add empty, narrow, clipped, ANSI, layout, validation, and scrolling snapshots for `ListView`.
 - Add `ListView` user/developer guidance, integration notes, an executable example, and an SVG.
