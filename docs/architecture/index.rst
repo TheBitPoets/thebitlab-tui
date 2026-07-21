@@ -15,6 +15,9 @@ rows or text. The terminal layer reads dimensions and color capability but never
 not navigate, accept events, or mutate that state.
 ``Canvas.blit`` composes clipped character/style cells from a pre-write snapshot. ``ScrollView``
 uses that operation to isolate oversized child rendering inside a viewport-sized canvas.
+``Modal`` centers a preferred inner ``Panel`` inside a flexible outer rectangle and clears only
+that inner frame. Visibility, z-order, input, and any surrounding underlay remain application
+responsibilities.
 
 Event flow
 ----------
@@ -30,6 +33,10 @@ current viewport and never becomes hidden application state.
 ``ScrollView`` follows the same ownership flow, with the application additionally supplying the
 logical ``content_height`` because the structural widget protocol has no measurement operation.
 The widget does not measure, navigate, or scroll horizontally.
+
+For modal presentation the flow is ``KeyEvent`` to application-owned ``open`` state to a rebuilt
+``Modal``. An application composite draws its base first and the modal second. The library does not
+add an overlay hierarchy, dimming, callbacks, or hidden close behavior.
 
 Student TUI adapter
 -------------------

@@ -53,6 +53,13 @@ clear stale content and child output cannot escape. Cover short content, offsets
 maximum, clipped outer rectangles, ANSI/no-color, and min/max/fixed layout. Do not add implicit
 measurement, horizontal scrolling, navigation, or callbacks.
 
+``Modal`` exposes minimum and maximum layout hints but deliberately has no fixed ``width`` or
+``height`` attributes. Its preferred dimensions size only the centered inner frame. Cover odd and
+even centering, ``open=False``, sentinel underlay preservation, ``None`` preferred dimensions,
+min/max ordering, heights below three, widths six through ten, ANSI/no-color, and flexible
+``Row``/``Column`` allocation. Keep ``[x]`` ahead of title text and do not add input, callbacks,
+backdrop ownership, or a shared size-hint abstraction.
+
 Documentation workflow
 ----------------------
 

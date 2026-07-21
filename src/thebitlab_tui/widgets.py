@@ -450,6 +450,105 @@ class ScrollView:
 
 
 @dataclass(slots=True)
+class Modal:
+    """Draw a caller-controlled centered panel without owning its underlay.
+
+    Args:
+        content: Child widget or plain string adapted to :class:`Label`.
+        title: Optional text shown after the stable ASCII close marker ``[x]``.
+        open: Draw the modal when true; drawing is a complete no-op when false.
+        preferred_width: Preferred inner-frame width, or ``None`` for all available width.
+        preferred_height: Preferred inner-frame height, or ``None`` for all available height.
+        min_width: Soft minimum inner-frame width.
+        min_height: Soft minimum inner-frame height.
+        max_width: Optional maximum inner-frame width.
+        max_height: Optional maximum inner-frame height.
+        style: Style applied to the ASCII panel border.
+        title_style: Style applied to the close marker and title.
+
+    Preferred dimensions size only the centered inner frame; layout containers assign a flexible
+    outer rectangle using the minimum and maximum hints. Minima yield when that rectangle is too
+    small. The widget clears and draws only its inner frame, leaving visibility, z-order, input,
+    and closing behavior to the application. Invalid dimensions raise :class:`ValueError`.
+    """
+
+    content: Widget | str
+    title: str = field(default="", kw_only=True)
+    open: bool = field(default=True, kw_only=True)
+    preferred_width: int | None = field(default=40, kw_only=True)
+    preferred_height: int | None = field(default=10, kw_only=True)
+    min_width: int = field(default=7, kw_only=True)
+    min_height: int = field(default=3, kw_only=True)
+    max_width: int | None = field(default=None, kw_only=True)
+    max_height: int | None = field(default=None, kw_only=True)
+    style: Style = field(default=PLAIN, kw_only=True)
+    title_style: Style = field(
+        default=Style(bold=True, bright=True),
+        kw_only=True,
+    )
+
+    def __post_init__(self) -> None:
+        _validate_size_hints(
+            width=self.preferred_width,
+            min_width=self.min_width,
+            max_width=self.max_width,
+            height=self.preferred_height,
+            min_height=self.min_height,
+            max_height=self.max_height,
+        )
+
+    @staticmethod
+    def _fit_extent(
+        available: int,
+        preferred: int | None,
+        minimum: int,
+        maximum: int | None,
+    ) -> int:
+        requested = available if preferred is None else preferred
+        bounded = min(requested, maximum) if maximum is not None else requested
+        return min(available, max(minimum, bounded))
+
+    def _header(self, frame_width: int) -> str:
+        available = max(0, frame_width - 4)
+        marker = "[x]"[:available]
+        if len(marker) < 3 or available < 5:
+            return marker
+        fitted_title = truncate(self.title, available - 4)
+        return f"{marker} {fitted_title}" if fitted_title else marker
+
+    def draw(self, canvas: Canvas, rect: Rect) -> None:
+        """Draw the centered inner frame without changing caller-owned state or underlay."""
+
+        if not self.open or rect.is_empty:
+            return
+        width = self._fit_extent(
+            rect.width,
+            self.preferred_width,
+            self.min_width,
+            self.max_width,
+        )
+        height = self._fit_extent(
+            rect.height,
+            self.preferred_height,
+            self.min_height,
+            self.max_height,
+        )
+        frame = Rect(
+            rect.x + (rect.width - width) // 2,
+            rect.y + (rect.height - height) // 2,
+            width,
+            height,
+        )
+        canvas.fill(frame)
+        Panel(
+            self.content,
+            title=self._header(width),
+            style=self.style,
+            title_style=self.title_style,
+        ).draw(canvas, frame)
+
+
+@dataclass(slots=True)
 class Panel:
     """Frame content with an optional ASCII border and title.
 

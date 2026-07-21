@@ -62,8 +62,15 @@ Run its stable snapshot without ANSI styling with:
 The application supplies both ``content_height`` and ``scroll_offset``. The example deliberately
 avoids wrapped auto-measurement and contains no input loop.
 
-Additional examples
--------------------
+Centered modal composition
+--------------------------
 
-- ``examples/modal.py`` demonstrates manual centered composition before the public ``Modal``
-  widget is introduced.
+``examples/modal.py`` draws a base workspace and then a centered ``Modal`` through a tiny
+application-owned composite. Run the stable ASCII snapshot with:
+
+.. code-block:: console
+
+   python examples/modal.py --no-color
+
+The example owns z-order and the ``open`` value. ``[x]`` is a textual affordance; there is no input
+reader, callback, dimming layer, or event loop in the widget.

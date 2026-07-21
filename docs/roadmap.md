@@ -44,6 +44,8 @@ Caller-owned focus and `ListView` implementation is tracked by
 [issue #14](https://github.com/TheBitPoets/thebitlab-tui/issues/14).
 Style-preserving canvas composition and `ScrollView` implementation are tracked by
 [issue #16](https://github.com/TheBitPoets/thebitlab-tui/issues/16).
+Centered modal composition and narrow-terminal fallback are tracked by
+[issue #18](https://github.com/TheBitPoets/thebitlab-tui/issues/18).
 
 ## Phase 3
 

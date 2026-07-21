@@ -6,7 +6,7 @@ have one pure function per application section and one composition function:
 ```python
 from collections.abc import Sequence
 
-from thebitlab_tui import Column, Label, ListView, Panel, Row, ScrollView
+from thebitlab_tui import Column, Label, ListView, Modal, Panel, Row, ScrollView
 
 
 def workspace_panel(workspace: dict[str, object]) -> Panel:
@@ -44,6 +44,18 @@ def report_panel(lines: Sequence[str], *, scroll_offset: int) -> Panel:
     return Panel(viewport, title="Report", min_width=30)
 
 
+def quick_help_modal(message: str, *, open: bool) -> Modal:
+    """Adapt application-owned help state without adding close behavior."""
+
+    return Modal(
+        message,
+        title="Quick help",
+        open=open,
+        preferred_width=40,
+        preferred_height=8,
+    )
+
+
 def student_screen(data: dict[str, object], collapsed: set[str], focus: str) -> Row:
     workspace = workspace_panel(data.get("workspace", {}))
     workspace.collapsed = "workspace" in collapsed
@@ -66,4 +78,10 @@ retained. No change to `scripts/student_lab_layout.py` is required for this scaf
 The first adapter should pass explicit logical rows to ``ScrollView`` as above. If it later wraps
 text responsively, the application must recalculate ``content_height`` from the current width on
 each redraw; the library intentionally does not measure child widgets or persist that value.
+
+Modal visibility must likewise remain in the application's dictionaries or persisted state. A
+small application-owned composite can draw ``student_screen(...)`` first and
+``quick_help_modal(...)`` second into the same rectangle. Escape or a modifier-free fallback such
+as ``q`` updates the application's ``open`` value; ``Modal`` itself does not handle keys, callbacks,
+z-order, or dimming. No change to ``scripts/student_lab_layout.py`` is required.
 

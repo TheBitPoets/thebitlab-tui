@@ -4,6 +4,10 @@
 
 - Add public style-preserving `Canvas.blit` composition with deterministic overlapping self-copy.
 - Add public `ScrollView` with caller-owned content height and vertical viewport state.
+- Add public `Modal` with caller-owned visibility, centered ASCII composition, and stable `[x]`
+  title priority.
+- Preserve the application underlay outside the modal inner frame and document flexible
+  Row/Column allocation without callbacks or overlay ownership.
 - Add clipping, isolation, ANSI, self-blit, layout, validation, guide, example, and SVG coverage.
 - Add the public `ListView` widget with caller-owned focus, selection, and vertical scrolling.
 - Add empty, narrow, clipped, ANSI, layout, validation, and scrolling snapshots for `ListView`.

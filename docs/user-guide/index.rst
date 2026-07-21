@@ -124,6 +124,45 @@ corresponding height before constructing the next frame.
    :alt: An ASCII Activity panel showing six rows inside a vertically scrolled viewport.
    :align: center
 
+Centered modal presentation
+---------------------------
+
+``Modal`` draws a preferred ASCII frame at the center of its assigned rectangle. The application
+owns the ``open`` value and z-order: draw the base widget first, then the modal. ``open=False`` is a
+complete no-op, so the same composite can be rebuilt after Escape or another modifier-free close
+command.
+
+.. code-block:: python
+
+   from dataclasses import dataclass
+
+   from thebitlab_tui import Canvas, Modal, Panel, Rect, render
+
+   @dataclass
+   class Screen:
+       help_open: bool
+
+       def draw(self, canvas: Canvas, rect: Rect) -> None:
+           Panel("Exercise 01", title="Workspace").draw(canvas, rect)
+           Modal(
+               "Press Escape or q to close",
+               title="Quick help",
+               open=self.help_open,
+               preferred_width=34,
+               preferred_height=7,
+           ).draw(canvas, rect)
+
+   frame = render(Screen(help_open=True), width=48, height=12, color=False)
+
+The stable ``[x]`` prefix is only a textual affordance; it is never a callback or button. Preferred
+dimensions size the inner frame, while ``min_width`` and ``min_height`` are soft when the terminal
+is too small. Passing ``None`` as a preferred dimension requests all available space, still capped
+by the corresponding maximum. Cells outside the centered inner frame remain untouched.
+
+.. image:: ../_static/images/modal.svg
+   :alt: A centered ASCII Quick help modal over a Workspace panel whose outer border remains visible.
+   :align: center
+
 Color and terminals
 -------------------
 
