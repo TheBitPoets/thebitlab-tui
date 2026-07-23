@@ -83,7 +83,7 @@ def _interaction(**changes: object) -> dict[str, object]:
 
 @pytest.mark.parametrize(
     ("width", "left_width"),
-    product((89, 90, 100), (36, 62, 120)),
+    tuple(product((89, 90, 100), (36, 62, 120))),
 )
 def test_allocation_matrix_preserves_geometry_and_persisted_width(
     width: int,
