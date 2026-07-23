@@ -31,7 +31,11 @@ to this project:
 
 .. code-block:: console
 
+   # From the approved source checkout:
    python -m pip install .
+
+   # Or from the approved wheel:
+   python -m pip install path/to/utui-0.3.0-py3-none-any.whl
 
 Verify the new identity and the absence of the old one:
 

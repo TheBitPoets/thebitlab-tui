@@ -171,6 +171,11 @@ def test_migration_guide_is_reachable() -> None:
     assert "migration-to-utui" in user_guide
     assert "m.version('utui')" in migration_guide
     assert "m.version('utui') == '0.3.0'" not in migration_guide
+    assert "python -m pip install ." in migration_guide
+    assert (
+        "python -m pip install path/to/utui-0.3.0-py3-none-any.whl"
+        in migration_guide
+    )
 
 
 def test_legacy_identifiers_are_confined_to_the_explicit_allowlist() -> None:

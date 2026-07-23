@@ -13,6 +13,7 @@ from tools.verify_public_api_migration import _assert_public_api_match
 ROOT = Path(__file__).parents[1]
 API_BASELINE = ROOT / "tests" / "data" / "public-api-0.3.0.json"
 CI_WORKFLOW = ROOT / ".github" / "workflows" / "ci.yml"
+LEGACY_COMMIT = "51173e64b9a81844dcd485da71045a8e1f9b32fd"
 
 
 def test_public_api_comparison_accepts_identical_captures() -> None:
@@ -63,3 +64,5 @@ def test_manifest_and_ci_split_static_and_runtime_evidence() -> None:
     assert 'python: ["3.11", "3.12", "3.13"]' in workflow
     assert "python tools/verify_public_api_migration.py" in workflow
     assert "--legacy-root legacy-v0.3.0" in workflow
+    assert workflow.count(f"ref: {LEGACY_COMMIT}") == 2
+    assert "ref: v0.3.0" not in workflow
