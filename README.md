@@ -1,6 +1,6 @@
-# thebitlab-tui
+# utui
 
-`thebitlab-tui` is a deliberately small Python library for rendering stable ASCII terminal
+`utui` is a deliberately small Python library for rendering stable ASCII terminal
 interfaces. It uses only the Python standard library, targets Python 3.11+, and keeps widgets,
 layout, rendering, and terminal I/O separate.
 
@@ -9,10 +9,15 @@ widgets, contain application logic, or require Unicode borders. The public surfa
 `Rect`, `Canvas`, `Style`, `Label`, `Panel`, `Divider`, `StatusBadge`, `ListView`, `ScrollView`,
 `Modal`, responsive `Row`/`Column`, and pure ASCII rendering.
 
+The project completed a hard pre-1.0 rename to the single distribution and import name `utui`.
+Existing 0.3.0 environments must uninstall the former distribution before installing this one;
+see [the migration guide](docs/user-guide/migration-to-utui.rst). No compatibility import is
+installed.
+
 ## Minimal example
 
 ```python
-from thebitlab_tui import Panel, Row, render
+from utui import Panel, Row, render
 
 screen = Row([
     Panel("Open the exercise", title="Assignment", min_width=18),
@@ -36,7 +41,7 @@ deterministic `--snapshot --no-color` mode for completely ANSI-free output.
 
 ```console
 python -m pytest
-python -m compileall -q src tests examples
+python -m compileall -q src tests examples tools docs/conf.py
 python examples/basic_panels.py --no-color
 python examples/terminal_input.py --snapshot --no-color
 ```
@@ -90,8 +95,8 @@ cannot fit, clipping wins over horizontal overflow.
 Modal minimum dimensions are soft too. Below seven columns the literal `[x]` prefix clips
 deterministically, while the frame remains inside its assigned rectangle.
 
-See `docs/architecture.md`, `docs/integration.md`, and `docs/roadmap.md` for design and migration
-details.
+See `docs/architecture.md`, `docs/integration.md`, `docs/roadmap.md`, and the
+[hard-rename guide](docs/user-guide/migration-to-utui.rst) for design and migration details.
 
 ## Documentation
 

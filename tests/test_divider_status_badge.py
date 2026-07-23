@@ -6,8 +6,8 @@ import inspect
 
 import pytest
 
-import thebitlab_tui
-from thebitlab_tui import (
+import utui
+from utui import (
     Canvas,
     Column,
     Divider,
@@ -217,7 +217,7 @@ def test_divider_and_badge_participate_in_structural_layout() -> None:
 
 
 def test_phase_two_primitives_are_public_exports() -> None:
-    assert {"Divider", "StatusBadge"} <= set(thebitlab_tui.__all__)
+    assert {"Divider", "StatusBadge"} <= set(utui.__all__)
     divider_parameters = inspect.signature(Divider).parameters
     badge_parameters = inspect.signature(StatusBadge).parameters
 

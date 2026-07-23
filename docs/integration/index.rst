@@ -1,7 +1,7 @@
 Student TUI integration
 =======================
 
-This guide describes the bounded Phase 4 path for integrating ``thebitlab-tui`` into an existing
+This guide describes the bounded Phase 4 path for integrating ``utui`` into an existing
 student terminal application.  The normative decisions remain in
 :doc:`../architecture/phase-4-adapter-contracts`; the corresponding automated evidence is indexed
 in :doc:`../architecture/phase-4-verification`.
@@ -9,7 +9,7 @@ in :doc:`../architecture/phase-4-verification`.
 The executable files ``examples/student_dashboard_adapter.py`` and
 ``examples/student_dashboard_fixtures.py`` demonstrate the boundary with synthetic data.  They
 are example and test artifacts, not public adapter API, an application schema, or an import target
-for consumer code.  Phase 4 adds no names to ``thebitlab_tui.__all__``.
+for consumer code.  Phase 4 adds no names to ``utui.__all__``.
 
 Ownership boundary
 ------------------
@@ -22,7 +22,7 @@ The dependency direction remains one way:
        -> consumer-owned projection and validation
        -> neutral logical rows and normalized presentation state
        -> consumer-owned widget builder
-       -> thebitlab_tui widgets
+       -> utui widgets
        -> render_lines/render
        -> consumer-owned clear, print, and redraw
 

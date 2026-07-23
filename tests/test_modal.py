@@ -1,4 +1,4 @@
-"""Snapshots and public contracts for :class:`thebitlab_tui.Modal`."""
+"""Snapshots and public contracts for :class:`utui.Modal`."""
 
 from __future__ import annotations
 
@@ -7,9 +7,9 @@ from dataclasses import dataclass
 
 import pytest
 
-import thebitlab_tui
-from thebitlab_tui import Canvas, Column, Label, Modal, Rect, Row, Style, render_lines
-from thebitlab_tui.styles import PLAIN, strip_ansi, visible_width
+import utui
+from utui import Canvas, Column, Label, Modal, Rect, Row, Style, render_lines
+from utui.styles import PLAIN, strip_ansi, visible_width
 
 
 def test_modal_centers_frame_and_preserves_the_outer_canvas() -> None:
@@ -368,7 +368,7 @@ def test_modal_rejects_invalid_dimensions(kwargs: dict[str, int]) -> None:
 
 
 def test_modal_is_a_stable_public_export() -> None:
-    assert "Modal" in thebitlab_tui.__all__
+    assert "Modal" in utui.__all__
     parameters = inspect.signature(Modal).parameters
     assert list(parameters) == [
         "content",

@@ -8,12 +8,13 @@ import runpy
 
 
 ROOT = Path(__file__).parents[1]
+PROJECT_DOCUMENT = ROOT / "pyproject.toml"
 
 
 def _project_section() -> str:
     """Return the literal ``[project]`` table without requiring Python 3.11 locally."""
 
-    document = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    document = PROJECT_DOCUMENT.read_text(encoding="utf-8")
     match = re.search(r"(?ms)^\[project\]\s*$\n(.*?)(?=^\[|\Z)", document)
     assert match is not None
     return match.group(1)
@@ -41,3 +42,14 @@ def test_runtime_dependency_list_remains_empty() -> None:
     project = _project_section()
 
     assert re.search(r"(?m)^dependencies\s*=", project) is None
+
+
+def test_distribution_identity_is_utui_only() -> None:
+    """Keep packaging metadata aligned with the hard pre-v1 rename."""
+
+    document = PROJECT_DOCUMENT.read_text(encoding="utf-8")
+    project = _project_section()
+
+    assert re.search(r'(?m)^name = "utui"$', project)
+    assert 'Repository = "https://github.com/TheBitPoets/utui"' in document
+    assert 'include = ["utui", "utui.*"]' in document

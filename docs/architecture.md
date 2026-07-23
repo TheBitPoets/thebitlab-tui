@@ -70,7 +70,7 @@ state owned by the consuming application.
 An adapter in `2cornot2c` will map each existing domain dictionary to a `Panel` containing labels,
 then compose the panels with `Row` and `Column`. Focus and collapsed state remain application
 state passed into widget constructors. This repository never imports the student application;
-dependency direction is one-way from the application to `thebitlab_tui`.
+dependency direction is one-way from the application to `utui`.
 
 Animations are intentionally absent. If later justified, they can be represented as pure
 sequences of widget trees or frames while timing remains the application's responsibility.

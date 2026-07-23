@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 
-from thebitlab_tui import (
+from utui import (
     Column,
     Divider,
     Label,

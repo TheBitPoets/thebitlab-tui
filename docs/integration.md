@@ -31,7 +31,7 @@ have one pure function per application section and one composition function:
 ```python
 from collections.abc import Sequence
 
-from thebitlab_tui import Column, Label, ListView, Modal, Panel, Row, ScrollView
+from utui import Column, Label, ListView, Modal, Panel, Row, ScrollView
 
 
 def workspace_panel(workspace: dict[str, object]) -> Panel:

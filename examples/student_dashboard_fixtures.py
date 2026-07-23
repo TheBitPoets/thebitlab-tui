@@ -1,7 +1,7 @@
 """Synthetic, revisioned data for the non-public student dashboard reference adapter.
 
 The values in this module are invented presentation fixtures. They are not an application schema,
-do not mirror consumer dictionaries, and are not installed as part of :mod:`thebitlab_tui`.
+do not mirror consumer dictionaries, and are not installed as part of :mod:`utui`.
 """
 
 from __future__ import annotations

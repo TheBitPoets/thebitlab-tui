@@ -5,15 +5,15 @@ Status
 ------
 
 This design record was approved in issue `#30
-<https://github.com/TheBitPoets/thebitlab-tui/issues/30>`_ and merged in PR `#31
-<https://github.com/TheBitPoets/thebitlab-tui/pull/31>`_ under parent issue `#24
-<https://github.com/TheBitPoets/thebitlab-tui/issues/24>`_. Issue `#33
-<https://github.com/TheBitPoets/thebitlab-tui/issues/33>`_ implements the approved shared facade;
+<https://github.com/TheBitPoets/utui/issues/30>`_ and merged in PR `#31
+<https://github.com/TheBitPoets/utui/pull/31>`_ under parent issue `#24
+<https://github.com/TheBitPoets/utui/issues/24>`_. Issue `#33
+<https://github.com/TheBitPoets/utui/issues/33>`_ implements the approved shared facade;
 the POSIX backend was delivered in issue `#35
-<https://github.com/TheBitPoets/thebitlab-tui/issues/35>`_, and the Windows backend was delivered
-in issue `#37 <https://github.com/TheBitPoets/thebitlab-tui/issues/37>`_ and PR `#38
-<https://github.com/TheBitPoets/thebitlab-tui/pull/38>`_. Phase 3 verification and documentation
-are consolidated in issue `#39 <https://github.com/TheBitPoets/thebitlab-tui/issues/39>`_.
+<https://github.com/TheBitPoets/utui/issues/35>`_, and the Windows backend was delivered
+in issue `#37 <https://github.com/TheBitPoets/utui/issues/37>`_ and PR `#38
+<https://github.com/TheBitPoets/utui/pull/38>`_. Phase 3 verification and documentation
+are consolidated in issue `#39 <https://github.com/TheBitPoets/utui/issues/39>`_.
 
 Goals and boundaries
 --------------------
@@ -45,7 +45,7 @@ Phase 3 adds one public concrete facade and leaves ``Key`` and ``KeyEvent`` unch
 
 .. code-block:: python
 
-   from thebitlab_tui import KeyReader
+   from utui import KeyReader
 
    with KeyReader(escape_timeout=0.05) as keys:
        event = keys.read(timeout=0.1)
@@ -60,8 +60,8 @@ The approved shape is:
 
    KeyReader.read(timeout: float | None = None) -> KeyEvent | None
 
-``KeyReader`` lives in ``thebitlab_tui.terminal``, is exported from ``thebitlab_tui``, and is
-listed in ``thebitlab_tui.__all__`` by the implementation pull request. Platform backends and
+``KeyReader`` lives in ``utui.terminal``, is exported from ``utui``, and is
+listed in ``utui.__all__`` by the implementation pull request. Platform backends and
 decoders remain private modules. The facade is a single-use context manager. Construction validates
 scalar arguments but has no terminal side effects. Its lifecycle is explicit:
 

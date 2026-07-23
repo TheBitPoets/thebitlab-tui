@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "thebitlab-tui"
+name = "utui"
 version = "0.3.0"
 description = "A tiny dependency-free ASCII TUI rendering library"
 readme = "README.md"
@@ -21,7 +21,7 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://github.com/TheBitPoets/thebitlab-tui"
+Repository = "https://github.com/TheBitPoets/utui"
 
 [project.optional-dependencies]
 test = ["pytest>=8"]
@@ -29,6 +29,7 @@ docs = ["Sphinx>=7,<8"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["utui", "utui.*"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"

@@ -9,11 +9,11 @@ import sys
 
 import pytest
 
-from thebitlab_tui import Key, KeyEvent
-from thebitlab_tui import terminal
-from thebitlab_tui import _windows_input as windows_input
-from thebitlab_tui._windows_decoder import _WindowsKeyRecord
-from thebitlab_tui._windows_input import (
+from utui import Key, KeyEvent
+from utui import terminal
+from utui import _windows_input as windows_input
+from utui._windows_decoder import _WindowsKeyRecord
+from utui._windows_input import (
     _ENABLE_PROCESSED_INPUT,
     _INPUT_RECORD,
     _KEY_EVENT,
@@ -146,7 +146,7 @@ def test_platform_factory_selects_windows_backend_lazily(
     harness = Harness()
     monkeypatch.setattr(terminal.sys, "platform", "win32")
     monkeypatch.setattr(
-        "thebitlab_tui._windows_input._default_ops", harness.ops
+        "utui._windows_input._default_ops", harness.ops
     )
 
     backend = terminal._create_backend(0.05)

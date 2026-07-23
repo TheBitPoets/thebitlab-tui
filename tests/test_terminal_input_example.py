@@ -15,7 +15,7 @@ from examples.terminal_input import (
     describe_event,
     run_session,
 )
-from thebitlab_tui import Key, KeyEvent, TerminalSize, render
+from utui import Key, KeyEvent, TerminalSize, render
 
 
 class FakeReader:

@@ -6,47 +6,47 @@ The reference below is generated directly from public docstrings.
 Geometry
 --------
 
-.. automodule:: thebitlab_tui.geometry
+.. automodule:: utui.geometry
    :members:
 
 Canvas
 ------
 
-.. automodule:: thebitlab_tui.canvas
+.. automodule:: utui.canvas
    :members:
 
 Styles
 ------
 
-.. automodule:: thebitlab_tui.styles
+.. automodule:: utui.styles
    :members:
 
 Widgets
 -------
 
-.. automodule:: thebitlab_tui.widgets
+.. automodule:: utui.widgets
    :members:
 
 Layout
 ------
 
-.. automodule:: thebitlab_tui.layout
+.. automodule:: utui.layout
    :members:
 
 Events
 ------
 
-.. automodule:: thebitlab_tui.events
+.. automodule:: utui.events
    :members:
 
 Renderer
 --------
 
-.. automodule:: thebitlab_tui.renderer
+.. automodule:: utui.renderer
    :members:
 
 Terminal
 --------
 
-.. automodule:: thebitlab_tui.terminal
+.. automodule:: utui.terminal
    :members:

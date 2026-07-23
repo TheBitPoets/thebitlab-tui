@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review utui PR"
+  short_description: "Review TUI PRs against stable contracts"
+  default_prompt: "Use $utui-pr-review to review this pull request for correctness, compatibility, tests, and documentation."

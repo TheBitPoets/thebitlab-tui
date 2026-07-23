@@ -19,9 +19,9 @@ def test_linux_pty_preserves_prequeued_input_and_restores_exact_attributes() -> 
     import pty
     import termios
 
-    from thebitlab_tui import Key, KeyEvent, KeyReader
-    from thebitlab_tui import terminal
-    from thebitlab_tui._posix_input import _PosixInputBackend, _default_ops
+    from utui import Key, KeyEvent, KeyReader
+    from utui import terminal
+    from utui._posix_input import _PosixInputBackend, _default_ops
 
     master, slave = pty.openpty()
     stream = os.fdopen(os.dup(slave), "rb", buffering=0)
@@ -67,9 +67,9 @@ def test_linux_pty_restores_exact_attributes_after_body_error(
     import pty
     import termios
 
-    from thebitlab_tui import KeyReader
-    from thebitlab_tui import terminal
-    from thebitlab_tui._posix_input import _PosixInputBackend, _default_ops
+    from utui import KeyReader
+    from utui import terminal
+    from utui._posix_input import _PosixInputBackend, _default_ops
 
     master, slave = pty.openpty()
     stream = os.fdopen(os.dup(slave), "rb", buffering=0)
@@ -99,9 +99,9 @@ def test_linux_pty_restores_exact_attributes_after_read_error() -> None:
     import pty
     import termios
 
-    from thebitlab_tui import KeyReader
-    from thebitlab_tui import terminal
-    from thebitlab_tui._posix_input import _PosixInputBackend, _default_ops
+    from utui import KeyReader
+    from utui import terminal
+    from utui._posix_input import _PosixInputBackend, _default_ops
 
     master, slave = pty.openpty()
     stream = os.fdopen(os.dup(slave), "rb", buffering=0)
@@ -136,7 +136,7 @@ def test_linux_pty_real_hangup_latches_eof_and_reports_restore_failure() -> None
     import termios
     import time
 
-    from thebitlab_tui._posix_input import _PosixInputBackend, _default_ops
+    from utui._posix_input import _PosixInputBackend, _default_ops
 
     master, slave = pty.openpty()
     stream = os.fdopen(os.dup(slave), "rb", buffering=0)

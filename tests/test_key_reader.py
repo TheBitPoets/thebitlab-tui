@@ -9,9 +9,9 @@ import sys
 
 import pytest
 
-from thebitlab_tui import Key, KeyEvent, KeyReader
-from thebitlab_tui import terminal
-from thebitlab_tui._input import _EventQueue
+from utui import Key, KeyEvent, KeyReader
+from utui import terminal
+from utui._input import _EventQueue
 
 
 @dataclass

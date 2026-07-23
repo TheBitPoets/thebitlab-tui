@@ -16,12 +16,22 @@ jobs:
         python: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          # Peeled commit for v0.3.0; keep migration evidence immutable.
+          ref: 51173e64b9a81844dcd485da71045a8e1f9b32fd
+          path: legacy-v0.3.0
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
       - run: python -m pip install -e ".[test]"
+      - run: >-
+          python tools/verify_public_api_migration.py
+          --current-root .
+          --legacy-root legacy-v0.3.0
       - run: python -m pytest
-      - run: python -m compileall -q src tests examples docs/conf.py
+      - run: python -m pip check
+      - run: python -m compileall -q src tests examples tools docs/conf.py
 
   docs:
     name: Sphinx documentation
@@ -33,3 +43,27 @@ jobs:
           python-version: "3.11"
       - run: python -m pip install -e ".[docs]"
       - run: python -m sphinx -W --keep-going -b html docs docs/_build/html
+
+  packaging:
+    name: Distribution migration on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: current
+      - uses: actions/checkout@v4
+        with:
+          # Peeled commit for v0.3.0; keep migration evidence immutable.
+          ref: 51173e64b9a81844dcd485da71045a8e1f9b32fd
+          path: legacy-v0.3.0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: >-
+          python current/tools/verify_distribution_migration.py
+          --current-root current
+          --legacy-root legacy-v0.3.0

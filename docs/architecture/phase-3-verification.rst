@@ -4,8 +4,8 @@ Phase 3 release verification
 Version ``0.3.0`` consolidates the dependency-free terminal input adapters without changing the
 approved public signatures or moving command, state, event-loop, or redraw ownership into the
 library. This page is the versioned evidence index for child issue `#39
-<https://github.com/TheBitPoets/thebitlab-tui/issues/39>`_. Formal milestone closeout and release
-publication are tracked by issue `#41 <https://github.com/TheBitPoets/thebitlab-tui/issues/41>`_.
+<https://github.com/TheBitPoets/utui/issues/39>`_. Formal milestone closeout and release
+publication are tracked by issue `#41 <https://github.com/TheBitPoets/utui/issues/41>`_.
 
 Compatibility and evidence matrix
 ---------------------------------
@@ -20,29 +20,29 @@ Compatibility and evidence matrix
      - Deterministic tests
      - Guide or example
    * - Shared ``KeyReader`` facade
-     - `Issue #33 <https://github.com/TheBitPoets/thebitlab-tui/issues/33>`__ /
-       `PR #34 <https://github.com/TheBitPoets/thebitlab-tui/pull/34>`__
+     - `Issue #33 <https://github.com/TheBitPoets/utui/issues/33>`__ /
+       `PR #34 <https://github.com/TheBitPoets/utui/pull/34>`__
      - :doc:`Input contracts <phase-3-input-contracts>`;
        :doc:`API reference <../api/index>` (``docs/api/index.rst``)
      - ``tests/test_key_reader.py`` and ``tests/test_public_api_docs.py``
      - :doc:`User guide <../user-guide/index>` (``docs/user-guide/index.rst``)
    * - Linux POSIX backend
-     - `Issue #35 <https://github.com/TheBitPoets/thebitlab-tui/issues/35>`__ /
-       `PR #36 <https://github.com/TheBitPoets/thebitlab-tui/pull/36>`__
+     - `Issue #35 <https://github.com/TheBitPoets/utui/issues/35>`__ /
+       `PR #36 <https://github.com/TheBitPoets/utui/pull/36>`__
      - :doc:`Input contracts <phase-3-input-contracts>`
      - ``tests/test_posix_decoder.py``, ``tests/test_posix_input.py``, and
        ``tests/test_posix_pty.py``
      - :doc:`Developer guide <../developer-guide/index>`
        (``docs/developer-guide/index.rst``)
    * - Windows console-record backend
-     - `Issue #37 <https://github.com/TheBitPoets/thebitlab-tui/issues/37>`__ /
-       `PR #38 <https://github.com/TheBitPoets/thebitlab-tui/pull/38>`__
+     - `Issue #37 <https://github.com/TheBitPoets/utui/issues/37>`__ /
+       `PR #38 <https://github.com/TheBitPoets/utui/pull/38>`__
      - :doc:`Input contracts <phase-3-input-contracts>`
      - ``tests/test_windows_decoder.py`` and ``tests/test_windows_input.py``
      - :doc:`Developer guide <../developer-guide/index>`
        (``docs/developer-guide/index.rst``)
    * - Application-owned loop and resize redraw
-     - `Issue #39 <https://github.com/TheBitPoets/thebitlab-tui/issues/39>`__
+     - `Issue #39 <https://github.com/TheBitPoets/utui/issues/39>`__
      - No new public API; uses ``KeyReader``, ``ResizeWatcher``, and pure rendering
      - ``tests/test_terminal_input_example.py``, ``tests/test_examples.py``,
        ``tests/test_docs_assets.py``, and ``tests/test_release_metadata.py``

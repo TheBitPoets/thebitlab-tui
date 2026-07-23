@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import dataclass
 
-from thebitlab_tui import Canvas, Label, Modal, Panel, Rect, render, supports_color
+from utui import Canvas, Label, Modal, Panel, Rect, render, supports_color
 
 
 @dataclass(slots=True)

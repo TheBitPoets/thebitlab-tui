@@ -1,5 +1,5 @@
-from thebitlab_tui import Column, Label, Panel, Row, Size, render_lines
-from thebitlab_tui.layout import allocate
+from utui import Column, Label, Panel, Row, Size, render_lines
+from utui.layout import allocate
 
 
 def test_fixed_and_proportional_allocation() -> None:

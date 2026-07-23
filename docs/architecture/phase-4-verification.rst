@@ -2,8 +2,8 @@ Phase 4 integration verification
 ================================
 
 This page is the versioned evidence index for Phase 4 child issue `#49
-<https://github.com/TheBitPoets/thebitlab-tui/issues/49>`_ under parent issue `#25
-<https://github.com/TheBitPoets/thebitlab-tui/issues/25>`_. It records library-side evidence
+<https://github.com/TheBitPoets/utui/issues/49>`_ under parent issue `#25
+<https://github.com/TheBitPoets/utui/issues/25>`_. It records library-side evidence
 without turning the reference adapter, fixture schema, or student-domain vocabulary into public
 API.
 
@@ -13,11 +13,11 @@ Provenance
 The evidence baseline is:
 
 * Phase 4 contract approval in PR `#44
-  <https://github.com/TheBitPoets/thebitlab-tui/pull/44>`_;
+  <https://github.com/TheBitPoets/utui/pull/44>`_;
 * reference adapter and neutral fixtures in PR `#46
-  <https://github.com/TheBitPoets/thebitlab-tui/pull/46>`_;
+  <https://github.com/TheBitPoets/utui/pull/46>`_;
 * complete reference-adapter behavior matrix in PR `#48
-  <https://github.com/TheBitPoets/thebitlab-tui/pull/48>`_;
+  <https://github.com/TheBitPoets/utui/pull/48>`_;
 * merged library baseline ``dbc36eabbb47562a2977597da833e092dec9f2b4``;
 * synthetic fixture revision ``phase4-v2``; and
 * read-only consumer compatibility baseline
@@ -101,7 +101,7 @@ Library evidence matrix
      - ``examples/student_dashboard_adapter.py`` with ``--no-color``
      - CI PASS
    * - Stable package boundary
-     - ``thebitlab_tui.__all__`` and project metadata
+     - ``utui.__all__`` and project metadata
      - ``tests/test_public_api_docs.py``;
        ``tests/test_release_metadata.py``
      - :doc:`API reference <../api/index>`

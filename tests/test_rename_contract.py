@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import importlib.util
 from pathlib import Path
 import re
+import subprocess
 
 
 ROOT = Path(__file__).parents[1]
@@ -12,6 +14,17 @@ PHASE4_CONTRACT = ROOT / "docs" / "architecture" / "phase-4-adapter-contracts.rs
 ARCHITECTURE_INDEX = ROOT / "docs" / "architecture" / "index.rst"
 ROADMAP = ROOT / "docs" / "roadmap.md"
 PROJECT = ROOT / "pyproject.toml"
+MIGRATION_GUIDE = ROOT / "docs" / "user-guide" / "migration-to-utui.rst"
+LEGACY_DISTRIBUTION = "thebitlab" + "-tui"
+LEGACY_IMPORT = "thebitlab" + "_tui"
+LEGACY_REPOSITORY = "TheBitPoets/" + LEGACY_DISTRIBUTION
+LEGACY_SKILL = LEGACY_DISTRIBUTION + "-pr-review"
+LEGACY_ALLOWLIST = {
+    "CHANGELOG.md",
+    "docs/architecture/utui-rename-contract.rst",
+    "docs/user-guide/migration-to-utui.rst",
+    "tests/test_rename_contract.py",
+}
 
 
 def test_rename_contract_is_reachable_and_traced() -> None:
@@ -129,12 +142,84 @@ def test_rename_sequence_is_atomic_and_repository_first_at_handoff() -> None:
     )
 
 
-def test_design_slice_does_not_perform_the_rename() -> None:
-    """Keep the design PR reversible until its breaking contract is approved."""
+def test_current_tree_has_the_approved_utui_identity() -> None:
+    """Require the new distribution, import, source, and skill identities."""
 
     project = PROJECT.read_text(encoding="utf-8")
-    source_packages = {path.name for path in (ROOT / "src").iterdir() if path.is_dir()}
+    source_packages = {
+        path.name
+        for path in (ROOT / "src").iterdir()
+        if path.is_dir() and (path / "__init__.py").is_file()
+    }
 
-    assert re.search(r'(?m)^name = "thebitlab-tui"$', project)
-    assert "thebitlab_tui" in source_packages
-    assert "utui" not in source_packages
+    assert re.search(r'(?m)^name = "utui"$', project)
+    assert source_packages == {"utui"}
+    assert importlib.util.find_spec("utui") is not None
+    assert (ROOT / ".agents" / "skills" / "utui-pr-review" / "SKILL.md").is_file()
+    assert not (ROOT / ".agents" / "skills" / LEGACY_SKILL).exists()
+
+
+def test_migration_guide_is_reachable() -> None:
+    """Keep the breaking upgrade procedure visible from the user guide."""
+
+    user_guide = (ROOT / "docs" / "user-guide" / "index.rst").read_text(
+        encoding="utf-8"
+    )
+    migration_guide = MIGRATION_GUIDE.read_text(encoding="utf-8")
+
+    assert MIGRATION_GUIDE.is_file()
+    assert "migration-to-utui" in user_guide
+    assert "m.version('utui')" in migration_guide
+    assert "m.version('utui') == '0.3.0'" not in migration_guide
+    assert "python -m pip install ." in migration_guide
+    assert (
+        "python -m pip install path/to/utui-0.3.0-py3-none-any.whl"
+        in migration_guide
+    )
+
+
+def test_legacy_identifiers_are_confined_to_the_explicit_allowlist() -> None:
+    """Reject old identities from maintained tracked paths and text."""
+
+    result = subprocess.run(
+        [
+            "git",
+            "-c",
+            f"safe.directory={ROOT.as_posix()}",
+            "ls-files",
+            "-z",
+            "--cached",
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    )
+    tracked = [
+        Path(path)
+        for path in result.stdout.decode("utf-8").split("\0")
+        if path
+    ]
+    legacy_terms = (
+        LEGACY_IMPORT,
+        LEGACY_DISTRIBUTION,
+        LEGACY_REPOSITORY,
+        LEGACY_SKILL,
+    )
+    violations: list[str] = []
+
+    for relative in tracked:
+        normalized = relative.as_posix()
+        if normalized in LEGACY_ALLOWLIST:
+            continue
+        if any(term in normalized for term in legacy_terms):
+            violations.append(f"{normalized}: legacy path")
+            continue
+        data = (ROOT / relative).read_bytes()
+        if b"\0" in data:
+            continue
+        text = data.decode("utf-8")
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            if any(term in line for term in legacy_terms):
+                violations.append(f"{normalized}:{line_number}")
+
+    assert violations == []

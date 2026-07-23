@@ -2,7 +2,7 @@ import inspect
 
 import pytest
 
-from thebitlab_tui import Canvas, Rect, Style, strip_ansi, visible_width
+from utui import Canvas, Rect, Style, strip_ansi, visible_width
 
 
 def test_truncation_with_ellipsis_preserves_canvas_width() -> None:

@@ -6,7 +6,7 @@ from copy import deepcopy
 
 import pytest
 
-import thebitlab_tui
+import utui
 from examples.student_dashboard_adapter import (
     BREAKPOINT,
     MISSING_ROW,
@@ -19,7 +19,7 @@ from examples.student_dashboard_fixtures import (
     SECTIONS,
     SECTION_IDS,
 )
-from thebitlab_tui import strip_ansi, visible_width
+from utui import strip_ansi, visible_width
 
 
 PUBLIC_API = (
@@ -264,7 +264,7 @@ def test_no_color_and_color_have_identical_visible_geometry() -> None:
 def test_reference_slice_does_not_change_public_exports() -> None:
     """Prevent an example-only adapter from becoming stable library API."""
 
-    assert tuple(thebitlab_tui.__all__) == PUBLIC_API
+    assert tuple(utui.__all__) == PUBLIC_API
 
 
 @pytest.mark.parametrize(

@@ -1,11 +1,19 @@
 User guide
 ==========
 
+.. toctree::
+   :hidden:
+
+   migration-to-utui
+
 Installation
 ------------
 
 The library requires Python 3.11 or newer and has no runtime dependencies. During development it
 can be installed from the repository with ``python -m pip install -e .``.
+Existing 0.3.0 environments must follow the explicit
+:doc:`hard-rename procedure <migration-to-utui>` instead of installing the new distribution over
+the old one.
 
 First frame
 -----------
@@ -15,7 +23,7 @@ application decision.
 
 .. code-block:: python
 
-   from thebitlab_tui import Panel, Row, render
+   from utui import Panel, Row, render
 
    screen = Row([
        Panel("Exercise 01", title="Assignment", min_width=20),
@@ -51,7 +59,7 @@ marker wins, and ``color=False`` removes ANSI without changing geometry.
 
 .. code-block:: python
 
-   from thebitlab_tui import Column, Divider, StatusBadge, render
+   from utui import Column, Divider, StatusBadge, render
 
    screen = Column([
        StatusBadge("running", status="info"),
@@ -71,7 +79,7 @@ columns. Width one keeps the marker, and item text uses the normal stable ellips
 
 .. code-block:: python
 
-   from thebitlab_tui import ListView, Panel, render
+   from utui import ListView, Panel, render
 
    state = {"active_index": 2, "scroll_offset": 1, "focused": True}
    listing = ListView(
@@ -106,7 +114,7 @@ result is composed.
 
 .. code-block:: python
 
-   from thebitlab_tui import Label, Panel, ScrollView, render
+   from utui import Label, Panel, ScrollView, render
 
    lines = ["queued", "running", "test 1 passed", "test 2 passed", "done"]
    viewport = ScrollView(
@@ -136,7 +144,7 @@ command.
 
    from dataclasses import dataclass
 
-   from thebitlab_tui import Canvas, Modal, Panel, Rect, render
+   from utui import Canvas, Modal, Panel, Rect, render
 
    @dataclass
    class Screen:
@@ -183,7 +191,7 @@ state, and redraws.
 
 .. code-block:: python
 
-   from thebitlab_tui import KeyReader
+   from utui import KeyReader
 
    with KeyReader(escape_timeout=0.05) as keys:
        event = keys.read(timeout=0.1)
