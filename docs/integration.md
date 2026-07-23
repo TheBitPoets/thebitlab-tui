@@ -16,6 +16,12 @@ application code:
 python examples/student_dashboard_adapter.py --no-color
 ```
 
+The revisioned fixture keeps persisted layout state (`orientation`, `order`, `left_width`,
+`collapsed`, and `focus`) separate from transient interaction state (dashboard and section
+offsets, list selection, and modal presentation). Both mappings remain caller-owned and unchanged
+after rendering. The synthetic guide and modal use modifier-free commands such as `q`; mapping
+`KeyEvent` values to those commands remains application behavior.
+
 Integration belongs in the `2cornot2c` repository, not in this library. The initial adapter can
 have one pure function per application section and one composition function:
 

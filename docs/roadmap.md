@@ -127,15 +127,18 @@ Tracked by [parent issue #25](https://github.com/TheBitPoets/thebitlab-tui/issue
 
 #### Phase 4 delivery sequence
 
-1. In progress in [#43](https://github.com/TheBitPoets/thebitlab-tui/issues/43): approve the
-   one-way ownership boundary, non-public reference-adapter strategy, persisted-layout mapping,
-   compatibility promise, fallback, and evidence matrix.
-2. In progress in [#45](https://github.com/TheBitPoets/thebitlab-tui/issues/45): add synthetic
-   neutral fixtures, a reference adapter outside `src`, core wide/narrow snapshots, basic
-   focus/collapse translation, ANSI geometry, and `no-color` example smoke coverage.
-3. After #45, verify the complete tiny, persisted-layout, focus/collapse, resize, scrolling,
-   modal, ANSI-input, modifier-free, Windows, and Linux evidence matrix without moving state or
-   commands into the library.
+1. Done in [#43](https://github.com/TheBitPoets/thebitlab-tui/issues/43) /
+   [PR #44](https://github.com/TheBitPoets/thebitlab-tui/pull/44): approve the one-way ownership
+   boundary, non-public reference-adapter strategy, persisted-layout mapping, compatibility
+   promise, fallback, and evidence matrix.
+2. Done in [#45](https://github.com/TheBitPoets/thebitlab-tui/issues/45) /
+   [PR #46](https://github.com/TheBitPoets/thebitlab-tui/pull/46): add synthetic neutral fixtures,
+   a reference adapter outside `src`, core wide/narrow/vertical snapshots, basic focus/collapse
+   translation, ANSI geometry, and `no-color` example smoke coverage.
+3. In progress in [#47](https://github.com/TheBitPoets/thebitlab-tui/issues/47): verify the
+   complete tiny, persisted-layout, focus/collapse, resize, scrolling, modal, ANSI-input,
+   modifier-free, Windows, and Linux evidence matrix without moving state or commands into the
+   library.
 4. Complete Sphinx integration guides, reproducible images, and the versioned evidence matrix.
 5. Link separately authorized consumer evidence, then run a documentation-only closeout before
    publishing `v0.4.0` and closing the parent and milestone in the documented order.

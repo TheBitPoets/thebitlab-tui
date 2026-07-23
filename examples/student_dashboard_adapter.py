@@ -9,14 +9,20 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
 from typing import Any
 
 from thebitlab_tui import (
+    Canvas,
     Column,
     Divider,
     Label,
+    ListView,
+    Modal,
     Panel,
+    Rect,
     Row,
+    ScrollView,
     Size,
     Widget,
     get_terminal_size,
@@ -26,6 +32,7 @@ from thebitlab_tui import (
 
 try:
     from .student_dashboard_fixtures import (
+        INTERACTION,
         PRESENTATION,
         SECTIONS,
         SECTION_IDS,
@@ -33,6 +40,7 @@ try:
     )
 except ImportError:  # pragma: no cover - exercised by the executable script smoke test
     from student_dashboard_fixtures import (
+        INTERACTION,
         PRESENTATION,
         SECTIONS,
         SECTION_IDS,
@@ -42,6 +50,21 @@ except ImportError:  # pragma: no cover - exercised by the executable script smo
 
 BREAKPOINT = 90
 MISSING_ROW = "Unavailable"
+PANEL_BODY_ROWS = 3
+
+
+@dataclass(slots=True)
+class _ReferenceFrame:
+    """Draw the caller-composed dashboard first and optional modal second."""
+
+    dashboard: Widget
+    modal: Modal
+
+    def draw(self, canvas: Canvas, rect: Rect) -> None:
+        """Draw one pure frame without owning visibility or interaction state."""
+
+        self.dashboard.draw(canvas, rect)
+        self.modal.draw(canvas, rect)
 
 
 def _normalized_rows(section: Mapping[str, Any]) -> tuple[str, ...]:
@@ -51,6 +74,18 @@ def _normalized_rows(section: Mapping[str, Any]) -> tuple[str, ...]:
     normalized = tuple(rows)
     if not all(isinstance(row, str) for row in normalized):
         raise ValueError("section rows must contain only strings")
+    return normalized or (MISSING_ROW,)
+
+
+def _normalized_items(section: Mapping[str, Any]) -> tuple[str, ...] | None:
+    if "items" not in section:
+        return None
+    items = section["items"]
+    if isinstance(items, (str, bytes)) or not isinstance(items, Sequence):
+        raise ValueError("section items must be a sequence of strings")
+    normalized = tuple(items)
+    if not all(isinstance(item, str) for item in normalized):
+        raise ValueError("section items must contain only strings")
     return normalized or (MISSING_ROW,)
 
 
@@ -79,19 +114,42 @@ def _build_panel(
     *,
     focused: bool,
     collapsed: bool,
+    section_offset: int,
+    list_offset: int,
+    active_index: int | None,
 ) -> tuple[Panel, int]:
     if section is None:
         title = SECTION_TITLES[identifier]
         rows = (MISSING_ROW,)
+        items = None
     else:
         title = section.get("title", SECTION_TITLES[identifier])
         if not isinstance(title, str):
             raise ValueError("section title must be a string")
         rows = _normalized_rows(section)
-    height = 3 if collapsed else max(3, len(rows) + 2)
+        items = _normalized_items(section)
+    if items is None:
+        content: Widget = ScrollView(
+            Label("\n".join(rows)),
+            content_height=len(rows),
+            scroll_offset=section_offset,
+        )
+        body_height = min(PANEL_BODY_ROWS, len(rows))
+    else:
+        effective_active = (
+            None if active_index is None else min(active_index, len(items) - 1)
+        )
+        content = ListView(
+            items,
+            active_index=effective_active,
+            scroll_offset=list_offset,
+            focused=focused,
+        )
+        body_height = min(PANEL_BODY_ROWS, len(items))
+    height = 3 if collapsed else max(3, body_height + 2)
     return (
         Panel(
-            Label("\n".join(rows)),
+            content,
             title=title,
             focused=focused,
             collapsed=collapsed,
@@ -100,10 +158,13 @@ def _build_panel(
     )
 
 
-def _build_column(entries: Sequence[tuple[Panel, int]]) -> Column:
-    return Column(
-        [panel for panel, _height in entries],
-        sizes=[Size.fixed_size(height) for _panel, height in entries],
+def _build_column(entries: Sequence[tuple[Panel, int]]) -> tuple[Column, int]:
+    return (
+        Column(
+            [panel for panel, _height in entries],
+            sizes=[Size.fixed_size(height) for _panel, height in entries],
+        ),
+        sum(height for _panel, height in entries),
     )
 
 
@@ -113,11 +174,54 @@ def _wide_widths(terminal_width: int, left_width: int) -> tuple[int, int]:
     return effective_left, right_width
 
 
+def _interaction_offsets(
+    interaction: Mapping[str, Any],
+    key: str,
+) -> dict[str, int]:
+    offsets = interaction.get(key, {})
+    if not isinstance(offsets, Mapping):
+        raise ValueError(f"{key} must be a mapping")
+    normalized: dict[str, int] = {}
+    for identifier, value in offsets.items():
+        if identifier not in SECTION_IDS:
+            raise ValueError(f"{key} contains an unknown section id")
+        if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+            raise ValueError(f"{key} values must be non-negative integers")
+        normalized[identifier] = value
+    return normalized
+
+
+def _modal(interaction: Mapping[str, Any]) -> Modal:
+    state = interaction.get("modal", {})
+    if not isinstance(state, Mapping):
+        raise ValueError("modal must be a mapping")
+    open_value = state.get("open", False)
+    title = state.get("title", "")
+    rows = state.get("rows", ())
+    if not isinstance(open_value, bool):
+        raise ValueError("modal open must be a boolean")
+    if not isinstance(title, str):
+        raise ValueError("modal title must be a string")
+    if isinstance(rows, (str, bytes)) or not isinstance(rows, Sequence):
+        raise ValueError("modal rows must be a sequence of strings")
+    normalized_rows = tuple(rows)
+    if not all(isinstance(row, str) for row in normalized_rows):
+        raise ValueError("modal rows must contain only strings")
+    return Modal(
+        Label("\n".join(normalized_rows)),
+        title=title,
+        open=open_value,
+        preferred_width=40,
+        preferred_height=max(3, len(normalized_rows) + 2),
+    )
+
+
 def build_dashboard(
     sections: Sequence[Mapping[str, Any]],
     presentation: Mapping[str, Any],
     *,
     width: int,
+    interaction: Mapping[str, Any] = INTERACTION,
 ) -> Widget:
     """Build one responsive widget tree without changing fixtures or caller state.
 
@@ -125,6 +229,7 @@ def build_dashboard(
         sections: Neutral, already-projected section dictionaries.
         presentation: Normalized caller-owned orientation, order, width, collapse, and focus.
         width: Current terminal width used to choose the explicit wide or narrow tree.
+        interaction: Caller-owned transient offsets, selection, and modal presentation.
 
     Returns:
         A widget composed only from the stable public uTUI API.
@@ -135,6 +240,8 @@ def build_dashboard(
 
     if width < 0:
         raise ValueError("width must be non-negative")
+    if not isinstance(interaction, Mapping):
+        raise ValueError("interaction must be a mapping")
     mapped = _section_map(sections)
     order = _ordered_ids(presentation)
     orientation = presentation.get("orientation")
@@ -149,6 +256,16 @@ def build_dashboard(
     focus = presentation.get("focus")
     if focus not in SECTION_IDS:
         raise ValueError("focus must be a stable section id")
+    dashboard_offset = interaction.get("dashboard_offset", 0)
+    if (
+        not isinstance(dashboard_offset, int)
+        or isinstance(dashboard_offset, bool)
+        or dashboard_offset < 0
+    ):
+        raise ValueError("dashboard_offset must be a non-negative integer")
+    section_offsets = _interaction_offsets(interaction, "section_offsets")
+    list_offsets = _interaction_offsets(interaction, "list_offsets")
+    active_indices = _interaction_offsets(interaction, "active_indices")
 
     entries = [
         _build_panel(
@@ -156,26 +273,36 @@ def build_dashboard(
             mapped.get(identifier),
             focused=focus == identifier,
             collapsed=identifier in collapsed,
+            section_offset=section_offsets.get(identifier, 0),
+            list_offset=list_offsets.get(identifier, 0),
+            active_index=active_indices.get(identifier),
         )
         for identifier in order
     ]
     if orientation != "horizontal" or width < BREAKPOINT:
-        return _build_column(entries)
-
-    effective_left, right_width = _wide_widths(width, left_width)
-    return Row(
-        [
-            _build_column(entries[:5]),
-            Divider("vertical"),
-            _build_column(entries[5:]),
-        ],
-        sizes=[
-            Size.fixed_size(effective_left),
-            Size.fixed_size(3),
-            Size.fixed_size(right_width),
-        ],
-        gap=0,
-        stack_when_narrow=False,
+        dashboard, content_height = _build_column(entries)
+    else:
+        effective_left, right_width = _wide_widths(width, left_width)
+        left, left_height = _build_column(entries[:5])
+        right, right_height = _build_column(entries[5:])
+        content_height = max(left_height, right_height)
+        dashboard = Row(
+            [left, Divider("vertical"), right],
+            sizes=[
+                Size.fixed_size(effective_left),
+                Size.fixed_size(3),
+                Size.fixed_size(right_width),
+            ],
+            gap=0,
+            stack_when_narrow=False,
+        )
+    return _ReferenceFrame(
+        ScrollView(
+            dashboard,
+            content_height=content_height,
+            scroll_offset=dashboard_offset,
+        ),
+        _modal(interaction),
     )
 
 
@@ -186,11 +313,17 @@ def render_reference_frame(
     width: int,
     height: int,
     color: bool = False,
+    interaction: Mapping[str, Any] = INTERACTION,
 ) -> list[str]:
-    """Render one deterministic reference frame without printing or mutating input."""
+    """Render one deterministic frame without printing or mutating caller state."""
 
     return render_lines(
-        build_dashboard(sections, presentation, width=width),
+        build_dashboard(
+            sections,
+            presentation,
+            width=width,
+            interaction=interaction,
+        ),
         width,
         height,
         color=color,

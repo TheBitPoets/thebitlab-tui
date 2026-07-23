@@ -158,7 +158,7 @@ VERTICAL_SNAPSHOT = """\
 def test_fixture_revision_and_identifiers_are_explicit() -> None:
     """Keep synthetic fixture drift visible without creating public API."""
 
-    assert FIXTURE_REVISION == "phase4-v1"
+    assert FIXTURE_REVISION == "phase4-v2"
     assert tuple(section["id"] for section in SECTIONS) == SECTION_IDS
     assert len(set(SECTION_IDS)) == 10
     assert PRESENTATION["order"] == SECTION_IDS

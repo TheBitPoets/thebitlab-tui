@@ -7,7 +7,7 @@ do not mirror consumer dictionaries, and are not installed as part of :mod:`theb
 from __future__ import annotations
 
 
-FIXTURE_REVISION = "phase4-v1"
+FIXTURE_REVISION = "phase4-v2"
 
 SECTION_IDS = (
     "assignment",
@@ -94,4 +94,16 @@ PRESENTATION = {
     "left_width": 62,
     "collapsed": ("help",),
     "focus": "assignment",
+}
+
+INTERACTION = {
+    "dashboard_offset": 0,
+    "section_offsets": {},
+    "list_offsets": {},
+    "active_indices": {},
+    "modal": {
+        "open": False,
+        "title": "Guida rapida",
+        "rows": ("Escape or q: close",),
+    },
 }
