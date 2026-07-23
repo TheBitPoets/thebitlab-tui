@@ -26,11 +26,24 @@ verifier from the current repository:
    git worktree add --detach ../utui-v0.3.0 v0.3.0
    python tools/verify_distribution_migration.py --legacy-root ../utui-v0.3.0
 
-The verifier copies both trees into temporary clean source directories, builds their wheels,
-inspects the new archive, and creates separate source-install, wheel-install, and upgrade virtual
-environments. The upgrade environment proves the documented uninstall-first sequence and absence
-of the retired distribution and import. GitHub Actions runs the same evidence on Windows and
-Linux; generated wheels and environments are never retained in the repository.
+The distribution verifier copies both trees into temporary clean source directories, builds their
+wheels, inspects the new archive, and creates separate source-install, wheel-install, and upgrade
+virtual environments. The upgrade environment proves the documented uninstall-first sequence and
+absence of the retired distribution and import.
+
+The static public API manifest remains byte-for-byte faithful to the evidence captured before the
+package move. ``Key`` and ``Widget`` signatures were intentionally excluded from that original
+manifest, so a second verifier imports the immutable legacy tag and the current tree in separate
+isolated interpreter processes:
+
+.. code-block:: console
+
+   python tools/verify_public_api_migration.py --legacy-root ../utui-v0.3.0
+
+GitHub Actions runs this direct legacy/current comparison on Python 3.11, 3.12, and 3.13 on both
+Windows and Linux. It compares all exports, including the interpreter-owned ``Key`` signature and
+the ``Widget`` protocol signature. Generated wheels and environments are never retained in the
+repository.
 
 Design contracts
 ----------------

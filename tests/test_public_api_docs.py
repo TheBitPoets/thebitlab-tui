@@ -6,7 +6,6 @@ import inspect
 import json
 from pathlib import Path
 import re
-import sys
 from enum import Enum
 
 import utui
@@ -14,7 +13,6 @@ from utui import canvas, events, geometry, layout, renderer, styles, terminal, w
 
 
 API_BASELINE = Path(__file__).parent / "data" / "public-api-0.3.0.json"
-SUPPORTED_PYTHON = ("3.11", "3.12", "3.13")
 MODULES = (canvas, events, geometry, layout, renderer, styles, terminal, widgets)
 PUBLIC_API = (
     "Canvas",
@@ -61,9 +59,11 @@ def _public_kind(value: object) -> str:
     return type(value).__name__
 
 
-def _stable_signature(value: object) -> str | None:
+def _stable_signature(name: str, value: object) -> str | None:
     """Normalize a supported signature across package names and processes."""
 
+    if name in {"Key", "Widget"}:
+        return None
     try:
         signature = str(inspect.signature(value))
     except (TypeError, ValueError):
@@ -86,32 +86,10 @@ def _capture_public_api(package: object) -> dict[str, object]:
                 "kind": _public_kind(value),
                 "module": module,
                 "qualname": getattr(value, "__qualname__", name),
-                "signature": _stable_signature(value),
+                "signature": _stable_signature(name, value),
             }
         )
-    return {"schema": 2, "source_version": "0.3.0", "exports": exports}
-
-
-def _expected_public_api() -> dict[str, object]:
-    """Resolve version-specific standard-library signatures for this Python."""
-
-    expected = json.loads(API_BASELINE.read_text(encoding="utf-8"))
-    python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
-    for exported in expected["exports"]:
-        signatures = exported.pop("signature_by_python", None)
-        if signatures is None:
-            continue
-        if tuple(signatures) != SUPPORTED_PYTHON:
-            raise AssertionError(
-                f"{exported['name']} does not cover {SUPPORTED_PYTHON}"
-            )
-        try:
-            exported["signature"] = signatures[python_version]
-        except KeyError as error:
-            raise AssertionError(
-                f"{exported['name']} has no signature for Python {python_version}"
-            ) from error
-    return expected
+    return {"schema": 1, "source_version": "0.3.0", "exports": exports}
 
 
 def test_public_api_manifest_is_stable() -> None:
@@ -120,22 +98,22 @@ def test_public_api_manifest_is_stable() -> None:
     assert tuple(utui.__all__) == PUBLIC_API
     assert len(utui.__all__) == len(set(utui.__all__))
     assert all(hasattr(utui, name) for name in PUBLIC_API)
-    assert _capture_public_api(utui) == _expected_public_api()
+    expected = json.loads(API_BASELINE.read_text(encoding="utf-8"))
+    assert _capture_public_api(utui) == expected
 
 
-def test_versioned_signatures_cover_supported_python_versions() -> None:
-    """Keep interpreter-owned signatures explicit across the support matrix."""
+def test_pre_move_manifest_keeps_original_signature_exclusions() -> None:
+    """Keep the pre-move evidence immutable instead of retrofitting signatures."""
 
     baseline = json.loads(API_BASELINE.read_text(encoding="utf-8"))
-    versioned = {
-        exported["name"]: exported["signature_by_python"]
+    exports = {
+        exported["name"]: exported
         for exported in baseline["exports"]
-        if "signature_by_python" in exported
     }
 
-    assert baseline["schema"] == 2
-    assert set(versioned) == {"Key"}
-    assert tuple(versioned["Key"]) == SUPPORTED_PYTHON
+    assert baseline["schema"] == 1
+    assert exports["Key"]["signature"] is None
+    assert exports["Widget"]["signature"] is None
 
 
 def test_exported_api_has_docstrings() -> None:
