@@ -9,9 +9,9 @@ from io import UnsupportedOperation
 
 import pytest
 
-from thebitlab_tui import Key, KeyEvent, KeyReader
-from thebitlab_tui import terminal
-from thebitlab_tui._posix_input import _PosixInputBackend, _PosixOps
+from utui import Key, KeyEvent, KeyReader
+from utui import terminal
+from utui._posix_input import _PosixInputBackend, _PosixOps
 
 
 class FakeStream:

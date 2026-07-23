@@ -1,4 +1,4 @@
-"""Stable public API for thebitlab-tui."""
+"""Stable public API for utui."""
 
 from .canvas import Canvas
 from .events import Key, KeyEvent

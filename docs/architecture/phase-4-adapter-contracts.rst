@@ -5,9 +5,9 @@ Status
 ------
 
 Approval of this design record is recorded by merging PR `#44
-<https://github.com/TheBitPoets/thebitlab-tui/pull/44>`_ for issue `#43
-<https://github.com/TheBitPoets/thebitlab-tui/issues/43>`_ under parent issue `#25
-<https://github.com/TheBitPoets/thebitlab-tui/issues/25>`_. The reference adapter, neutral
+<https://github.com/TheBitPoets/utui/pull/44>`_ for issue `#43
+<https://github.com/TheBitPoets/utui/issues/43>`_ under parent issue `#25
+<https://github.com/TheBitPoets/utui/issues/25>`_. The reference adapter, neutral
 fixtures, and consumer integration must not begin before that merge.
 
 Compatibility provenance
@@ -24,12 +24,12 @@ Decision
 
 Phase 4 uses two complementary artifacts:
 
-* an executable reference adapter and synthetic fixtures outside ``src/thebitlab_tui``; and
+* an executable reference adapter and synthetic fixtures outside ``src/utui``; and
 * a normative recipe showing how a consumer composes the existing public widgets.
 
 The reference adapter is example and test code, not library API. Phase 4 does not add a public
 section model, adapter class, persistence API, measurement protocol, or export in
-``thebitlab_tui.__all__``. A new public abstraction requires a separate design gate supported by
+``utui.__all__``. A new public abstraction requires a separate design gate supported by
 evidence from at least two consumers or by a missing reusable rendering primitive discovered while
 building the reference adapter.
 
@@ -50,7 +50,7 @@ The dependency and data flow is:
        -> consumer-owned projection and validation
        -> neutral section rows + normalized presentation state
        -> consumer/reference widget builder
-       -> existing thebitlab_tui widgets
+       -> existing utui widgets
        -> pure render_lines/render output
        -> consumer-owned clear, print, and redraw
 
@@ -123,7 +123,7 @@ rules, or real student data.
 
 The fixture schema is test data, not public API. Tests and examples may import it from the
 repository's example/test area, but application code must not import it from
-``thebitlab_tui``. Changing its serialization, helper names, or synthetic contents remains
+``utui``. Changing its serialization, helper names, or synthetic contents remains
 possible through focused snapshot review.
 
 Persisted layout compatibility

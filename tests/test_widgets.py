@@ -1,6 +1,6 @@
 import pytest
 
-from thebitlab_tui import Label, Panel, Style, render_lines, visible_width
+from utui import Label, Panel, Style, render_lines, visible_width
 
 
 def test_label_alignment_wrapping_and_truncation() -> None:
@@ -48,7 +48,7 @@ def test_panel_color_keeps_borders_aligned() -> None:
 
 
 def test_partially_clipped_panel_does_not_grow_a_new_border() -> None:
-    from thebitlab_tui import Canvas, Rect
+    from utui import Canvas, Rect
 
     canvas = Canvas(8, 3)
     Panel("body", title="Title").draw(canvas, Rect(-2, 0, 10, 3))

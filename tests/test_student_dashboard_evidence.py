@@ -18,7 +18,7 @@ from examples.student_dashboard_fixtures import (
     SECTION_IDS,
     SECTION_TITLES,
 )
-from thebitlab_tui import strip_ansi, visible_width
+from utui import strip_ansi, visible_width
 
 
 TINY_SNAPSHOT = """\

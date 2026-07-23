@@ -1,6 +1,6 @@
 import pytest
 
-from thebitlab_tui import Rect
+from utui import Rect
 
 
 def test_rect_properties_and_contains() -> None:

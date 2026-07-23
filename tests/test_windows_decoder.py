@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from thebitlab_tui import Key, KeyEvent
-from thebitlab_tui._windows_decoder import (
+from utui import Key, KeyEvent
+from utui._windows_decoder import (
     _LEFT_ALT_PRESSED,
     _LEFT_CTRL_PRESSED,
     _RIGHT_ALT_PRESSED,

@@ -5,9 +5,9 @@ Status and scope
 ----------------
 
 This document is the normative design gate for issue `#52
-<https://github.com/TheBitPoets/thebitlab-tui/issues/52>`_ under rename parent `#51
-<https://github.com/TheBitPoets/thebitlab-tui/issues/51>`_ and integration parent `#25
-<https://github.com/TheBitPoets/thebitlab-tui/issues/25>`_.  It approves names, compatibility,
+<https://github.com/TheBitPoets/utui/issues/52>`_ under rename parent `#51
+<https://github.com/TheBitPoets/utui/issues/51>`_ and integration parent `#25
+<https://github.com/TheBitPoets/utui/issues/25>`_.  It approves names, compatibility,
 sequencing, rollback, and evidence before the repository or installed package is changed.
 
 This design-only slice does not rename the repository, source directory, distribution, import

@@ -1,4 +1,4 @@
-"""Snapshots and public contracts for :class:`thebitlab_tui.ScrollView`."""
+"""Snapshots and public contracts for :class:`utui.ScrollView`."""
 
 from __future__ import annotations
 
@@ -7,8 +7,8 @@ from dataclasses import dataclass
 
 import pytest
 
-import thebitlab_tui
-from thebitlab_tui import (
+import utui
+from utui import (
     Canvas,
     Column,
     Label,
@@ -247,7 +247,7 @@ def test_scroll_view_zero_height_draws_no_rows() -> None:
 
 
 def test_scroll_view_is_a_stable_public_export() -> None:
-    assert "ScrollView" in thebitlab_tui.__all__
+    assert "ScrollView" in utui.__all__
     parameters = inspect.signature(ScrollView).parameters
     assert list(parameters) == [
         "content",

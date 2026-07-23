@@ -1,7 +1,7 @@
 from io import StringIO
 
-import thebitlab_tui.renderer as renderer
-from thebitlab_tui import (
+import utui.renderer as renderer
+from utui import (
     Label,
     ResizeWatcher,
     TerminalSize,

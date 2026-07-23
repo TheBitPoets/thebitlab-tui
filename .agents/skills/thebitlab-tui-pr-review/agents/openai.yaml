@@ -1,4 +1,0 @@
-interface:
-  display_name: "Review thebitlab-tui PR"
-  short_description: "Review TUI PRs against stable contracts"
-  default_prompt: "Use $thebitlab-tui-pr-review to review this pull request for correctness, compatibility, tests, and documentation."

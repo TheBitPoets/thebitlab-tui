@@ -12,7 +12,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
 
-from thebitlab_tui import (
+from utui import (
     Canvas,
     Column,
     Divider,

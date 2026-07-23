@@ -8,8 +8,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from thebitlab_tui import Key, KeyEvent
-from thebitlab_tui._posix_decoder import _PosixDecoder, _validated_codec
+from utui import Key, KeyEvent
+from utui._posix_decoder import _PosixDecoder, _validated_codec
 
 
 def drain(decoder: _PosixDecoder) -> list[KeyEvent]:

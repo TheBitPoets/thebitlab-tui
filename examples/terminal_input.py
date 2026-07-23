@@ -9,7 +9,7 @@ from io import UnsupportedOperation
 import sys
 from typing import TextIO
 
-from thebitlab_tui import (
+from utui import (
     Key,
     KeyEvent,
     KeyReader,

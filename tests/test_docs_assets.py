@@ -14,7 +14,7 @@ from examples.scroll_view import build_screen as build_scroll_view
 from examples.selectable_list import build_screen as build_selectable_list
 from examples.student_dashboard_adapter import render_reference_frame
 from examples.terminal_input import ApplicationState, render_frame as render_input_frame
-from thebitlab_tui import TerminalSize, render
+from utui import TerminalSize, render
 from tools.generate_phase4_images import CAPTURES, Capture, _interaction, _svg
 
 

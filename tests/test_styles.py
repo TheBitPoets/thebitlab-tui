@@ -1,6 +1,6 @@
 import pytest
 
-from thebitlab_tui import Style, strip_ansi, truncate, visible_width
+from utui import Style, strip_ansi, truncate, visible_width
 
 
 def test_color_mode_adds_ansi_without_changing_visible_width() -> None:

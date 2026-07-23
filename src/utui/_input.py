@@ -1,7 +1,7 @@
 """Private contracts shared by terminal input backends.
 
 This module deliberately exposes no public API.  Platform implementations use the structural
-backend contract while :class:`thebitlab_tui.terminal.KeyReader` owns lifecycle and deadlines.
+backend contract while :class:`utui.terminal.KeyReader` owns lifecycle and deadlines.
 """
 
 from __future__ import annotations

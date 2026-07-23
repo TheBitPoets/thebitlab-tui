@@ -10,9 +10,27 @@ Install test and documentation tools without changing runtime dependencies:
 
    python -m pip install -e ".[test,docs]"
    python -m pytest
-   python -m compileall -q src tests examples
+   python -m pip check
+   python -m compileall -q src tests examples tools docs/conf.py
    python -m sphinx -W --keep-going -b html docs docs/_build/html
    python examples/basic_panels.py --no-color
+
+Distribution migration verification
+-----------------------------------
+
+Keep an immutable checkout of tag ``v0.3.0`` next to the current tree, then run the standard-library
+verifier from the current repository:
+
+.. code-block:: console
+
+   git worktree add --detach ../utui-v0.3.0 v0.3.0
+   python tools/verify_distribution_migration.py --legacy-root ../utui-v0.3.0
+
+The verifier copies both trees into temporary clean source directories, builds their wheels,
+inspects the new archive, and creates separate source-install, wheel-install, and upgrade virtual
+environments. The upgrade environment proves the documented uninstall-first sequence and absence
+of the retired distribution and import. GitHub Actions runs the same evidence on Windows and
+Linux; generated wheels and environments are never retained in the repository.
 
 Design contracts
 ----------------
@@ -22,7 +40,7 @@ Layout computes rectangles; the renderer produces a frame; terminal helpers expo
 policy, dimensions, and normalized input through private adapters. Applications retain commands,
 event loops, redraw, dictionaries, and persisted state outside the package.
 
-Names exported by ``thebitlab_tui.__all__`` are public API. Before changing a public signature,
+Names exported by ``utui.__all__`` are public API. Before changing a public signature,
 return type, exception, import path, or documented behavior, create an issue and record whether the
 change is compatible. Add tests before changing rendering output.
 
@@ -115,7 +133,7 @@ loading inside the Windows-only default-operation factory.
 
 The cross-platform ownership example is ``examples/terminal_input.py``. Keep its
 ``ApplicationState``, command mapping, finite polling loop, frame presenter, and resize/redraw
-decision outside ``src/thebitlab_tui``. Its snapshot mode must stay non-interactive and
+decision outside ``src/utui``. Its snapshot mode must stay non-interactive and
 deterministic so Windows/Linux CI and the reproducible SVG can compare exact ASCII rows. Its
 interactive mode must reject redirected stdin with ``io.UnsupportedOperation`` rather than adding
 a pipe protocol to ``KeyReader``.
@@ -148,7 +166,7 @@ Regenerate the accessible Phase 4 SVG captures with only the standard library:
 ``tests/test_docs_assets.py`` compares every captured terminal row to
 ``render_reference_frame``. Before proposing a change, also follow
 :doc:`the Phase 4 verification matrix <../architecture/phase-4-verification>` and confirm that
-``src/``, ``thebitlab_tui.__all__``, and runtime dependency metadata are unchanged unless a
+``src/``, ``utui.__all__``, and runtime dependency metadata are unchanged unless a
 separate design gate explicitly approves otherwise.
 
 See ``docs/it/00-regole-operative.md`` for milestone, issue, PR, finding, and review rules.

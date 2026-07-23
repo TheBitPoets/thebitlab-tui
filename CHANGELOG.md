@@ -4,6 +4,8 @@
 
 - Define the hard pre-v1 rename contract from `thebitlab-tui` / `thebitlab_tui` to `utui`,
   preserving public symbols and behavior while rejecting a runtime compatibility shim.
+- Implement the approved hard rename across the distribution, import package, documentation,
+  examples, tests, repository skill, and maintained URLs, with an explicit uninstall-first guide.
 - Add a non-public executable student-dashboard reference adapter with revisioned synthetic
   fixtures and deterministic wide/narrow ASCII snapshots, without changing the public API.
 - Add caller-owned transient reference state and deterministic evidence for tiny terminals,

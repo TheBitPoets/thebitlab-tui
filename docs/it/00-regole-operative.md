@@ -1,7 +1,7 @@
-# Regole operative di thebitlab-tui
+# Regole operative di utui
 
 Questo documento definisce il flusso stabile per roadmap, issue, pull request, review e
-documentazione. È adattato alla micro-libreria Python `thebitlab-tui`: non eredita processi,
+documentazione. È adattato alla micro-libreria Python `utui`: non eredita processi,
 componenti o vincoli applicativi di altri progetti.
 
 ## Metodo di lavoro
@@ -205,7 +205,7 @@ modifica anche una regola versionata, collegare normalmente il relativo commit.
 Non rispondere solo `fixed`. Formato raccomandato:
 
 ```markdown
-Fixed in [abc1234](https://github.com/TheBitPoets/thebitlab-tui/commit/full-sha).
+Fixed in [abc1234](https://github.com/TheBitPoets/utui/commit/full-sha).
 
 The previous path counted ANSI escape sequences as visible cells and could move the right border.
 The fix measures visible width independently from styling; the new snapshots cover both modes.

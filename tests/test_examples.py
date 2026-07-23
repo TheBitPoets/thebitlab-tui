@@ -9,7 +9,7 @@ import sys
 
 import pytest
 
-from thebitlab_tui import visible_width
+from utui import visible_width
 
 
 ROOT = Path(__file__).parents[1]

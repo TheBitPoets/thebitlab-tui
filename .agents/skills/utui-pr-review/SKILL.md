@@ -1,9 +1,9 @@
 ---
-name: thebitlab-tui-pr-review
-description: Review pull requests for thebitlab-tui. Use for PR reviews, review rounds, finding triage, API compatibility checks, ASCII/ANSI rendering changes, Windows/Linux portability, snapshot coverage, docstrings, or Sphinx documentation validation.
+name: utui-pr-review
+description: Review pull requests for utui. Use for PR reviews, review rounds, finding triage, API compatibility checks, ASCII/ANSI rendering changes, Windows/Linux portability, snapshot coverage, docstrings, or Sphinx documentation validation.
 ---
 
-# Review thebitlab-tui pull requests
+# Review utui pull requests
 
 Perform a read-only review unless the user explicitly asks to fix findings.
 
@@ -13,7 +13,7 @@ Perform a read-only review unless the user explicitly asks to fix findings.
 2. Read the child issue, parent issue, milestone, primary roadmap, and relevant architecture/API
    pages. Do not load unrelated documentation.
 3. Inspect PR metadata, full diff, CI checks, previous review rounds, and unresolved threads.
-4. Identify public API changes by comparing `thebitlab_tui.__all__`, signatures, return values,
+4. Identify public API changes by comparing `utui.__all__`, signatures, return values,
    exceptions, and documented behavior.
 
 ## Review the change

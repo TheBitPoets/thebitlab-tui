@@ -1,7 +1,7 @@
-thebitlab-tui
+utui
 =============
 
-``thebitlab-tui`` is a small, dependency-free Python library for pure ASCII terminal rendering.
+``utui`` is a small, dependency-free Python library for pure ASCII terminal rendering.
 It targets Python 3.11+ on Windows and Linux without owning an event loop or application state.
 
 .. image:: _static/images/three-panels-wide.svg

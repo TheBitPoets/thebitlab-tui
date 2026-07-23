@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 
-from thebitlab_tui import Label, Panel, ScrollView, render, supports_color
+from utui import Label, Panel, ScrollView, render, supports_color
 
 
 def build_screen() -> Panel:

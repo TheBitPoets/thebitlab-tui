@@ -1,4 +1,4 @@
-"""Sphinx configuration for thebitlab-tui."""
+"""Sphinx configuration for utui."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-project = "thebitlab-tui"
+project = "utui"
 author = "TheBitPoets"
 release = "0.3.0"
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 
-from thebitlab_tui import Panel, Row, render_terminal, supports_color
+from utui import Panel, Row, render_terminal, supports_color
 
 
 def build_screen() -> Row:

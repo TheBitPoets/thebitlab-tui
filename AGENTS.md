@@ -11,7 +11,7 @@ Read [the operating rules](docs/it/00-regole-operative.md) before non-trivial wo
 - Do not copy or modify application code from `E:\dev\2cornot2c`.
 - Integrate the student TUI only through a future adapter compatible with
   `scripts/student_lab_layout.py` and its persisted `.student-lab-layout.json` state.
-- Treat the public names in `thebitlab_tui.__all__` as stable. Discuss and document compatibility
+- Treat the public names in `utui.__all__` as stable. Discuss and document compatibility
   before changing signatures, behavior, imports, or return types.
 
 ## Changes and verification
@@ -35,5 +35,5 @@ Read [the operating rules](docs/it/00-regole-operative.md) before non-trivial wo
 - Put actionable findings inline. A fix must link the finding, its focused commit, and a regression
   test or a documented reason why a test is not applicable.
 - Use the repository skill
-  [thebitlab-tui-pr-review](.agents/skills/thebitlab-tui-pr-review/SKILL.md) for PR reviews.
+  [utui-pr-review](.agents/skills/utui-pr-review/SKILL.md) for PR reviews.
 

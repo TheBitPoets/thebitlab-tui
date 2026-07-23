@@ -1,4 +1,4 @@
-"""Snapshots and public contracts for :class:`thebitlab_tui.ListView`."""
+"""Snapshots and public contracts for :class:`utui.ListView`."""
 
 from __future__ import annotations
 
@@ -6,8 +6,8 @@ import inspect
 
 import pytest
 
-import thebitlab_tui
-from thebitlab_tui import (
+import utui
+from utui import (
     Canvas,
     Column,
     Label,
@@ -233,7 +233,7 @@ def test_list_view_zero_height_draws_no_rows() -> None:
 
 
 def test_list_view_is_a_stable_public_export() -> None:
-    assert "ListView" in thebitlab_tui.__all__
+    assert "ListView" in utui.__all__
     parameters = inspect.signature(ListView).parameters
     assert list(parameters) == [
         "items",
