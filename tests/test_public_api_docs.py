@@ -3,11 +3,16 @@
 from __future__ import annotations
 
 import inspect
+import json
+from pathlib import Path
+import re
+from enum import Enum
 
 import thebitlab_tui
 from thebitlab_tui import canvas, events, geometry, layout, renderer, styles, terminal, widgets
 
 
+API_BASELINE = Path(__file__).parent / "data" / "public-api-0.3.0.json"
 MODULES = (canvas, events, geometry, layout, renderer, styles, terminal, widgets)
 PUBLIC_API = (
     "Canvas",
@@ -40,12 +45,60 @@ PUBLIC_API = (
 )
 
 
+def _public_kind(value: object) -> str:
+    """Return the stable public kind used by the versioned API manifest."""
+
+    if inspect.isclass(value) and issubclass(value, Enum):
+        return "enum"
+    if inspect.isclass(value) and getattr(value, "_is_protocol", False):
+        return "protocol"
+    if inspect.isclass(value):
+        return "class"
+    if inspect.isfunction(value):
+        return "function"
+    return type(value).__name__
+
+
+def _stable_signature(name: str, value: object) -> str | None:
+    """Normalize a supported signature across package names and processes."""
+
+    if name in {"Key", "Widget"}:
+        return None
+    signature = str(inspect.signature(value))
+    signature = signature.replace("thebitlab_tui", "{package}").replace(
+        "utui", "{package}"
+    )
+    return re.sub(r"at 0x[0-9A-Fa-f]+", "at 0x...", signature)
+
+
+def _capture_public_api(package: object) -> dict[str, object]:
+    """Capture names, ownership, kinds, and supported signatures."""
+
+    exports = []
+    for name in package.__all__:
+        value = getattr(package, name)
+        module = getattr(value, "__module__", "")
+        module = re.sub(r"^(?:thebitlab_tui|utui)\.?", "", module)
+        exports.append(
+            {
+                "name": name,
+                "kind": _public_kind(value),
+                "module": module,
+                "qualname": getattr(value, "__qualname__", name),
+                "signature": _stable_signature(name, value),
+            }
+        )
+    return {"schema": 1, "source_version": "0.3.0", "exports": exports}
+
+
 def test_public_api_manifest_is_stable() -> None:
-    """Protect the complete documented namespace against accidental drift."""
+    """Protect the complete 0.3.0 namespace and signatures during the rename."""
 
     assert tuple(thebitlab_tui.__all__) == PUBLIC_API
     assert len(thebitlab_tui.__all__) == len(set(thebitlab_tui.__all__))
     assert all(hasattr(thebitlab_tui, name) for name in PUBLIC_API)
+    expected = json.loads(API_BASELINE.read_text(encoding="utf-8"))
+    assert _capture_public_api(thebitlab_tui) == expected
 
 
 def test_exported_api_has_docstrings() -> None:
