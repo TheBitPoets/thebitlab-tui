@@ -114,6 +114,46 @@ NARROW_SNAPSHOT = """\
 |q: close                                                                               |
 +---------------------------------------------------------------------------------------+"""
 
+VERTICAL_SNAPSHOT = """\
++ Guida rapida ------------------------------------------------------------------------------------+
+|Arrows: move                                                                                      |
+|Enter: open                                                                                       |
+|q: close                                                                                          |
++--------------------------------------------------------------------------------------------------+
++ Runner ------------------------------------------------------------------------------------------+
+|Command: python -m pytest                                                                         |
+|State: idle                                                                                       |
++--------------------------------------------------------------------------------------------------+
++ Grading -----------------------------------------------------------------------------------------+
+|State: not submitted                                                                              |
++--------------------------------------------------------------------------------------------------+
++ Ultimo dettaglio test ---------------------------------------------------------------------------+
+|Passed: 6                                                                                         |
+|Failed: 1                                                                                         |
++--------------------------------------------------------------------------------------------------+
++ Report ------------------------------------------------------------------------------------------+
+|Summary: implementation started                                                                   |
+|Notes: add boundary cases                                                                         |
++--------------------------------------------------------------------------------------------------+
++ [+] Richieste aiuto -----------------------------------------------------------------------------+
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
++ Aiuto consentito --------------------------------------------------------------------------------+
+|Allowed: standard library docs                                                                    |
+|Not allowed: completed solution                                                                   |
++--------------------------------------------------------------------------------------------------+
++ Activity ----------------------------------------------------------------------------------------+
+|Last action: opened instructions                                                                  |
++--------------------------------------------------------------------------------------------------+
++ Workspace ---------------------------------------------------------------------------------------+
+|Path: C:/training/sample-lab                                                                      |
+|Files: 4                                                                                          |
++--------------------------------------------------------------------------------------------------+
++ > Dettaglio consegna ----------------------------------------------------------------------------+
+|Exercise: parse a tiny text format                                                                |
+|Status: ready                                                                                     |
++--------------------------------------------------------------------------------------------------+"""
+
 
 def test_fixture_revision_and_identifiers_are_explicit() -> None:
     """Keep synthetic fixture drift visible without creating public API."""
@@ -169,6 +209,22 @@ def test_core_wide_and_narrow_ascii_snapshots() -> None:
 
     assert wide == [line.ljust(100) for line in WIDE_SNAPSHOT.splitlines()]
     assert narrow == [line.ljust(89) for line in NARROW_SNAPSHOT.splitlines()]
+
+
+def test_explicit_vertical_ascii_snapshot_preserves_persisted_order() -> None:
+    """Freeze the explicit vertical tree with a non-default persisted order."""
+
+    vertical_state = {
+        **PRESENTATION,
+        "orientation": "vertical",
+        "order": tuple(reversed(SECTION_IDS)),
+    }
+
+    vertical = render_reference_frame(SECTIONS, vertical_state, width=100, height=38)
+
+    assert vertical == [line.ljust(100) for line in VERTICAL_SNAPSHOT.splitlines()]
+    assert all(visible_width(row) == 100 for row in vertical)
+    assert "\x1b[" not in "\n".join(vertical)
 
 
 def test_missing_section_remains_visible() -> None:
