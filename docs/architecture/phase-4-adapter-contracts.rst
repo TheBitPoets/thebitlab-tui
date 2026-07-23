@@ -245,9 +245,10 @@ The reference-adapter slice must add neutral fixtures and deterministic checks f
 
 The consumer repository separately owns raw-dictionary projection tests, persisted JSON round
 trips and invalid-file fallback, key-command tests, its legacy renderer fallback, and manual
-integration evidence. That work starts only through a separately authorized issue and PR. The
-parent issue records the exact library tag or commit, consumer commit or PR, fixture revision, and
-manual Windows/Linux results; library CI never checks out or vendors the consumer repository.
+integration evidence. That work starts only after the verified ``utui`` rename baseline tracked
+by parent issue #51 and through a separately authorized consumer issue and PR. The parent issue
+records the exact library tag or commit, consumer commit or PR, fixture revision, and manual
+Windows/Linux results; library CI never checks out or vendors the consumer repository.
 
 Delivery sequence
 -----------------
@@ -258,8 +259,11 @@ After this design gate is approved, Phase 4 remains split into bounded child iss
 2. verify persisted-layout translation, ASCII fallback, focus, collapse, resize, scrolling, modal,
    ANSI, and ``no-color`` behavior;
 3. complete the Sphinx user/developer integration guides, reproducible images, and evidence matrix;
-4. collect separately authorized consumer evidence without coupling the repositories;
-5. run a documentation-only closeout before version ``0.4.0``, tag, release, parent, and milestone
+4. approve and complete the hard pre-v1 repository, distribution, and import rename tracked by
+   parent issue #51 and :doc:`utui-rename-contract`;
+5. collect separately authorized consumer evidence using only the verified ``utui`` baseline and
+   without coupling the repositories;
+6. run a documentation-only closeout before version ``0.4.0``, tag, release, parent, and milestone
    closure in the documented order.
 
 Reversibility
