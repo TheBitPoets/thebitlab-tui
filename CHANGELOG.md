@@ -4,6 +4,9 @@
 
 - Add a non-public executable student-dashboard reference adapter with revisioned synthetic
   fixtures and deterministic wide/narrow ASCII snapshots, without changing the public API.
+- Add caller-owned transient reference state and deterministic evidence for tiny terminals,
+  resize, focus, collapse, scrolling, selection, modal overlays, ANSI input, and cross-platform
+  example execution.
 
 ## 0.3.0 - 2026-07-21
 
