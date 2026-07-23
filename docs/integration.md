@@ -5,6 +5,17 @@ The normative Phase 4 design is
 The snippets below illustrate the current public widgets; they are not a public adapter API or a
 schema for the consumer's dictionaries.
 
+The executable synthetic implementation lives in
+[`examples/student_dashboard_adapter.py`](../examples/student_dashboard_adapter.py), with
+revisioned neutral input in
+[`examples/student_dashboard_fixtures.py`](../examples/student_dashboard_fixtures.py). It is a
+reference for consumer-owned projection and responsive composition, not an import target for
+application code:
+
+```console
+python examples/student_dashboard_adapter.py --no-color
+```
+
 Integration belongs in the `2cornot2c` repository, not in this library. The initial adapter can
 have one pure function per application section and one composition function:
 

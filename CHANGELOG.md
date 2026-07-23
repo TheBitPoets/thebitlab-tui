@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-- No changes yet.
+- Add a non-public executable student-dashboard reference adapter with revisioned synthetic
+  fixtures and deterministic wide/narrow ASCII snapshots, without changing the public API.
 
 ## 0.3.0 - 2026-07-21
 

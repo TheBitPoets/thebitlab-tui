@@ -101,3 +101,24 @@ Redirected input is rejected rather than reinterpreted as an interactive keyboar
 .. image:: ../_static/images/terminal-input.svg
    :alt: Three responsive ASCII panels showing terminal size, selected application item, and portable keyboard commands.
    :align: center
+
+Student dashboard reference adapter
+-----------------------------------
+
+``examples/student_dashboard_adapter.py`` and
+``examples/student_dashboard_fixtures.py`` make the Phase 4 integration contract executable
+without importing the student application or adding package API. Run the synthetic dashboard at
+the current terminal size with:
+
+.. code-block:: console
+
+   python examples/student_dashboard_adapter.py --no-color
+
+The reference adapter consumes neutral logical rows plus normalized caller-owned ``orientation``,
+``order``, ``left_width``, ``collapsed``, and ``focus`` state. At 90 columns or wider it renders
+two groups of five panels separated by the compatibility string ``" | "``. Below that breakpoint,
+or for explicit vertical orientation, it constructs one column in exact persisted order.
+
+The fixture revision and helper names are example/test details, not stable imports. Real consumer
+dictionaries, validation, persistence, commands, resize/redraw policy, and fallback remain in the
+consumer repository.

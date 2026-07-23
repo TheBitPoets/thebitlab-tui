@@ -130,10 +130,12 @@ Tracked by [parent issue #25](https://github.com/TheBitPoets/thebitlab-tui/issue
 1. In progress in [#43](https://github.com/TheBitPoets/thebitlab-tui/issues/43): approve the
    one-way ownership boundary, non-public reference-adapter strategy, persisted-layout mapping,
    compatibility promise, fallback, and evidence matrix.
-2. After #43: add synthetic neutral fixtures, a reference adapter outside `src`, and deterministic
-   wide, narrow, tiny, focus, collapse, ANSI, and `no-color` snapshots.
-3. Verify persisted-layout translation, resize, scrolling, modal, modifier-free, Windows, and
-   Linux behavior without moving state or commands into the library.
+2. In progress in [#45](https://github.com/TheBitPoets/thebitlab-tui/issues/45): add synthetic
+   neutral fixtures, a reference adapter outside `src`, core wide/narrow snapshots, basic
+   focus/collapse translation, ANSI geometry, and `no-color` example smoke coverage.
+3. After #45, verify the complete tiny, persisted-layout, focus/collapse, resize, scrolling,
+   modal, ANSI-input, modifier-free, Windows, and Linux evidence matrix without moving state or
+   commands into the library.
 4. Complete Sphinx integration guides, reproducible images, and the versioned evidence matrix.
 5. Link separately authorized consumer evidence, then run a documentation-only closeout before
    publishing `v0.4.0` and closing the parent and milestone in the documented order.

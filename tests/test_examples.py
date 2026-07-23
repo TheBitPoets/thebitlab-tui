@@ -24,6 +24,7 @@ ROOT = Path(__file__).parents[1]
         ("scroll_view.py", [], 40, 8),
         ("modal.py", [], 48, 12),
         ("terminal_input.py", ["--snapshot"], 70, 8),
+        ("student_dashboard_adapter.py", [], 100, 24),
     ],
 )
 def test_documented_example_runs_without_color(
