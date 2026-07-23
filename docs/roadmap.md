@@ -135,11 +135,12 @@ Tracked by [parent issue #25](https://github.com/TheBitPoets/thebitlab-tui/issue
    [PR #46](https://github.com/TheBitPoets/thebitlab-tui/pull/46): add synthetic neutral fixtures,
    a reference adapter outside `src`, core wide/narrow/vertical snapshots, basic focus/collapse
    translation, ANSI geometry, and `no-color` example smoke coverage.
-3. In progress in [#47](https://github.com/TheBitPoets/thebitlab-tui/issues/47): verify the
-   complete tiny, persisted-layout, focus/collapse, resize, scrolling, modal, ANSI-input,
-   modifier-free, Windows, and Linux evidence matrix without moving state or commands into the
-   library.
-4. Complete Sphinx integration guides, reproducible images, and the versioned evidence matrix.
+3. Done in [#47](https://github.com/TheBitPoets/thebitlab-tui/issues/47) /
+   [PR #48](https://github.com/TheBitPoets/thebitlab-tui/pull/48): verify the complete tiny,
+   persisted-layout, focus/collapse, resize, scrolling, modal, ANSI-input, modifier-free, Windows,
+   and Linux evidence matrix without moving state or commands into the library.
+4. In progress in [#49](https://github.com/TheBitPoets/thebitlab-tui/issues/49): complete Sphinx
+   integration guides, reproducible images, and the versioned evidence matrix.
 5. Link separately authorized consumer evidence, then run a documentation-only closeout before
    publishing `v0.4.0` and closing the parent and milestone in the documented order.
 

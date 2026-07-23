@@ -7,6 +7,8 @@
 - Add caller-owned transient reference state and deterministic evidence for tiny terminals,
   resize, focus, collapse, scrolling, selection, modal overlays, ANSI input, and cross-platform
   example execution.
+- Add canonical Sphinx integration guidance, reproducible synthetic dashboard SVGs, and a
+  versioned Phase 4 evidence matrix that keeps pending consumer acceptance explicit.
 
 ## 0.3.0 - 2026-07-21
 

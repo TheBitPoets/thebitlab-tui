@@ -125,4 +125,30 @@ tests are necessary but do not prove terminal restoration or key delivery in a r
 Record separate manual results for Linux, Windows Terminal with PowerShell, and Windows Terminal
 with ``cmd.exe``; leave missing environments explicitly ``NOT RUN``.
 
+Phase 4 reference-adapter maintenance
+-------------------------------------
+
+The Phase 4 adapter and synthetic fixtures remain under ``examples/`` and outside the installed
+package. They are executable evidence, not public API or a consumer dictionary schema. Never
+import, vendor, or copy application data from ``2cornot2c``; consumer projection, validation,
+persistence, commands, event loops, printing, and legacy fallback stay in that repository.
+
+Keep the five persisted layout fields separate from transient dashboard/section/list offsets,
+selection, and modal presentation. Rendering may clamp an effective value but must not repair or
+mutate caller mappings. If fixture structure or meaning changes, update ``FIXTURE_REVISION`` and
+review every wide, narrow, tiny, resize, focus, collapse, scroll, selection, modal, ANSI, and
+``no-color`` snapshot affected by that change.
+
+Regenerate the accessible Phase 4 SVG captures with only the standard library:
+
+.. code-block:: console
+
+   python tools/generate_phase4_images.py
+
+``tests/test_docs_assets.py`` compares every captured terminal row to
+``render_reference_frame``. Before proposing a change, also follow
+:doc:`the Phase 4 verification matrix <../architecture/phase-4-verification>` and confirm that
+``src/``, ``thebitlab_tui.__all__``, and runtime dependency metadata are unchanged unless a
+separate design gate explicitly approves otherwise.
+
 See ``docs/it/00-regole-operative.md`` for milestone, issue, PR, finding, and review rules.

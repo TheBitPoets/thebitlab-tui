@@ -2,6 +2,9 @@
 
 The normative Phase 4 design is
 [`docs/architecture/phase-4-adapter-contracts.rst`](architecture/phase-4-adapter-contracts.rst).
+The canonical Sphinx guide is
+[`docs/integration/index.rst`](integration/index.rst), and the versioned library-side evidence is
+[`docs/architecture/phase-4-verification.rst`](architecture/phase-4-verification.rst).
 The snippets below illustrate the current public widgets; they are not a public adapter API or a
 schema for the consumer's dictionaries.
 
@@ -130,4 +133,12 @@ Choose the wide or narrow tree explicitly from the current size.
 The actual migration should keep the existing text renderer as a feature/failure fallback. No
 byte-for-byte identity is promised, but ASCII markers, persisted meanings, no-overflow behavior,
 ANSI-independent geometry, and modifier-free commands must remain available.
+
+## Consumer evidence handoff
+
+Library CI proves only the synthetic reference adapter on supported Python versions and operating
+systems. Raw dictionary projection, `.student-lab-layout.json` round trips and invalid-file
+recovery, real command mappings, legacy fallback rollout, and manual Windows/Linux student-TUI
+acceptance remain pending in a separately authorized `2cornot2c` issue and pull request. Do not
+record those consumer results as passed from library CI.
 

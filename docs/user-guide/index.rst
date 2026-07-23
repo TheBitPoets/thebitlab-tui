@@ -229,3 +229,28 @@ Use snapshot mode when the entire output stream must contain no ANSI at all.
 .. image:: ../_static/images/three-panels-narrow.svg
    :alt: The same three ASCII panels stacked in a narrow terminal.
    :align: center
+
+Embedding an existing student dashboard
+---------------------------------------
+
+The Phase 4 reference adapter demonstrates how an existing application can project its own
+dictionaries into neutral rows, build widgets from caller-owned state, and receive a pure frame.
+The example is not public package API and does not define a consumer schema. The application keeps
+``.student-lab-layout.json``, commands, input handling, resize polling, screen output, and its
+legacy renderer fallback.
+
+Persisted ``orientation``, ``order``, ``left_width``, ``collapsed``, and ``focus`` values stay
+separate from transient scroll offsets, list selection, and modal visibility. Rebuild the complete
+tree at every terminal size change; below 90 columns the reference composition uses one column in
+exact persisted order.
+
+.. image:: ../_static/images/student-dashboard-wide.svg
+   :alt: Ten synthetic student panels arranged in the wide two-column ASCII dashboard.
+   :align: center
+
+.. image:: ../_static/images/student-dashboard-narrow.svg
+   :alt: The same ten synthetic student panels stacked in persisted order below the breakpoint.
+   :align: center
+
+Follow the canonical :doc:`student integration guide <../integration/index>` for the ownership
+boundary, state translation, reproducible commands, and incremental consumer rollout.

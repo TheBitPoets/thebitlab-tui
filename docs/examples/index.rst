@@ -122,3 +122,31 @@ or for explicit vertical orientation, it constructs one column in exact persiste
 The fixture revision and helper names are example/test details, not stable imports. Real consumer
 dictionaries, validation, persistence, commands, resize/redraw policy, and fallback remain in the
 consumer repository.
+
+Use explicit dimensions for reproducible captures:
+
+.. code-block:: console
+
+   python examples/student_dashboard_adapter.py --no-color --width 100 --height 20
+   python examples/student_dashboard_adapter.py --no-color --width 89 --height 38
+
+``PRESENTATION`` contains only the five persisted layout meanings. ``INTERACTION`` separately
+contains caller-owned dashboard and section offsets, list offsets and selection, and modal
+presentation. The adapter draws with effective clamps but never writes them back. The fixture
+revision is ``phase4-v2``.
+
+.. image:: ../_static/images/student-dashboard-wide.svg
+   :alt: Ten synthetic student panels arranged in the wide two-column ASCII dashboard.
+   :align: center
+
+.. image:: ../_static/images/student-dashboard-narrow.svg
+   :alt: The same ten synthetic student panels stacked in persisted order below the breakpoint.
+   :align: center
+
+.. image:: ../_static/images/student-dashboard-modal.svg
+   :alt: A centered ASCII quick-help modal over the synthetic student dashboard.
+   :align: center
+
+See :doc:`the integration guide <../integration/index>` and
+:doc:`the Phase 4 evidence matrix <../architecture/phase-4-verification>` for the complete
+ownership and verification boundaries.

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="440" viewBox="0 0 1040 440" role="img" aria-labelledby="title desc">
+  <title id="title">Wide synthetic student dashboard</title>
+  <desc id="desc">Ten synthetic student panels use the Phase 4 two-column ASCII layout.</desc>
+  <rect width="1040" height="440" rx="8" fill="#171717"/>
+  <text x="20" y="30" fill="#f4f4f4" font-family="Consolas, monospace" font-size="14" xml:space="preserve">
+    <tspan x="20" dy="0">+ &gt; Dettaglio consegna -------------------------------------+ | + Report --------------------------+</tspan>
+    <tspan x="20" dy="20">|Exercise: parse a tiny text format                         | | |Summary: implementation started   |</tspan>
+    <tspan x="20" dy="20">|Status: ready                                              | | |Notes: add boundary cases         |</tspan>
+    <tspan x="20" dy="20">+-----------------------------------------------------------+ | +----------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Workspace ------------------------------------------------+ | + Ultimo dettaglio test -----------+</tspan>
+    <tspan x="20" dy="20">|Path: C:/training/sample-lab                               | | |Passed: 6                         |</tspan>
+    <tspan x="20" dy="20">|Files: 4                                                   | | |Failed: 1                         |</tspan>
+    <tspan x="20" dy="20">+-----------------------------------------------------------+ | +----------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Activity -------------------------------------------------+ | + Grading -------------------------+</tspan>
+    <tspan x="20" dy="20">|Last action: opened instructions                           | | |State: not submitted              |</tspan>
+    <tspan x="20" dy="20">+-----------------------------------------------------------+ | +----------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Aiuto consentito -----------------------------------------+ | + Runner --------------------------+</tspan>
+    <tspan x="20" dy="20">|Allowed: standard library docs                             | | |Command: python -m pytest         |</tspan>
+    <tspan x="20" dy="20">|Not allowed: completed solution                            | | |State: idle                       |</tspan>
+    <tspan x="20" dy="20">+-----------------------------------------------------------+ | +----------------------------------+</tspan>
+    <tspan x="20" dy="20">+ [+] Richieste aiuto --------------------------------------+ | + Guida rapida --------------------+</tspan>
+    <tspan x="20" dy="20">|                                                           | | |Arrows: move                      |</tspan>
+    <tspan x="20" dy="20">+-----------------------------------------------------------+ | |Enter: open                       |</tspan>
+    <tspan x="20" dy="20">                                                              | |q: close                          |</tspan>
+    <tspan x="20" dy="20">                                                              | +----------------------------------+</tspan>
+  </text>
+</svg>

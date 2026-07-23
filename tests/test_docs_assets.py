@@ -12,8 +12,10 @@ from examples.basic_panels import build_screen as build_panels
 from examples.modal import HelpOverlay
 from examples.scroll_view import build_screen as build_scroll_view
 from examples.selectable_list import build_screen as build_selectable_list
+from examples.student_dashboard_adapter import render_reference_frame
 from examples.terminal_input import ApplicationState, render_frame as render_input_frame
 from thebitlab_tui import TerminalSize, render
+from tools.generate_phase4_images import CAPTURES, Capture, _interaction, _svg
 
 
 SVG_NAMESPACE = {"svg": "http://www.w3.org/2000/svg"}
@@ -21,6 +23,7 @@ ROOT = Path(__file__).parents[1]
 IMAGES = ROOT / "docs" / "_static" / "images"
 EVIDENCE_INDEX = ROOT / "docs" / "architecture" / "phase-2-verification.rst"
 PHASE_3_EVIDENCE_INDEX = ROOT / "docs" / "architecture" / "phase-3-verification.rst"
+PHASE_4_EVIDENCE_INDEX = ROOT / "docs" / "architecture" / "phase-4-verification.rst"
 REQUIRED_EVIDENCE = {
     "docs/api/index.rst",
     "docs/user-guide/index.rst",
@@ -59,6 +62,26 @@ REQUIRED_PHASE_3_EVIDENCE = {
     "tests/test_examples.py",
     "tests/test_docs_assets.py",
     "tests/test_release_metadata.py",
+}
+REQUIRED_PHASE_4_EVIDENCE = {
+    "docs/architecture/phase-4-adapter-contracts.rst",
+    "docs/architecture/phase-4-verification.rst",
+    "docs/integration/index.rst",
+    "docs/user-guide/index.rst",
+    "docs/developer-guide/index.rst",
+    "docs/examples/index.rst",
+    "docs/_static/images/student-dashboard-wide.svg",
+    "docs/_static/images/student-dashboard-narrow.svg",
+    "docs/_static/images/student-dashboard-modal.svg",
+    "examples/student_dashboard_adapter.py",
+    "examples/student_dashboard_fixtures.py",
+    "tools/generate_phase4_images.py",
+    "tests/test_docs_assets.py",
+    "tests/test_examples.py",
+    "tests/test_phase4_contract.py",
+    "tests/test_public_api_docs.py",
+    "tests/test_student_dashboard_adapter.py",
+    "tests/test_student_dashboard_evidence.py",
 }
 
 
@@ -115,6 +138,22 @@ def test_terminal_input_image_matches_deterministic_snapshot() -> None:
     assert _terminal_rows(IMAGES / "terminal-input.svg") == expected
 
 
+@pytest.mark.parametrize("capture", CAPTURES, ids=lambda capture: capture.filename)
+def test_student_dashboard_images_match_generator(capture: Capture) -> None:
+    """Keep complete Phase 4 SVG files synchronized with their generator."""
+
+    rows = render_reference_frame(
+        width=capture.width,
+        height=capture.height,
+        color=False,
+        interaction=_interaction(modal_open=capture.modal_open),
+    )
+    path = IMAGES / capture.filename
+
+    assert path.read_bytes() == _svg(capture, rows).encode("utf-8")
+    assert _terminal_rows(path) == rows
+
+
 def test_phase_2_evidence_index_references_existing_files() -> None:
     """Reject stale paths in the versioned Phase 2 release matrix."""
 
@@ -137,6 +176,33 @@ def test_phase_3_evidence_index_references_existing_files() -> None:
 
     assert REQUIRED_PHASE_3_EVIDENCE <= referenced_paths
     assert all((ROOT / relative_path).is_file() for relative_path in referenced_paths)
+
+
+def test_phase_4_evidence_index_references_existing_files() -> None:
+    """Reject stale paths in the versioned Phase 4 evidence matrix."""
+
+    document = PHASE_4_EVIDENCE_INDEX.read_text(encoding="utf-8")
+    referenced_paths = set(
+        re.findall(r"``((?:docs|examples|tests|tools)/[^`]+)``", document)
+    )
+
+    assert REQUIRED_PHASE_4_EVIDENCE <= referenced_paths
+    assert all((ROOT / relative_path).is_file() for relative_path in referenced_paths)
+
+
+def test_phase_4_evidence_records_provenance_and_pending_consumer_work() -> None:
+    """Keep library proof separate from consumer integration that has not run."""
+
+    document = PHASE_4_EVIDENCE_INDEX.read_text(encoding="utf-8")
+    handoff = document.split("Consumer evidence handoff", 1)[1]
+
+    assert "phase4-v2" in document
+    assert "dbc36eabbb47562a2977597da833e092dec9f2b4" in document
+    assert "7a538d2edd1dca44c8f062888f508845f3441f1c" in document
+    assert all(f"pull/{number}" in document for number in (44, 46, 48))
+    assert handoff.count("\n     - PENDING\n") == 6
+    assert "Automated PASS" not in handoff
+    assert "CI PASS" not in handoff
 
 
 def test_phase_3_manual_evidence_is_complete() -> None:
