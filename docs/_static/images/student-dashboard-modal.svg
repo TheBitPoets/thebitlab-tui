@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="280" viewBox="0 0 540 280" role="img" aria-labelledby="title desc">
+  <title id="title">Synthetic student dashboard with quick-help modal</title>
+  <desc id="desc">A centered ASCII quick-help modal overlays the caller-owned dashboard underlay.</desc>
+  <rect width="540" height="280" rx="8" fill="#171717"/>
+  <text x="20" y="30" fill="#f4f4f4" font-family="Consolas, monospace" font-size="14" xml:space="preserve">
+    <tspan x="20" dy="0">+ &gt; Dettaglio consegna --------------------------+</tspan>
+    <tspan x="20" dy="20">|Exercise: parse a tiny text format              |</tspan>
+    <tspan x="20" dy="20">|Status: ready                                   |</tspan>
+    <tspan x="20" dy="20">+------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Wor+ [x] Guida rapida --------------------+----+</tspan>
+    <tspan x="20" dy="20">|Path|Escape or q: close                    |    |</tspan>
+    <tspan x="20" dy="20">|File+--------------------------------------+    |</tspan>
+    <tspan x="20" dy="20">+------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Activity --------------------------------------+</tspan>
+    <tspan x="20" dy="20">|Last action: opened instructions                |</tspan>
+    <tspan x="20" dy="20">+------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Aiuto consentito ------------------------------+</tspan>
+  </text>
+</svg>

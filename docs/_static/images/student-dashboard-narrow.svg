@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="930" height="800" viewBox="0 0 930 800" role="img" aria-labelledby="title desc">
+  <title id="title">Narrow synthetic student dashboard</title>
+  <desc id="desc">The same ten synthetic panels use one ordered ASCII column below the breakpoint.</desc>
+  <rect width="930" height="800" rx="8" fill="#171717"/>
+  <text x="20" y="30" fill="#f4f4f4" font-family="Consolas, monospace" font-size="14" xml:space="preserve">
+    <tspan x="20" dy="0">+ &gt; Dettaglio consegna -----------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">|Exercise: parse a tiny text format                                                     |</tspan>
+    <tspan x="20" dy="20">|Status: ready                                                                          |</tspan>
+    <tspan x="20" dy="20">+---------------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Workspace ----------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">|Path: C:/training/sample-lab                                                           |</tspan>
+    <tspan x="20" dy="20">|Files: 4                                                                               |</tspan>
+    <tspan x="20" dy="20">+---------------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Activity -----------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">|Last action: opened instructions                                                       |</tspan>
+    <tspan x="20" dy="20">+---------------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Aiuto consentito ---------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">|Allowed: standard library docs                                                         |</tspan>
+    <tspan x="20" dy="20">|Not allowed: completed solution                                                        |</tspan>
+    <tspan x="20" dy="20">+---------------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ [+] Richieste aiuto ------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">|                                                                                       |</tspan>
+    <tspan x="20" dy="20">+---------------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Report -------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">|Summary: implementation started                                                        |</tspan>
+    <tspan x="20" dy="20">|Notes: add boundary cases                                                              |</tspan>
+    <tspan x="20" dy="20">+---------------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Ultimo dettaglio test ----------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">|Passed: 6                                                                              |</tspan>
+    <tspan x="20" dy="20">|Failed: 1                                                                              |</tspan>
+    <tspan x="20" dy="20">+---------------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Grading ------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">|State: not submitted                                                                   |</tspan>
+    <tspan x="20" dy="20">+---------------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Runner -------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">|Command: python -m pytest                                                              |</tspan>
+    <tspan x="20" dy="20">|State: idle                                                                            |</tspan>
+    <tspan x="20" dy="20">+---------------------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">+ Guida rapida -------------------------------------------------------------------------+</tspan>
+    <tspan x="20" dy="20">|Arrows: move                                                                           |</tspan>
+    <tspan x="20" dy="20">|Enter: open                                                                            |</tspan>
+    <tspan x="20" dy="20">|q: close                                                                               |</tspan>
+    <tspan x="20" dy="20">+---------------------------------------------------------------------------------------+</tspan>
+  </text>
+</svg>

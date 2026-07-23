@@ -13,6 +13,7 @@ It targets Python 3.11+ on Windows and Linux without owning an event loop or app
    :caption: Guides
 
    user-guide/index
+   integration/index
    developer-guide/index
    architecture/index
    examples/index

@@ -10,6 +10,9 @@ ROOT = Path(__file__).parents[1]
 CONTRACT = ROOT / "docs" / "architecture" / "phase-4-adapter-contracts.rst"
 ARCHITECTURE_INDEX = ROOT / "docs" / "architecture" / "index.rst"
 INTEGRATION_GUIDE = ROOT / "docs" / "integration.md"
+SPHINX_INDEX = ROOT / "docs" / "index.rst"
+SPHINX_INTEGRATION_GUIDE = ROOT / "docs" / "integration" / "index.rst"
+VERIFICATION = ROOT / "docs" / "architecture" / "phase-4-verification.rst"
 
 SECTION_IDS = (
     "assignment",
@@ -85,7 +88,9 @@ def test_phase4_contract_is_in_the_sphinx_architecture_tree() -> None:
     index = ARCHITECTURE_INDEX.read_text(encoding="utf-8")
 
     assert "phase-4-adapter-contracts" in index
+    assert "phase-4-verification" in index
     assert CONTRACT.is_file()
+    assert VERIFICATION.is_file()
 
 
 def test_phase4_contract_names_every_compatibility_section() -> None:
@@ -167,3 +172,18 @@ def test_phase4_integration_guide_links_the_normative_contract() -> None:
 
     assert "architecture/phase-4-adapter-contracts.rst" in guide
     assert "not a public adapter API" in guide
+
+
+def test_phase4_sphinx_integration_guide_preserves_the_consumer_boundary() -> None:
+    """Keep the canonical HTML guide reachable and subordinate to the contract."""
+
+    index = SPHINX_INDEX.read_text(encoding="utf-8")
+    guide = SPHINX_INTEGRATION_GUIDE.read_text(encoding="utf-8")
+
+    assert "integration/index" in index
+    assert "../architecture/phase-4-adapter-contracts" in guide
+    assert "../architecture/phase-4-verification" in guide
+    assert "not public adapter API" in guide
+    assert "never reads ``.student-lab-layout.json``" in guide
+    assert "legacy renderer" in guide
+    assert "never import" in guide
