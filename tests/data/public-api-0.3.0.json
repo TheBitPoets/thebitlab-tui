@@ -1,11 +1,11 @@
 {
-  "schema": 1,
+  "schema": 2,
   "source_version": "0.3.0",
   "exports": [
     {"name": "Canvas", "kind": "class", "module": "canvas", "qualname": "Canvas", "signature": "(width: 'int', height: 'int', fill: 'str' = ' ') -> 'None'"},
     {"name": "Column", "kind": "class", "module": "layout", "qualname": "Column", "signature": "(children: 'list[Widget]', sizes: 'list[Size] | None' = None, gap: 'int' = 0, width: 'int | None' = None, height: 'int | None' = None, min_width: 'int' = 1, min_height: 'int' = 1, max_width: 'int | None' = None, max_height: 'int | None' = None) -> None"},
     {"name": "Divider", "kind": "class", "module": "widgets", "qualname": "Divider", "signature": "(orientation: \"Literal['horizontal', 'vertical']\" = 'horizontal', *, char: 'str | None' = None, style: 'Style' = Style(bold=False, bright=False, foreground=None, background=None), width: 'int | None' = None, height: 'int | None' = None, min_width: 'int' = 1, min_height: 'int' = 1, max_width: 'int | None' = None, max_height: 'int | None' = None) -> None"},
-    {"name": "Key", "kind": "enum", "module": "events", "qualname": "Key", "signature": "(value, names=None, *, module=None, qualname=None, type=None, start=1, boundary=None)"},
+    {"name": "Key", "kind": "enum", "module": "events", "qualname": "Key", "signature_by_python": {"3.11": "(value, names=None, *, module=None, qualname=None, type=None, start=1, boundary=None)", "3.12": "(*values)", "3.13": "(*values)"}},
     {"name": "KeyEvent", "kind": "class", "module": "events", "qualname": "KeyEvent", "signature": "(key: 'Key', character: 'str | None' = None, ctrl: 'bool' = False, alt: 'bool' = False, shift: 'bool' = False) -> None"},
     {"name": "KeyReader", "kind": "class", "module": "terminal", "qualname": "KeyReader", "signature": "(*, escape_timeout: 'float' = 0.05) -> 'None'"},
     {"name": "Label", "kind": "class", "module": "widgets", "qualname": "Label", "signature": "(text: 'str', align: 'str' = 'left', wrap: 'bool' = False, truncate: 'bool' = True, style: 'Style' = Style(bold=False, bright=False, foreground=None, background=None), width: 'int | None' = None, height: 'int | None' = None, min_width: 'int' = 1, min_height: 'int' = 1, max_width: 'int | None' = None, max_height: 'int | None' = None) -> None"},

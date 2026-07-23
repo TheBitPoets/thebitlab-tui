@@ -6,6 +6,7 @@ import inspect
 import json
 from pathlib import Path
 import re
+import sys
 from enum import Enum
 
 import utui
@@ -13,6 +14,7 @@ from utui import canvas, events, geometry, layout, renderer, styles, terminal, w
 
 
 API_BASELINE = Path(__file__).parent / "data" / "public-api-0.3.0.json"
+SUPPORTED_PYTHON = ("3.11", "3.12", "3.13")
 MODULES = (canvas, events, geometry, layout, renderer, styles, terminal, widgets)
 PUBLIC_API = (
     "Canvas",
@@ -87,7 +89,29 @@ def _capture_public_api(package: object) -> dict[str, object]:
                 "signature": _stable_signature(value),
             }
         )
-    return {"schema": 1, "source_version": "0.3.0", "exports": exports}
+    return {"schema": 2, "source_version": "0.3.0", "exports": exports}
+
+
+def _expected_public_api() -> dict[str, object]:
+    """Resolve version-specific standard-library signatures for this Python."""
+
+    expected = json.loads(API_BASELINE.read_text(encoding="utf-8"))
+    python_version = f"{sys.version_info.major}.{sys.version_info.minor}"
+    for exported in expected["exports"]:
+        signatures = exported.pop("signature_by_python", None)
+        if signatures is None:
+            continue
+        if tuple(signatures) != SUPPORTED_PYTHON:
+            raise AssertionError(
+                f"{exported['name']} does not cover {SUPPORTED_PYTHON}"
+            )
+        try:
+            exported["signature"] = signatures[python_version]
+        except KeyError as error:
+            raise AssertionError(
+                f"{exported['name']} has no signature for Python {python_version}"
+            ) from error
+    return expected
 
 
 def test_public_api_manifest_is_stable() -> None:
@@ -96,8 +120,22 @@ def test_public_api_manifest_is_stable() -> None:
     assert tuple(utui.__all__) == PUBLIC_API
     assert len(utui.__all__) == len(set(utui.__all__))
     assert all(hasattr(utui, name) for name in PUBLIC_API)
-    expected = json.loads(API_BASELINE.read_text(encoding="utf-8"))
-    assert _capture_public_api(utui) == expected
+    assert _capture_public_api(utui) == _expected_public_api()
+
+
+def test_versioned_signatures_cover_supported_python_versions() -> None:
+    """Keep interpreter-owned signatures explicit across the support matrix."""
+
+    baseline = json.loads(API_BASELINE.read_text(encoding="utf-8"))
+    versioned = {
+        exported["name"]: exported["signature_by_python"]
+        for exported in baseline["exports"]
+        if "signature_by_python" in exported
+    }
+
+    assert baseline["schema"] == 2
+    assert set(versioned) == {"Key"}
+    assert tuple(versioned["Key"]) == SUPPORTED_PYTHON
 
 
 def test_exported_api_has_docstrings() -> None:
