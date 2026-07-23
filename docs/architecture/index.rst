@@ -63,3 +63,4 @@ Phase design records
    phase-3-verification
    phase-4-adapter-contracts
    phase-4-verification
+   utui-rename-contract

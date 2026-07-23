@@ -124,6 +124,10 @@ consumer evidence, legacy ASCII fallback preservation, complete documentation, c
 verification, two clean review rounds, and the `v0.4.0` release.
 
 Tracked by [parent issue #25](https://github.com/TheBitPoets/thebitlab-tui/issues/25).
+Before consumer integration starts, the repository, distribution, and import package complete the
+hard pre-v1 `utui` rename tracked by
+[parent issue #51](https://github.com/TheBitPoets/thebitlab-tui/issues/51). The normative rename
+contract is [`docs/architecture/utui-rename-contract.rst`](architecture/utui-rename-contract.rst).
 
 #### Phase 4 delivery sequence
 
@@ -139,9 +143,14 @@ Tracked by [parent issue #25](https://github.com/TheBitPoets/thebitlab-tui/issue
    [PR #48](https://github.com/TheBitPoets/thebitlab-tui/pull/48): verify the complete tiny,
    persisted-layout, focus/collapse, resize, scrolling, modal, ANSI-input, modifier-free, Windows,
    and Linux evidence matrix without moving state or commands into the library.
-4. In progress in [#49](https://github.com/TheBitPoets/thebitlab-tui/issues/49): complete Sphinx
-   integration guides, reproducible images, and the versioned evidence matrix.
-5. Link separately authorized consumer evidence, then run a documentation-only closeout before
+4. Done in [#49](https://github.com/TheBitPoets/thebitlab-tui/issues/49) /
+   [PR #50](https://github.com/TheBitPoets/thebitlab-tui/pull/50): complete Sphinx integration
+   guides, reproducible images, and the versioned evidence matrix.
+5. In progress in [#51](https://github.com/TheBitPoets/thebitlab-tui/issues/51) /
+   [#52](https://github.com/TheBitPoets/thebitlab-tui/issues/52): approve and implement the hard
+   pre-v1 rename to repository, distribution, and import identity `utui`.
+6. After the verified rename baseline, link separately authorized consumer evidence.
+7. Run a documentation-only closeout before
    publishing `v0.4.0` and closing the parent and milestone in the documented order.
 
 The normative contract is
@@ -202,7 +211,7 @@ sync with the parent issue's checklist and implementation traceability.
 | Phase 1 - Core rendering | Complete | 2026-07-20 | Pre-tracking | None | Pre-tracking | Initial ASCII rendering scaffold |
 | Interactive widgets v0.2 | Complete | 2026-07-21 | 2026-08-17 | Stable core API | [#7](https://github.com/TheBitPoets/thebitlab-tui/issues/7) | Released as [`v0.2.0`](https://github.com/TheBitPoets/thebitlab-tui/releases/tag/v0.2.0); terminal input and integration work deferred |
 | Terminal adapters v0.3 | Complete | 2026-07-22 | 2026-08-21 | v0.2 | [#24](https://github.com/TheBitPoets/thebitlab-tui/issues/24) | Completed 2026-07-22; versioned as `0.3.0`; tag and GitHub release follow the closeout merge; Phase 4 integration work deferred |
-| Integration-ready v0.4 | In progress | 2026-09-18 | 2026-09-25 | v0.3 and consumer availability | [#25](https://github.com/TheBitPoets/thebitlab-tui/issues/25) | Started early 2026-07-22 after v0.3; design gate #43; implementation stays in `2cornot2c` |
+| Integration-ready v0.4 | In progress | 2026-09-18 | 2026-09-25 | v0.3 and consumer availability | [#25](https://github.com/TheBitPoets/thebitlab-tui/issues/25) | Started early 2026-07-22 after v0.3; `utui` rename prerequisite #51; consumer implementation stays in `2cornot2c` |
 | Release candidate v0.9 | Planned | 2026-10-16 | 2026-10-23 | v0.4 and integration evidence | [#26](https://github.com/TheBitPoets/thebitlab-tui/issues/26) | Candidate API freeze, packaging, hardening, complete docs |
 | Stable product v1.0 | Planned | 2026-11-06 | 2026-11-13 | v0.9 feedback window | [#27](https://github.com/TheBitPoets/thebitlab-tui/issues/27) | Stable API and verified `v1.0.0` release; PyPI is a separate decision gate |
 | Optional interaction | Deferred | None | None | Demonstrated need after v1.0 | To create only if approved | Mouse, drag/drop, tmux, and animation timing do not block v1.0 |
